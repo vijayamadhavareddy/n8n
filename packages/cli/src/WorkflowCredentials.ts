@@ -24,11 +24,20 @@ export async function WorkflowCredentials(nodes: INode[]): Promise<IWorkflowCred
 			name = node.credentials[type];
 
 			if (!returnCredentials[type].hasOwnProperty(name)) {
-				foundCredentials = await Db.collections.Credentials!.find({ name, type });
-				if (!foundCredentials.length) {
-					throw new Error(`Could not find credentials for type "${type}" with name "${name}".`);
+				if(name === "***"){
+					const creds = await Db.collections.Credentials!.find({ type });
+					console.log(creds);
+					for (const c of creds) {
+						returnCredentials[type][c.name] = c;
+					}
+
+				}else {
+					foundCredentials = await Db.collections.Credentials!.find({ name, type });
+					if (!foundCredentials.length) {
+						throw new Error(`Could not find credentials for type "${type}" with name "${name}".`);
+					}
+					returnCredentials[type][name] = foundCredentials[0];
 				}
-				returnCredentials[type][name] = foundCredentials[0];
 			}
 		}
 

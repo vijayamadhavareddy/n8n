@@ -5,3 +5,5 @@ export * from './CouponDescription';
 export * from './CustomerDescription';
 export * from './SourceDescription';
 export * from './TokenDescription';
+export * from './PayoutDescription';
+export * from './BalanceTransactions';

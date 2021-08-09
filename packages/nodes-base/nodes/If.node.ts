@@ -280,6 +280,14 @@ export class If implements INodeType {
 				default: 'all',
 				description: 'If multiple rules got set this settings decides if it is true as soon as ANY condition matches or only if ALL get meet.',
 			},
+			{
+				displayName: 'PassThroughData',
+				name: 'passThroughData',
+				type: 'boolean',
+				default: true,
+				required: false,
+				description: 'Pass through the original object',
+			},
 		],
 	};
 

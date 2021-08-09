@@ -318,7 +318,7 @@ export function returnJsonArray(jsonData: IDataObject | IDataObject[]): INodeExe
  * @returns {(ICredentialDataDecryptedObject | undefined)}
  */
 export function getCredentials(workflow: Workflow, node: INode, type: string, additionalData: IWorkflowExecuteAdditionalData, mode: WorkflowExecuteMode, runExecutionData?: IRunExecutionData | null, runIndex?: number, connectionInputData?: INodeExecutionData[], itemIndex?: number): ICredentialDataDecryptedObject | undefined {
-
+	console.log(node.credentials);
 	// Get the NodeType as it has the information if the credentials are required
 	const nodeType = workflow.nodeTypes.getByName(node.type);
 	if (nodeType === undefined) {
@@ -760,6 +760,9 @@ export function getExecuteFunctions(workflow: Workflow, runExecutionData: IRunEx
 				} catch (error) {
 					Logger.warn(`There was a problem sending messsage to UI: ${error.message}`);
 				}
+			},
+			updateCustomCredentials: (credType: string, value: string) => {
+				node.credentials![credType] = value;				
 			},
 			helpers: {
 				prepareBinaryData,

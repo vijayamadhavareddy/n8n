@@ -53,7 +53,11 @@ export class CredentialsHelper extends ICredentialsHelper {
 			throw new Error(`No credentials of type "${type}" exist.`);
 		}
 		if (!this.workflowCredentials[type][name]) {
-			throw new Error(`No credentials with name "${name}" exist for type "${type}".`);
+			Db.collections.Credentials!.find({ name, type }).then(foundCredentials => {
+
+			}).catch(() => {
+				throw new Error(`No credentials with name "${name}" exist for type "${type}".`);
+			})
 		}
 		const credentialData = this.workflowCredentials[type][name];
 
@@ -103,6 +107,7 @@ export class CredentialsHelper extends ICredentialsHelper {
 	 * @memberof CredentialsHelper
 	 */
 	getDecrypted(name: string, type: string, mode: WorkflowExecuteMode, raw?: boolean, expressionResolveValues?: ICredentialsExpressionResolveValues): ICredentialDataDecryptedObject {
+		console.log(name, type);
 		const credentials = this.getCredentials(name, type);
 
 		const decryptedDataOriginal = credentials.getData(this.encryptionKey);

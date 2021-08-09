@@ -71,6 +71,11 @@ export class Merge implements INodeType {
 						value: 'wait',
 						description: 'Waits till data of both inputs is available and will then output a single empty item. Source Nodes must connect to both Input 1 and 2. This node only supports 2 Sources, if you need more Sources, connect multiple Merge nodes in series. This node will not output any data.',
 					},
+					{
+						name: 'Select',
+						value: 'select',
+						description: 'Select Defined Keys'
+					}
 				],
 				default: 'append',
 				description: 'How data of branches should be merged.',
@@ -118,6 +123,7 @@ export class Merge implements INodeType {
 							'keepKeyMatches',
 							'mergeByKey',
 							'removeKeyMatches',
+							'select'
 						],
 					},
 				},
@@ -135,6 +141,7 @@ export class Merge implements INodeType {
 							'keepKeyMatches',
 							'mergeByKey',
 							'removeKeyMatches',
+							'select'
 						],
 					},
 				},
@@ -452,6 +459,39 @@ export class Merge implements INodeType {
 			}
 		} else if (mode === 'wait') {
 			returnData.push({ json: {} });
+		} else if (mode === 'select') {
+			const propertyName1 = this.getNodeParameter('propertyName1', 0) as string;
+			const propertyName2 = this.getNodeParameter('propertyName2', 0) as string;
+			const dataInput1 = this.getInputData(0);
+			const dataInput2 = this.getInputData(1);
+			const source1Keys = propertyName1.split(",");
+			const source2Keys = propertyName2.split(",")
+			const count = dataInput1.length > dataInput2.length ? dataInput1.length: dataInput2.length;
+			for (let index = 0; index < count; index++) {
+				const element: any = {};
+				if(index < dataInput1.length) {
+					const di1 = dataInput1[index].json;
+					for (const key of source1Keys) {
+						element[key] = di1[key];
+					}
+				}else {
+					for (const key of source1Keys) {
+						element[key] = null;
+					}
+				}
+
+				if(index < dataInput2.length) {
+					const di2 = dataInput2[index].json;
+					for (const key of source2Keys) {
+						element[key] = di2[key];
+					}
+				}else {
+					for (const key of source2Keys) {
+						element[key] = null;
+					}
+				}
+				returnData.push({json: element});
+			}
 		}
 
 		return [returnData];
