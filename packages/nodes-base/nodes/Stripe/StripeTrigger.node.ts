@@ -26,7 +26,6 @@ export class StripeTrigger implements INodeType {
 		description: 'Handle Stripe events via webhooks',
 		defaults: {
 			name: 'Stripe Trigger',
-			color: '#32325d',
 		},
 		inputs: [],
 		outputs: ['main'],
@@ -51,12 +50,12 @@ export class StripeTrigger implements INodeType {
 				type: 'multiOptions',
 				required: true,
 				default: [],
-				description: 'The event to listen to.',
+				description: 'The event to listen to',
 				options: [
 					{
 						name: '*',
 						value: '*',
-						description: 'Any time any event is triggered (Wildcard Event).',
+						description: 'Any time any event is triggered (Wildcard Event)',
 					},
 					{
 						'name': 'Account Updated',
@@ -820,7 +819,7 @@ export class StripeTrigger implements INodeType {
 				try {
 					await stripeApiRequest.call(this, 'GET', endpoint, {});
 				} catch (error) {
-					if (error.message.includes('resource_missing')) {
+					if (error.httpCode === '404' || error.message.includes('resource_missing')) {
 						// Webhook does not exist
 						delete webhookData.webhookId;
 						delete webhookData.webhookEvents;

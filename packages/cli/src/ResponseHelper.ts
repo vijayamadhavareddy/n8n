@@ -1,13 +1,20 @@
+/* eslint-disable import/no-cycle */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable no-console */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable no-param-reassign */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { Request, Response } from 'express';
 import { parse, stringify } from 'flatted';
 
+// eslint-disable-next-line import/no-cycle
 import {
 	IExecutionDb,
 	IExecutionFlatted,
 	IExecutionFlattedDb,
 	IExecutionResponse,
 	IWorkflowDb,
-} from './';
+} from '.';
 
 /**
  * Special Error which allows to return also an error code and http status code
@@ -17,7 +24,6 @@ import {
  * @extends {Error}
  */
 export class ResponseError extends Error {
-
 	// The HTTP status code of  response
 	httpStatusCode?: number;
 
@@ -35,7 +41,7 @@ export class ResponseError extends Error {
 	 * @param {string} [hint] The error hint to provide a context (webhook related)
 	 * @memberof ResponseError
 	 */
-	constructor(message: string, errorCode?: number, httpStatusCode?: number, hint?:string) {
+	constructor(message: string, errorCode?: number, httpStatusCode?: number, hint?: string) {
 		super(message);
 		this.name = 'ResponseError';
 
@@ -51,23 +57,30 @@ export class ResponseError extends Error {
 	}
 }
 
-
-
 export function basicAuthAuthorizationError(resp: Response, realm: string, message?: string) {
 	resp.statusCode = 401;
 	resp.setHeader('WWW-Authenticate', `Basic realm="${realm}"`);
-	resp.json({code: resp.statusCode, message});
+	resp.json({ code: resp.statusCode, message });
 }
 
 export function jwtAuthAuthorizationError(resp: Response, message?: string) {
 	resp.statusCode = 403;
-	resp.json({code: resp.statusCode, message});
+	resp.json({ code: resp.statusCode, message });
 }
 
-
-export function sendSuccessResponse(res: Response, data: any, raw?: boolean, responseCode?: number) { // tslint:disable-line:no-any
+export function sendSuccessResponse(
+	res: Response,
+	data: any,
+	raw?: boolean,
+	responseCode?: number,
+	responseHeader?: object,
+) {
 	if (responseCode !== undefined) {
 		res.status(responseCode);
+	}
+
+	if (responseHeader) {
+		res.header(responseHeader);
 	}
 
 	if (raw === true) {
@@ -83,14 +96,13 @@ export function sendSuccessResponse(res: Response, data: any, raw?: boolean, res
 	}
 }
 
-
 export function sendErrorResponse(res: Response, error: ResponseError) {
 	let httpStatusCode = 500;
 	if (error.httpStatusCode) {
 		httpStatusCode = error.httpStatusCode;
 	}
 
-	if (process.env.NODE_ENV !== 'production') {
+	if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
 		console.error('ERROR RESPONSE');
 		console.error(error);
 	}
@@ -118,10 +130,11 @@ export function sendErrorResponse(res: Response, error: ResponseError) {
 		// @ts-ignore
 		response.stack = error.stack;
 	}
-
 	res.status(httpStatusCode).json(response);
 }
 
+const isUniqueConstraintError = (error: Error) =>
+	['unique', 'duplicate'].some((s) => error.message.toLowerCase().includes(s));
 
 /**
  * A helper function which does not just allow to return Promises it also makes sure that
@@ -133,21 +146,22 @@ export function sendErrorResponse(res: Response, error: ResponseError) {
  * @returns
  */
 
-export function send(processFunction: (req: Request, res: Response) => Promise<any>) { // tslint:disable-line:no-any
-
+export function send(processFunction: (req: Request, res: Response) => Promise<any>, raw = false) {
+	// eslint-disable-next-line consistent-return
 	return async (req: Request, res: Response) => {
 		try {
 			const data = await processFunction(req, res);
 
-			// Success response
-			sendSuccessResponse(res, data);
+			sendSuccessResponse(res, data, raw);
 		} catch (error) {
-			// Error response
+			if (error instanceof Error && isUniqueConstraintError(error)) {
+				error.message = 'There is already an entry with this name';
+			}
+
 			sendErrorResponse(res, error);
 		}
 	};
 }
-
 
 /**
  * Flattens the Execution data.
@@ -160,31 +174,33 @@ export function send(processFunction: (req: Request, res: Response) => Promise<a
  */
 export function flattenExecutionData(fullExecutionData: IExecutionDb): IExecutionFlatted {
 	// Flatten the data
-	const returnData: IExecutionFlatted = Object.assign({}, {
+	const returnData: IExecutionFlatted = {
 		data: stringify(fullExecutionData.data),
 		mode: fullExecutionData.mode,
+		// @ts-ignore
+		waitTill: fullExecutionData.waitTill,
 		startedAt: fullExecutionData.startedAt,
 		stoppedAt: fullExecutionData.stoppedAt,
 		finished: fullExecutionData.finished ? fullExecutionData.finished : false,
 		workflowId: fullExecutionData.workflowId,
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 		workflowData: fullExecutionData.workflowData!,
-	});
+	};
 
 	if (fullExecutionData.id !== undefined) {
-		returnData.id = fullExecutionData.id!.toString();
+		returnData.id = fullExecutionData.id.toString();
 	}
 
 	if (fullExecutionData.retryOf !== undefined) {
-		returnData.retryOf = fullExecutionData.retryOf!.toString();
+		returnData.retryOf = fullExecutionData.retryOf.toString();
 	}
 
 	if (fullExecutionData.retrySuccessId !== undefined) {
-		returnData.retrySuccessId = fullExecutionData.retrySuccessId!.toString();
+		returnData.retrySuccessId = fullExecutionData.retrySuccessId.toString();
 	}
 
 	return returnData;
 }
-
 
 /**
  * Unflattens the Execution data.
@@ -194,17 +210,17 @@ export function flattenExecutionData(fullExecutionData: IExecutionDb): IExecutio
  * @returns {IExecutionResponse}
  */
 export function unflattenExecutionData(fullExecutionData: IExecutionFlattedDb): IExecutionResponse {
-
-	const returnData: IExecutionResponse = Object.assign({}, {
+	const returnData: IExecutionResponse = {
 		id: fullExecutionData.id.toString(),
 		workflowData: fullExecutionData.workflowData as IWorkflowDb,
 		data: parse(fullExecutionData.data),
 		mode: fullExecutionData.mode,
+		waitTill: fullExecutionData.waitTill ? fullExecutionData.waitTill : undefined,
 		startedAt: fullExecutionData.startedAt,
 		stoppedAt: fullExecutionData.stoppedAt,
 		finished: fullExecutionData.finished ? fullExecutionData.finished : false,
 		workflowId: fullExecutionData.workflowId,
-	});
+	};
 
 	return returnData;
 }

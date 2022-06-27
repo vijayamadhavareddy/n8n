@@ -2,11 +2,12 @@ import {
 	INodeProperties,
 } from 'n8n-workflow';
 
-export const portfolioOperations = [
+export const portfolioOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		required: true,
 		displayOptions: {
 			show: {
@@ -39,9 +40,9 @@ export const portfolioOperations = [
 		],
 		default: 'create',
 	},
-] as INodeProperties[];
+];
 
-export const portfolioFields = [
+export const portfolioFields: INodeProperties[] = [
 	{
 		displayName: 'Return All',
 		name: 'returnAll',
@@ -57,7 +58,7 @@ export const portfolioFields = [
 			},
 		},
 		default: false,
-		description: 'If all results should be returned or only up to a given limit.',
+		description: 'Whether to return all results or only up to a given limit',
 	},
 	{
 		displayName: 'Limit',
@@ -81,7 +82,7 @@ export const portfolioFields = [
 			maxValue: 100,
 		},
 		default: 100,
-		description: 'Number of results to return.',
+		description: 'Max number of results to return',
 	},
 	{
 		displayName: 'Portfolio ID',
@@ -124,7 +125,6 @@ export const portfolioFields = [
 		displayName: 'Description',
 		name: 'description',
 		type: 'string',
-		required: false,
 		default: '',
 		displayOptions: {
 			show: {
@@ -137,13 +137,11 @@ export const portfolioFields = [
 				],
 			},
 		},
-		description: 'Description',
 	},
 	{
 		displayName: 'Privacy',
 		name: 'privacy',
 		type: 'options',
-		required: false,
 		displayOptions: {
 			show: {
 				resource: [
@@ -174,5 +172,5 @@ export const portfolioFields = [
 		],
 		default: 'shared',
 	},
-] as INodeProperties[];
+];
 

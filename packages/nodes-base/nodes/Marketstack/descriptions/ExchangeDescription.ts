@@ -7,6 +7,7 @@ export const exchangeOperations: INodeProperties[] = [
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		options: [
 			{
 				name: 'Get',
@@ -41,6 +42,6 @@ export const exchangeFields: INodeProperties[] = [
 			},
 		},
 		default: '',
-		description: 'Stock exchange to retrieve, specified by <a target="_blank" href="https://en.wikipedia.org/wiki/Market_Identifier_Code">Market Identifier Code</a>, e.g. <code>XNAS</code>',
+		description: 'Stock exchange to retrieve, specified by <a href="https://en.wikipedia.org/wiki/Market_Identifier_Code">Market Identifier Code</a>, e.g. <code>XNAS</code>',
 	},
 ];

@@ -2,11 +2,12 @@ import {
 	INodeProperties,
 } from 'n8n-workflow';
 
-export const threadOperations = [
+export const threadOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		displayOptions: {
 			show: {
 				resource: [
@@ -42,11 +43,10 @@ export const threadOperations = [
 			},
 		],
 		default: 'create',
-		description: 'The operation to perform.',
 	},
-] as INodeProperties[];
+];
 
-export const threadFields = [
+export const threadFields: INodeProperties[] = [
 	/*-------------------------------------------------------------------------- */
 	/*                                thread:create                              */
 	/* ------------------------------------------------------------------------- */
@@ -66,7 +66,7 @@ export const threadFields = [
 			},
 		},
 		required: true,
-		description: 'The ID of the channel.',
+		description: 'The ID of the channel',
 	},
 	{
 		displayName: 'Title',
@@ -84,7 +84,7 @@ export const threadFields = [
 			},
 		},
 		required: true,
-		description: 'The title of the new thread (1 < length < 300).',
+		description: 'The title of the new thread (1 < length < 300)',
 	},
 	{
 		displayName: 'Content',
@@ -102,7 +102,7 @@ export const threadFields = [
 			},
 		},
 		required: true,
-		description: 'The content of the thread.',
+		description: 'The content of the thread',
 	},
 	{
 		displayName: 'Additional Fields',
@@ -125,6 +125,7 @@ export const threadFields = [
 				displayName: 'Actions',
 				name: 'actionsUi',
 				type: 'fixedCollection',
+				default: {},
 				placeholder: 'Add Action',
 				typeOptions: {
 					multipleValues: true,
@@ -138,7 +139,7 @@ export const threadFields = [
 								displayName: 'Action',
 								name: 'action',
 								type: 'options',
-								description: 'The action of the button.',
+								description: 'The action of the button',
 								options: [
 									{
 										name: 'Open URL',
@@ -159,7 +160,7 @@ export const threadFields = [
 								displayName: 'Button Text',
 								name: 'button_text',
 								type: 'string',
-								description: 'The text for the action button.',
+								description: 'The text for the action button',
 								default: '',
 							},
 							{
@@ -174,7 +175,7 @@ export const threadFields = [
 										],
 									},
 								},
-								description: 'The text for the action button.',
+								description: 'The text for the action button',
 								default: '',
 							},
 							{
@@ -201,7 +202,7 @@ export const threadFields = [
 										],
 									},
 								},
-								description: 'URL to redirect.',
+								description: 'URL to redirect',
 								default: '',
 							},
 						],
@@ -216,7 +217,7 @@ export const threadFields = [
 				description: 'Name of the property that holds the binary data. Multiple can be defined separated by comma.',
 			},
 			{
-				displayName: 'Direct Mentions',
+				displayName: 'Direct Mention Names or IDs',
 				name: 'direct_mentions',
 				type: 'multiOptions',
 				typeOptions: {
@@ -226,10 +227,10 @@ export const threadFields = [
 					],
 				},
 				default: [],
-				description: 'The users that are directly mentioned.',
+				description: 'The users that are directly mentioned. Choose from the list, or specify IDs using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 			},
 			{
-				displayName: 'Recipients',
+				displayName: 'Recipient Names or IDs',
 				name: 'recipients',
 				type: 'multiOptions',
 				typeOptions: {
@@ -239,21 +240,21 @@ export const threadFields = [
 					],
 				},
 				default: [],
-				description: 'The users that will attached to the thread.',
+				description: 'The users that will attached to the thread. Choose from the list, or specify IDs using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 			},
 			{
-				displayName: 'Send as integration',
+				displayName: 'Send as Integration',
 				name: 'send_as_integration',
 				type: 'boolean',
 				default: false,
-				description: 'Displays the integration as the thread creator.',
+				description: 'Whether to display the integration as the thread creator',
 			},
 			{
 				displayName: 'Temporary ID',
 				name: 'temp_id',
 				type: 'number',
 				default: 0,
-				description: 'The temporary ID of the thread.',
+				description: 'The temporary ID of the thread',
 			},
 		],
 	},
@@ -277,7 +278,7 @@ export const threadFields = [
 			},
 		},
 		required: true,
-		description: 'The ID of the thread.',
+		description: 'The ID of the thread',
 	},
 	/* -------------------------------------------------------------------------- */
 	/*                                 thread:getAll                             */
@@ -298,7 +299,7 @@ export const threadFields = [
 			},
 		},
 		required: true,
-		description: 'The ID of the channel.',
+		description: 'The ID of the channel',
 	},
 	{
 		displayName: 'Return All',
@@ -315,7 +316,7 @@ export const threadFields = [
 			},
 		},
 		default: false,
-		description: 'If all results should be returned or only up to a given limit.',
+		description: 'Whether to return all results or only up to a given limit',
 	},
 	{
 		displayName: 'Limit',
@@ -339,7 +340,7 @@ export const threadFields = [
 			maxValue: 100,
 		},
 		default: 50,
-		description: 'How many results to return.',
+		description: 'Max number of results to return',
 	},
 	{
 		displayName: 'Filters',
@@ -363,7 +364,7 @@ export const threadFields = [
 				name: 'as_ids',
 				type: 'boolean',
 				default: false,
-				description: 'If enabled, only the IDs of the threads are returned.',
+				description: 'Whether only the IDs of the threads are returned',
 			},
 			{
 				displayName: 'Filter By',
@@ -371,7 +372,7 @@ export const threadFields = [
 				type: 'options',
 				options: [
 					{
-						name: 'Attached to me',
+						name: 'Attached to Me',
 						value: 'attached_to_me',
 					},
 					{
@@ -384,21 +385,21 @@ export const threadFields = [
 					},
 				],
 				default: '',
-				description: 'A filter can be one of <code>attached_to_me</code>, <code>everyone</code> and <code>is_starred</code>.',
+				description: 'A filter can be one of <code>attached_to_me</code>, <code>everyone</code> and <code>is_starred</code>',
 			},
 			{
 				displayName: 'Newer Than',
 				name: 'newer_than_ts',
 				type: 'dateTime',
 				default: '',
-				description: 'Limits threads to those newer when the specified Unix time.',
+				description: 'Limits threads to those newer when the specified Unix time',
 			},
 			{
 				displayName: 'Older Than',
 				name: 'older_than_ts',
 				type: 'dateTime',
 				default: '',
-				description: 'Limits threads to those older than the specified Unix time.',
+				description: 'Limits threads to those older than the specified Unix time',
 			},
 		],
 	},
@@ -422,7 +423,7 @@ export const threadFields = [
 			},
 		},
 		required: true,
-		description: 'The ID of the thread.',
+		description: 'The ID of the thread',
 	},
 	{
 		displayName: 'Update Fields',
@@ -445,6 +446,7 @@ export const threadFields = [
 				displayName: 'Actions',
 				name: 'actionsUi',
 				type: 'fixedCollection',
+				default: {},
 				placeholder: 'Add Action',
 				typeOptions: {
 					multipleValues: true,
@@ -458,7 +460,7 @@ export const threadFields = [
 								displayName: 'Action',
 								name: 'action',
 								type: 'options',
-								description: 'The action of the button.',
+								description: 'The action of the button',
 								options: [
 									{
 										name: 'Open URL',
@@ -479,7 +481,7 @@ export const threadFields = [
 								displayName: 'Button Text',
 								name: 'button_text',
 								type: 'string',
-								description: 'The text for the action button.',
+								description: 'The text for the action button',
 								default: '',
 							},
 							{
@@ -494,7 +496,7 @@ export const threadFields = [
 										],
 									},
 								},
-								description: 'The text for the action button.',
+								description: 'The text for the action button',
 								default: '',
 							},
 							{
@@ -521,7 +523,7 @@ export const threadFields = [
 										],
 									},
 								},
-								description: 'URL to redirect.',
+								description: 'URL to redirect',
 								default: '',
 							},
 						],
@@ -540,10 +542,10 @@ export const threadFields = [
 				name: 'content',
 				type: 'string',
 				default: '',
-				description: 'The content of the thread.',
+				description: 'The content of the thread',
 			},
 			{
-				displayName: 'Direct Mentions',
+				displayName: 'Direct Mention Names or IDs',
 				name: 'direct_mentions',
 				type: 'multiOptions',
 				typeOptions: {
@@ -553,15 +555,15 @@ export const threadFields = [
 					],
 				},
 				default: [],
-				description: 'The users that are directly mentioned.',
+				description: 'The users that are directly mentioned. Choose from the list, or specify IDs using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 			},
 			{
 				displayName: 'Title',
 				name: 'title',
 				type: 'string',
 				default: '',
-				description: 'The title of the thread (1 < length < 300).',
+				description: 'The title of the thread (1 < length < 300)',
 			},
 		],
 	},
-] as INodeProperties[];
+];

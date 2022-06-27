@@ -1,7 +1,18 @@
 <template>
-	<div @click="onClickInside" class="container">
+	<div
+		class="container"
+		ref="mainPanelContainer"
+		@click="onClickInside"
+	>
 		<SlideTransition>
-			<SubcategoryPanel v-if="activeSubcategory" :elements="subcategorizedNodes" :title="activeSubcategory.properties.subcategory" :activeIndex="activeSubcategoryIndex" @close="onSubcategoryClose" @selected="selected" />
+			<SubcategoryPanel
+				v-if="activeSubcategory"
+				:elements="subcategorizedNodes"
+				:title="activeSubcategory.properties.subcategory"
+				:activeIndex="activeSubcategoryIndex"
+				@close="onSubcategoryClose"
+				@selected="selected"
+			/>
 		</SlideTransition>
 		<div class="main-panel">
 			<SearchBar
@@ -11,9 +22,9 @@
 			/>
 			<div class="type-selector">
 				<el-tabs v-model="selectedType" stretch>
-					<el-tab-pane label="All" :name="ALL_NODE_FILTER"></el-tab-pane>
-					<el-tab-pane label="Regular" :name="REGULAR_NODE_FILTER"></el-tab-pane>
-					<el-tab-pane label="Trigger" :name="TRIGGER_NODE_FILTER"></el-tab-pane>
+					<el-tab-pane :label="$locale.baseText('nodeCreator.mainPanel.all')" :name="ALL_NODE_FILTER"></el-tab-pane>
+					<el-tab-pane :label="$locale.baseText('nodeCreator.mainPanel.regular')" :name="REGULAR_NODE_FILTER"></el-tab-pane>
+					<el-tab-pane :label="$locale.baseText('nodeCreator.mainPanel.trigger')" :name="TRIGGER_NODE_FILTER"></el-tab-pane>
 				</el-tabs>
 			</div>
 			<div v-if="searchFilter.length === 0" class="scrollable">
@@ -35,7 +46,10 @@
 					@selected="selected"
 				/>
 			</div>
-			<NoResults v-else @nodeTypeSelected="nodeTypeSelected" />
+			<NoResults
+				v-else
+				@nodeTypeSelected="$emit('nodeTypeSelected', $event)"
+			/>
 		</div>
 	</div>
 </template>
@@ -55,7 +69,6 @@ import { INodeCreateElement, INodeItemProps, ISubcategoryItemProps } from '@/Int
 import { ALL_NODE_FILTER, CORE_NODES_CATEGORY, REGULAR_NODE_FILTER, TRIGGER_NODE_FILTER } from '@/constants';
 import SlideTransition from '../transitions/SlideTransition.vue';
 import { matchesNodeType, matchesSelectType } from './helpers';
-
 
 export default mixins(externalHooks).extend({
 	name: 'NodeCreateList',
@@ -88,9 +101,7 @@ export default mixins(externalHooks).extend({
 		filteredNodeTypes(): INodeCreateElement[] {
 			const nodeTypes: INodeCreateElement[] = this.searchItems;
 			const filter = this.searchFilter;
-
 			const returnData = nodeTypes.filter((el: INodeCreateElement) => {
-				const nodeType = (el.properties as INodeItemProps).nodeType;
 				return filter && matchesSelectType(el, this.selectedType) && matchesNodeType(el, filter);
 			});
 
@@ -153,11 +164,23 @@ export default mixins(externalHooks).extend({
 				selectedType: this.selectedType,
 				filteredNodes: this.filteredNodeTypes,
 			});
+			this.$telemetry.trackNodesPanel('nodeCreateList.nodeFilterChanged', {
+				oldValue,
+				newValue,
+				selectedType: this.selectedType,
+				filteredNodes: this.filteredNodeTypes,
+				workflow_id: this.$store.getters.workflowId,
+			});
 		},
 		selectedType(newValue, oldValue) {
 			this.$externalHooks().run('nodeCreateList.selectedTypeChanged', {
 				oldValue,
 				newValue,
+			});
+			this.$telemetry.trackNodesPanel('nodeCreateList.selectedTypeChanged', {
+				old_filter: oldValue,
+				new_filter: newValue,
+				workflow_id: this.$store.getters.workflowId,
 			});
 		},
 	},
@@ -215,27 +238,22 @@ export default mixins(externalHooks).extend({
 				this.activeIndex = Math.max(this.activeIndex, 0);
 			} else if (e.key === 'Enter' && activeNodeType) {
 				this.selected(activeNodeType);
-			} else if (e.key === 'ArrowRight' && activeNodeType.type === 'subcategory') {
+			} else if (e.key === 'ArrowRight' && activeNodeType && activeNodeType.type === 'subcategory') {
 				this.selected(activeNodeType);
-			} else if (e.key === 'ArrowRight' && activeNodeType.type === 'category' && !activeNodeType.properties.expanded) {
+			} else if (e.key === 'ArrowRight' && activeNodeType && activeNodeType.type === 'category' && !activeNodeType.properties.expanded) {
 				this.selected(activeNodeType);
-			} else if (e.key === 'ArrowLeft' && activeNodeType.type === 'category' && activeNodeType.properties.expanded) {
+			} else if (e.key === 'ArrowLeft' && activeNodeType && activeNodeType.type === 'category' && activeNodeType.properties.expanded) {
 				this.selected(activeNodeType);
 			}
 		},
 		selected(element: INodeCreateElement) {
 			if (element.type === 'node') {
-				const properties = element.properties as INodeItemProps;
-
-				this.nodeTypeSelected(properties.nodeType.name);
+				this.$emit('nodeTypeSelected', (element.properties as INodeItemProps).nodeType.name);
 			} else if (element.type === 'category') {
 				this.onCategorySelected(element.category);
 			} else if (element.type === 'subcategory') {
 				this.onSubcategorySelected(element);
 			}
-		},
-		nodeTypeSelected(nodeTypeName: string) {
-			this.$emit('nodeTypeSelected', nodeTypeName);
 		},
 		onCategorySelected(category: string) {
 			if (this.activeCategory.includes(category)) {
@@ -244,6 +262,7 @@ export default mixins(externalHooks).extend({
 				);
 			} else {
 				this.activeCategory = [...this.activeCategory, category];
+				this.$telemetry.trackNodesPanel('nodeCreateList.onCategoryExpanded', { category_name: category, workflow_id: this.$store.getters.workflowId });
 			}
 
 			this.activeIndex = this.categorized.findIndex(
@@ -253,6 +272,7 @@ export default mixins(externalHooks).extend({
 		onSubcategorySelected(selected: INodeCreateElement) {
 			this.activeSubcategoryIndex = 0;
 			this.activeSubcategory = selected;
+			this.$telemetry.trackNodesPanel('nodeCreateList.onSubcategorySelected', { selected, workflow_id: this.$store.getters.workflowId });
 		},
 
 		onSubcategoryClose() {
@@ -274,20 +294,21 @@ export default mixins(externalHooks).extend({
 	},
 	async destroyed() {
 		this.$externalHooks().run('nodeCreateList.destroyed');
+		this.$telemetry.trackNodesPanel('nodeCreateList.destroyed', { workflow_id: this.$store.getters.workflowId });
 	},
 });
 </script>
 
 <style lang="scss" scoped>
-/deep/ .el-tabs__item {
+::v-deep .el-tabs__item {
 	padding: 0;
 }
 
-/deep/ .el-tabs__active-bar {
+::v-deep .el-tabs__active-bar {
 	height: 1px;
 }
 
-/deep/ .el-tabs__nav-wrap::after {
+::v-deep .el-tabs__nav-wrap::after {
 	height: 1px;
 }
 
@@ -321,7 +342,7 @@ export default mixins(externalHooks).extend({
 	text-align: center;
 	background-color: $--node-creator-select-background-color;
 
-	/deep/ .el-tabs > div {
+	::v-deep .el-tabs > div {
 		margin-bottom: 0;
 
 		.el-tabs__nav {

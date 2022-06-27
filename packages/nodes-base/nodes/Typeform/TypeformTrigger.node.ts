@@ -4,7 +4,10 @@ import {
 } from 'n8n-core';
 
 import {
+	ICredentialsDecrypted,
+	ICredentialTestFunctions,
 	IDataObject,
+	INodeCredentialTestResult,
 	INodeType,
 	INodeTypeDescription,
 	IWebhookResponseData,
@@ -31,7 +34,6 @@ export class TypeformTrigger implements INodeType {
 		description: 'Starts the workflow on a Typeform form submission',
 		defaults: {
 			name: 'Typeform Trigger',
-			color: '#404040',
 		},
 		inputs: [],
 		outputs: ['main'],
@@ -46,6 +48,7 @@ export class TypeformTrigger implements INodeType {
 						],
 					},
 				},
+				testedBy: 'testTypeformTokenAuth',
 			},
 			{
 				name: 'typeformOAuth2Api',
@@ -83,10 +86,9 @@ export class TypeformTrigger implements INodeType {
 					},
 				],
 				default: 'accessToken',
-				description: 'The resource to operate on.',
 			},
 			{
-				displayName: 'Form',
+				displayName: 'Form Name or ID',
 				name: 'formId',
 				type: 'options',
 				typeOptions: {
@@ -95,21 +97,23 @@ export class TypeformTrigger implements INodeType {
 				options: [],
 				default: '',
 				required: true,
-				description: 'Form which should trigger workflow on submission.',
+				description: 'Form which should trigger workflow on submission. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 			},
 			{
+				// eslint-disable-next-line n8n-nodes-base/node-param-display-name-wrong-for-simplify
 				displayName: 'Simplify Answers',
 				name: 'simplifyAnswers',
 				type: 'boolean',
 				default: true,
-				description: 'Converts the answers to a key:value pair ("FIELD_TITLE":"USER_ANSER") to be easily processable.',
+				// eslint-disable-next-line n8n-nodes-base/node-param-description-wrong-for-simplify
+				description: 'Whether to convert the answers to a key:value pair ("FIELD_TITLE":"USER_ANSER") to be easily processable',
 			},
 			{
 				displayName: 'Only Answers',
 				name: 'onlyAnswers',
 				type: 'boolean',
 				default: true,
-				description: 'Returns only the answers of the form and not any of the other data.',
+				description: 'Whether to return only the answers of the form and not any of the other data',
 			},
 		],
 	};
@@ -117,6 +121,38 @@ export class TypeformTrigger implements INodeType {
 	methods = {
 		loadOptions: {
 			getForms,
+		},
+		credentialTest: {
+			async testTypeformTokenAuth(this: ICredentialTestFunctions, credential: ICredentialsDecrypted): Promise<INodeCredentialTestResult> {
+				const credentials = credential.data;
+
+				const options = {
+					headers: {
+						authorization: `bearer ${credentials!.accessToken}`,
+					},
+					uri: 'https://api.typeform.com/workspaces',
+					json: true,
+				};
+				try {
+					const response = await this.helpers.request(options);
+					if (!response.items) {
+						return {
+							status: 'Error',
+							message: 'Token is not valid.',
+						};
+					}
+				} catch(err) {
+					return {
+						status: 'Error',
+						message: `Token is not valid; ${err.message}`,
+					};
+				}
+
+				return {
+					status: 'OK',
+					message: 'Authentication successful!',
+				};
+			},
 		},
 	};
 

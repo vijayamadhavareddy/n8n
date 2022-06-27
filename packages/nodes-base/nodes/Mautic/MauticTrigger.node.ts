@@ -30,7 +30,6 @@ export class MauticTrigger implements INodeType {
 		description: 'Handle Mautic events via webhooks',
 		defaults: {
 			name: 'Mautic Trigger',
-			color: '#52619b',
 		},
 		inputs: [],
 		outputs: ['main'],
@@ -84,7 +83,7 @@ export class MauticTrigger implements INodeType {
 				default: 'credentials',
 			},
 			{
-				displayName: 'Events',
+				displayName: 'Event Names or IDs',
 				name: 'events',
 				type: 'multiOptions',
 				required: true,
@@ -108,7 +107,7 @@ export class MauticTrigger implements INodeType {
 						value: 'DESC',
 					},
 				],
-				description: 'Order direction for queued events in one webhook. Can be “DESC” or “ASC”',
+				description: 'Order direction for queued events in one webhook. Can be “DESC” or “ASC”.',
 			},
 		],
 	};

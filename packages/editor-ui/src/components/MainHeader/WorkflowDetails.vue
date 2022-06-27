@@ -2,13 +2,13 @@
 	<div class="container" v-if="workflowName">
 		<BreakpointsObserver :valueXS="15" :valueSM="25" :valueMD="50" class="name-container">
 			<template v-slot="{ value }">
-				<WorkflowNameShort
+				<ShortenName
 					:name="workflowName"
 					:limit="value"
 					:custom="true"
 				>
 					<template v-slot="{ shortenedName }">
-						<InlineTextEdit 
+						<InlineTextEdit
 							:value="workflowName"
 							:previewValue="shortenedName"
 							:isEditEnabled="isNameEditEnabled"
@@ -19,53 +19,57 @@
 							class="name"
 						/>
 					</template>
-				</WorkflowNameShort>
+				</ShortenName>
 			</template>
 		</BreakpointsObserver>
 
-		<div
-			v-if="isTagsEditEnabled"
-			class="tags">
-			<TagsDropdown
-				:createEnabled="true"
-				:currentTagIds="appliedTagIds"
-				:eventBus="tagsEditBus"
-				@blur="onTagsBlur"
-				@update="onTagsUpdate"
-				@esc="onTagsEditEsc"
-				placeholder="Choose or create a tag"
-				ref="dropdown"
-				class="tags-edit"
-			/>
-		</div>
-		<div
-			class="tags"
-			v-else-if="currentWorkflowTagIds.length === 0"
-		>
-			<span
-				class="add-tag clickable"
+		<span v-if="areTagsEnabled" class="tags">
+			<div
+				v-if="isTagsEditEnabled">
+				<TagsDropdown
+					:createEnabled="true"
+					:currentTagIds="appliedTagIds"
+					:eventBus="tagsEditBus"
+					@blur="onTagsBlur"
+					@update="onTagsUpdate"
+					@esc="onTagsEditEsc"
+					:placeholder="$locale.baseText('workflowDetails.chooseOrCreateATag')"
+					ref="dropdown"
+					class="tags-edit"
+				/>
+			</div>
+			<div
+				v-else-if="currentWorkflowTagIds.length === 0"
+			>
+				<span
+					class="add-tag clickable"
+					@click="onTagsEditEnable"
+				>
+					+ {{ $locale.baseText('workflowDetails.addTag') }}
+				</span>
+			</div>
+			<TagsContainer
+				v-else
+				:tagIds="currentWorkflowTagIds"
+				:clickable="true"
+				:responsive="true"
+				:key="currentWorkflowId"
 				@click="onTagsEditEnable"
-			>	
-				+ Add tag
-			</span>
-		</div>
-		<TagsContainer
-			v-else
-			:tagIds="currentWorkflowTagIds"
-			:clickable="true"
-			:responsive="true"
-			:key="currentWorkflowId"
-			@click="onTagsEditEnable"
-			class="tags"
-		/>
+			/>
+		</span>
+		<span v-else class="tags"></span>
 
 		<PushConnectionTracker class="actions">
 			<template>
 				<span class="activator">
-					<span>Active:</span>
-					<WorkflowActivator :workflow-active="isWorkflowActive" :workflow-id="currentWorkflowId" :disabled="!currentWorkflowId"/>
+					<span>{{ $locale.baseText('workflowDetails.active') + ':' }}</span>
+					<WorkflowActivator :workflow-active="isWorkflowActive" :workflow-id="currentWorkflowId"/>
 				</span>
-				<SaveWorkflowButton />
+				<SaveButton
+					:saved="!this.isDirty && !this.isNewWorkflow"
+					:disabled="isWorkflowSaving"
+					@click="onSaveButtonClick"
+				/>
 			</template>
 		</PushConnectionTracker>
 	</div>
@@ -77,12 +81,12 @@ import mixins from "vue-typed-mixins";
 import { mapGetters } from "vuex";
 import { MAX_WORKFLOW_NAME_LENGTH } from "@/constants";
 
-import WorkflowNameShort from "@/components/WorkflowNameShort.vue";
+import ShortenName from "@/components/ShortenName.vue";
 import TagsContainer from "@/components/TagsContainer.vue";
 import PushConnectionTracker from "@/components/PushConnectionTracker.vue";
 import WorkflowActivator from "@/components/WorkflowActivator.vue";
 import { workflowHelpers } from "@/components/mixins/workflowHelpers";
-import SaveWorkflowButton from "@/components/SaveWorkflowButton.vue";
+import SaveButton from "@/components/SaveButton.vue";
 import TagsDropdown from "@/components/TagsDropdown.vue";
 import InlineTextEdit from "@/components/InlineTextEdit.vue";
 import BreakpointsObserver from "@/components/BreakpointsObserver.vue";
@@ -101,9 +105,9 @@ export default mixins(workflowHelpers).extend({
 	components: {
 		TagsContainer,
 		PushConnectionTracker,
-		WorkflowNameShort,
+		ShortenName,
 		WorkflowActivator,
-		SaveWorkflowButton,
+		SaveButton,
 		TagsDropdown,
 		InlineTextEdit,
 		BreakpointsObserver,
@@ -120,19 +124,27 @@ export default mixins(workflowHelpers).extend({
 	},
 	computed: {
 		...mapGetters({
-			isWorkflowActive: "isActive", 
+			isWorkflowActive: "isActive",
 			workflowName: "workflowName",
 			isDirty: "getStateIsDirty",
 			currentWorkflowTagIds: "workflowTags",
 		}),
+		...mapGetters('settings', ['areTagsEnabled']),
+		isNewWorkflow(): boolean {
+			return !this.$route.params.name;
+		},
 		isWorkflowSaving(): boolean {
 			return this.$store.getters.isActionActive("workflowSaving");
 		},
-		currentWorkflowId() {
+		currentWorkflowId(): string {
 			return this.$route.params.name;
 		},
 	},
 	methods: {
+		async onSaveButtonClick () {
+			const saved = await this.saveCurrentWorkflow();
+			if (saved) this.$store.dispatch('settings/fetchPromptsData');
+		},
 		onTagsEditEnable() {
 			this.$data.appliedTagIds = this.currentWorkflowTagIds;
 			this.$data.isTagsEditEnabled = true;
@@ -161,6 +173,8 @@ export default mixins(workflowHelpers).extend({
 			this.$data.tagsSaving = true;
 
 			const saved = await this.saveCurrentWorkflow({ tags });
+			this.$telemetry.track('User edited workflow tags', { workflow_id: this.currentWorkflowId as string, new_tag_count: tags.length });
+
 			this.$data.tagsSaving = false;
 			if (saved) {
 				this.$data.isTagsEditEnabled = false;
@@ -184,8 +198,8 @@ export default mixins(workflowHelpers).extend({
 			const newName = name.trim();
 			if (!newName) {
 				this.$showMessage({
-					title: "Name missing",
-					message: `Please enter a name, or press 'esc' to go back to the old one.`,
+					title: this.$locale.baseText('workflowDetails.showMessage.title'),
+					message: this.$locale.baseText('workflowDetails.showMessage.message'),
 					type: "error",
 				});
 

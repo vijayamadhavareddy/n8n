@@ -1,24 +1,32 @@
-import config = require('../config');
-import * as winston from 'winston';
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-shadow */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 
-import {
-	IDataObject,
-	ILogger,
-	LogTypes,
-} from 'n8n-workflow';
+import { inspect } from 'util';
+import winston from 'winston';
 
-import * as callsites from 'callsites';
+import { IDataObject, ILogger, LogTypes } from 'n8n-workflow';
+
+import callsites from 'callsites';
 import { basename } from 'path';
+import config from '../config';
 
-class Logger implements ILogger {
+export class Logger implements ILogger {
 	private logger: winston.Logger;
 
 	constructor() {
-		const level = config.get('logs.level');
-		const output = (config.get('logs.output') as string).split(',').map(output => output.trim());
+		const level = config.getEnv('logs.level');
+
+		const output = config
+			.getEnv('logs.output')
+			.split(',')
+			.map((output) => output.trim());
 
 		this.logger = winston.createLogger({
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 			level,
+			silent: level === 'silent',
 		});
 
 		if (output.includes('console')) {
@@ -28,18 +36,22 @@ class Logger implements ILogger {
 					winston.format.metadata(),
 					winston.format.timestamp(),
 					winston.format.colorize({ all: true }),
+					// eslint-disable-next-line @typescript-eslint/no-shadow
 					winston.format.printf(({ level, message, timestamp, metadata }) => {
-						return `${timestamp} | ${level.padEnd(18)} | ${message}` + (Object.keys(metadata).length ? ` ${JSON.stringify(metadata)}` : '');
-					}) as winston.Logform.Format
+						// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+						return `${timestamp} | ${level.padEnd(18)} | ${message}${
+							Object.keys(metadata).length ? ` ${JSON.stringify(inspect(metadata))}` : ''
+						}`;
+					}),
 				);
 			} else {
-				format = winston.format.printf(({ message }) => message) as winston.Logform.Format;
+				format = winston.format.printf(({ message }: { message: string }) => message);
 			}
 
 			this.logger.add(
 				new winston.transports.Console({
 					format,
-				})
+				}),
 			);
 		}
 
@@ -47,20 +59,20 @@ class Logger implements ILogger {
 			const fileLogFormat = winston.format.combine(
 				winston.format.timestamp(),
 				winston.format.metadata(),
-				winston.format.json()
+				winston.format.json(),
 			);
 			this.logger.add(
 				new winston.transports.File({
-					filename: config.get('logs.file.location'),
+					filename: config.getEnv('logs.file.location'),
 					format: fileLogFormat,
-					maxsize: config.get('logs.file.fileSizeMax') as number * 1048576, // config * 1mb
-					maxFiles: config.get('logs.file.fileCountMax'),
-				})
+					maxsize: config.getEnv('logs.file.fileSizeMax') * 1048576, // config * 1mb
+					maxFiles: config.getEnv('logs.file.fileCountMax'),
+				}),
 			);
 		}
 	}
 
-	log(type: LogTypes, message: string, meta: object = {}) {
+	log(type: LogTypes, message: string, meta: object = {}): void {
 		const callsite = callsites();
 		// We are using the third array element as the structure is as follows:
 		// [0]: this file
@@ -70,41 +82,42 @@ class Logger implements ILogger {
 		// We are in runtime, so it means we are looking at compiled js files
 		const logDetails = {} as IDataObject;
 		if (callsite[2] !== undefined) {
+			// eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
 			logDetails.file = basename(callsite[2].getFileName() || '');
 			const functionName = callsite[2].getFunctionName();
 			if (functionName) {
 				logDetails.function = functionName;
 			}
 		}
-		this.logger.log(type, message, {...meta, ...logDetails});
+		this.logger.log(type, message, { ...meta, ...logDetails });
 	}
 
 	// Convenience methods below
 
-	debug(message: string, meta: object = {}) {
+	debug(message: string, meta: object = {}): void {
 		this.log('debug', message, meta);
 	}
 
-	info(message: string, meta: object = {}) {
+	info(message: string, meta: object = {}): void {
 		this.log('info', message, meta);
 	}
 
-	error(message: string, meta: object = {}) {
+	error(message: string, meta: object = {}): void {
 		this.log('error', message, meta);
 	}
 
-	verbose(message: string, meta: object = {}) {
+	verbose(message: string, meta: object = {}): void {
 		this.log('verbose', message, meta);
 	}
 
-	warn(message: string, meta: object = {}) {
+	warn(message: string, meta: object = {}): void {
 		this.log('warn', message, meta);
 	}
-
 }
 
 let activeLoggerInstance: Logger | undefined;
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function getLogger() {
 	if (activeLoggerInstance === undefined) {
 		activeLoggerInstance = new Logger();

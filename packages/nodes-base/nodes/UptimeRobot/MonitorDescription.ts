@@ -2,11 +2,12 @@ import {
 	INodeProperties,
 } from 'n8n-workflow';
 
-export const monitorOperations = [
+export const monitorOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		displayOptions: {
 			show: {
 				resource: [
@@ -47,11 +48,10 @@ export const monitorOperations = [
 			},
 		],
 		default: 'getAll',
-		description: 'The operation to perform.',
 	},
-] as INodeProperties[];
+];
 
-export const monitorFields = [
+export const monitorFields: INodeProperties[] = [
 	/* -------------------------------------------------------------------------- */
 	/*                                monitor:create                              */
 	/* -------------------------------------------------------------------------- */
@@ -71,7 +71,7 @@ export const monitorFields = [
 				],
 			},
 		},
-		description: 'The friendly name of the monitor.',
+		description: 'The friendly name of the monitor',
 	},
 	{
 		displayName: 'Type',
@@ -111,7 +111,7 @@ export const monitorFields = [
 				],
 			},
 		},
-		description: 'The type of the monitor.',
+		description: 'The type of the monitor',
 	},
 	{
 		displayName: 'URL',
@@ -129,7 +129,7 @@ export const monitorFields = [
 				],
 			},
 		},
-		description: 'The URL/IP of the monitor.',
+		description: 'The URL/IP of the monitor',
 	},
 
 	/* -------------------------------------------------------------------------- */
@@ -153,7 +153,7 @@ export const monitorFields = [
 				],
 			},
 		},
-		description: 'The ID of the monitor.',
+		description: 'The ID of the monitor',
 	},
 
 	/* -------------------------------------------------------------------------- */
@@ -174,7 +174,7 @@ export const monitorFields = [
 			},
 		},
 		default: false,
-		description: 'If all results should be returned or only up to a given limit.',
+		description: 'Whether to return all results or only up to a given limit',
 	},
 	{
 		displayName: 'Limit',
@@ -198,7 +198,7 @@ export const monitorFields = [
 			maxValue: 100,
 		},
 		default: 50,
-		description: 'How many results to return.',
+		description: 'Max number of results to return',
 	},
 	{
 		displayName: 'Filters',
@@ -222,48 +222,49 @@ export const monitorFields = [
 				name: 'alert_contacts',
 				type: 'boolean',
 				default: false,
-				description: 'Whether the alert contacts set for the monitor to be returned.',
+				description: 'Whether the alert contacts set for the monitor to be returned',
 			},
 			{
 				displayName: 'Logs',
 				name: 'logs',
 				type: 'boolean',
 				default: false,
-				description: 'If the logs of each monitor will be returned.',
+				description: 'Whether the logs of each monitor will be returned',
 			},
 			{
 				displayName: 'Maintenance Window',
 				name: 'mwindow',
 				type: 'boolean',
 				default: false,
-				description: 'If the maintenance windows for the monitors to be returned.',
+				description: 'Whether to return the maintenance windows for the monitors',
 			},
 			{
 				displayName: 'Monitor IDs',
 				name: 'monitors',
 				type: 'string',
 				default: '',
-				description: 'Monitors IDs separated with dash, e.g. 15830-32696-83920.',
+				description: 'Monitors IDs separated with dash, e.g. 15830-32696-83920',
 			},
 			{
 				displayName: 'Response Times',
 				name: 'response_times',
 				type: 'boolean',
 				default: false,
-				description: 'Whether the response time data of each monitor will be returned.',
+				description: 'Whether the response time data of each monitor will be returned',
 			},
 			{
 				displayName: 'Search',
 				name: 'search',
 				type: 'string',
 				default: '',
-				description: 'A keyword to be matched against url and friendly name.',
+				description: 'A keyword to be matched against URL and friendly name',
 			},
 			{
 				displayName: 'Statuses',
 				name: 'statuses',
 				type: 'multiOptions',
-				default: '',
+				default: [],
+				// eslint-disable-next-line n8n-nodes-base/node-param-multi-options-type-unsorted-items
 				options: [
 					{
 						name: 'Paused',
@@ -291,7 +292,7 @@ export const monitorFields = [
 				displayName: 'Types',
 				name: 'types',
 				type: 'multiOptions',
-				default: '',
+				default: [],
 				options: [
 					{
 						name: 'Heartbeat',
@@ -314,7 +315,7 @@ export const monitorFields = [
 						value: 4,
 					},
 				],
-				description: 'Select monitor types.',
+				description: 'Select monitor types',
 			},
 		],
 	},
@@ -338,7 +339,7 @@ export const monitorFields = [
 				],
 			},
 		},
-		description: 'The ID of the monitor.',
+		description: 'The ID of the monitor',
 	},
 	{
 		displayName: 'Update Fields',
@@ -362,7 +363,7 @@ export const monitorFields = [
 				name: 'friendly_name',
 				type: 'string',
 				default: '',
-				description: 'The friendly name of the monitor.',
+				description: 'The friendly name of the monitor',
 			},
 			{
 				displayName: 'HTTP Auth Type',
@@ -379,7 +380,7 @@ export const monitorFields = [
 						value: 2,
 					},
 				],
-				description: 'The authentication type for password-protected web pages.',
+				description: 'The authentication type for password-protected web pages',
 			},
 			{
 				displayName: 'HTTP Method',
@@ -416,35 +417,35 @@ export const monitorFields = [
 						value: 4,
 					},
 				],
-				description: 'The HTTP method to be used.',
+				description: 'The HTTP method to be used',
 			},
 			{
 				displayName: 'HTTP Password',
 				name: 'http_password',
 				type: 'string',
 				default: '',
-				description: 'The password used for password-protected web pages.',
+				description: 'The password used for password-protected web pages',
 			},
 			{
 				displayName: 'HTTP Username',
 				name: 'http_username',
 				type: 'string',
 				default: '',
-				description: 'The username used for password-protected web pages.',
+				description: 'The username used for password-protected web pages',
 			},
 			{
 				displayName: 'Interval',
 				name: 'interval',
 				type: 'number',
 				default: '',
-				description: 'The interval for the monitoring check.',
+				description: 'The interval for the monitoring check',
 			},
 			{
 				displayName: 'Port',
 				name: 'port',
 				type: 'number',
 				default: '',
-				description: 'The monitored port.',
+				description: 'The monitored port',
 			},
 			{
 				displayName: 'Status',
@@ -461,10 +462,10 @@ export const monitorFields = [
 						value: 1,
 					},
 				],
-				description: 'Select monitor statuses.',
+				description: 'Select monitor statuses',
 			},
 			{
-				displayName: 'Sub type',
+				displayName: 'Sub Type',
 				name: 'sub_type',
 				type: 'options',
 				default: '',
@@ -498,15 +499,15 @@ export const monitorFields = [
 						value: 4,
 					},
 				],
-				description: 'Specify which pre-defined port/service or custom port is monitored.',
+				description: 'Specify which pre-defined port/service or custom port is monitored',
 			},
 			{
 				displayName: 'URL',
 				name: 'url',
 				type: 'string',
 				default: '',
-				description: 'The URL/IP of the monitor.',
+				description: 'The URL/IP of the monitor',
 			},
 		],
 	},
-] as INodeProperties[];
+];

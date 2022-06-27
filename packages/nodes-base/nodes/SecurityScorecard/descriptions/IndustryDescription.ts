@@ -2,11 +2,12 @@ import {
 	INodeProperties,
 } from 'n8n-workflow';
 
-export const industryOperations = [
+export const industryOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		required: true,
 		displayOptions: {
 			show: {
@@ -31,13 +32,14 @@ export const industryOperations = [
 		],
 		default: 'getFactor',
 	},
-] as INodeProperties[];
+];
 
-export const industryFields = [
+export const industryFields: INodeProperties[] = [
 	{
 		displayName: 'Industry',
 		name: 'industry',
 		type: 'options',
+		default: 'food',
 		options: [
 			{
 				name: 'Food',
@@ -90,7 +92,7 @@ export const industryFields = [
 			},
 		},
 		default: false,
-		description: 'If all results should be returned or only up to a given limit.',
+		description: 'Whether to return all results or only up to a given limit',
 	},
 	{
 		displayName: 'Limit',
@@ -115,10 +117,10 @@ export const industryFields = [
 			maxValue: 100,
 		},
 		default: 100,
-		description: 'Number of results to return.',
+		description: 'Max number of results to return',
 	},
 	{
-		displayName: 'Simplify Response',
+		displayName: 'Simplify',
 		name: 'simple',
 		type: 'boolean',
 		displayOptions: {
@@ -133,7 +135,7 @@ export const industryFields = [
 			},
 		},
 		default: true,
-		description: 'Return a simplified version of the response instead of the raw data.',
+		description: 'Whether to return a simplified version of the response instead of the raw data',
 	},
 	{
 		displayName: 'Options',
@@ -158,7 +160,6 @@ export const industryFields = [
 				name: 'from',
 				type: 'dateTime',
 				default: '',
-				required: false,
 			},
 			{
 				displayName: 'Date To',
@@ -166,8 +167,7 @@ export const industryFields = [
 				name: 'to',
 				type: 'dateTime',
 				default: '',
-				required: false,
 			},
 		],
 	},
-] as INodeProperties[];
+];

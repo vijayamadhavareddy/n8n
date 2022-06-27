@@ -2,11 +2,12 @@ import {
 	INodeProperties,
 } from 'n8n-workflow';
 
-export const contactOperations = [
+export const contactOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		displayOptions: {
 			show: {
 				resource: [
@@ -42,11 +43,10 @@ export const contactOperations = [
 			},
 		],
 		default: 'create',
-		description: 'The operation to perform.',
 	},
-] as INodeProperties[];
+];
 
-export const contactFields = [
+export const contactFields: INodeProperties[] = [
 	/* -------------------------------------------------------------------------- */
 	/*                                 contact:create                             */
 	/* -------------------------------------------------------------------------- */
@@ -121,14 +121,12 @@ export const contactFields = [
 								name: 'city',
 								type: 'string',
 								default: '',
-								description: 'City',
 							},
 							{
 								displayName: 'Region',
 								name: 'region',
 								type: 'string',
 								default: '',
-								description: 'Region',
 							},
 							{
 								displayName: 'Country Code',
@@ -141,7 +139,6 @@ export const contactFields = [
 								name: 'postalCode',
 								type: 'string',
 								default: '',
-								description: 'Postal code',
 							},
 							{
 								displayName: 'Type',
@@ -177,7 +174,7 @@ export const contactFields = [
 				displayName: 'Company',
 				name: 'companyUi',
 				type: 'fixedCollection',
-				default: '',
+				default: {},
 				placeholder: 'Add Company',
 				typeOptions: {
 					multipleValues: true,
@@ -219,7 +216,7 @@ export const contactFields = [
 				displayName: 'Custom Fields',
 				name: 'customFieldsUi',
 				type: 'fixedCollection',
-				default: '',
+				default: {},
 				placeholder: 'Add Custom Field',
 				typeOptions: {
 					multipleValues: true,
@@ -233,14 +230,14 @@ export const contactFields = [
 								displayName: 'Key',
 								name: 'key',
 								type: 'string',
-								description: 'The end user specified key of the user defined data.',
+								description: 'The end user specified key of the user defined data',
 								default: '',
 							},
 							{
 								displayName: 'Value',
 								name: 'value',
 								type: 'string',
-								description: 'The end user specified value of the user defined data.',
+								description: 'The end user specified value of the user defined data',
 								default: '',
 							},
 						],
@@ -251,7 +248,7 @@ export const contactFields = [
 				displayName: 'Emails',
 				name: 'emailsUi',
 				type: 'fixedCollection',
-				default: '',
+				default: {},
 				placeholder: 'Add Email',
 				typeOptions: {
 					multipleValues: true,
@@ -280,14 +277,14 @@ export const contactFields = [
 									},
 								],
 								default: '',
-								description: `The type of the email address. The type can be custom or one of these predefined values`,
+								description: 'The type of the email address. The type can be custom or one of these predefined values.',
 							},
 							{
 								displayName: 'Value',
 								name: 'value',
 								type: 'string',
 								default: '',
-								description: 'The email address.',
+								description: 'The email address',
 							},
 						],
 					},
@@ -297,9 +294,9 @@ export const contactFields = [
 				displayName: 'Events',
 				name: 'eventsUi',
 				type: 'fixedCollection',
-				default: '',
+				default: {},
 				placeholder: 'Add Event',
-				description: 'An event related to the person.',
+				description: 'An event related to the person',
 				typeOptions: {
 					multipleValues: true,
 				},
@@ -313,7 +310,7 @@ export const contactFields = [
 								name: 'date',
 								type: 'dateTime',
 								default: '',
-								description: 'The date of the event.',
+								description: 'The date of the event',
 							},
 							{
 								displayName: 'Type',
@@ -330,7 +327,7 @@ export const contactFields = [
 									},
 								],
 								default: '',
-								description: `The type of the event. The type can be custom or one of these predefined values`,
+								description: 'The type of the event. The type can be custom or one of these predefined values.',
 							},
 						],
 					},
@@ -341,10 +338,10 @@ export const contactFields = [
 				name: 'fileAs',
 				type: 'string',
 				default: '',
-				description: 'The name that should be used to sort the person in a list.',
+				description: 'The name that should be used to sort the person in a list',
 			},
 			{
-				displayName: 'Group',
+				displayName: 'Group Names or IDs',
 				name: 'group',
 				type: 'multiOptions',
 				typeOptions: {
@@ -383,7 +380,7 @@ export const contactFields = [
 				displayName: 'Phone',
 				name: 'phoneUi',
 				type: 'fixedCollection',
-				default: '',
+				default: {},
 				placeholder: 'Add Phone',
 				typeOptions: {
 					multipleValues: true,
@@ -399,24 +396,28 @@ export const contactFields = [
 								type: 'options',
 								options: [
 									{
+										name: 'Google Voice',
+										value: 'googleVoice',
+									},
+									{
 										name: 'Home',
 										value: 'home',
-									},
-									{
-										name: 'Work',
-										value: 'work',
-									},
-									{
-										name: 'Mobile',
-										value: 'mobile',
 									},
 									{
 										name: 'Home Fax',
 										value: 'homeFax',
 									},
 									{
-										name: 'Work Fax',
-										value: 'workFax',
+										name: 'Main',
+										value: 'main',
+									},
+									{
+										name: 'Mobile',
+										value: 'mobile',
+									},
+									{
+										name: 'Other',
+										value: 'other',
 									},
 									{
 										name: 'Other Fax',
@@ -427,24 +428,20 @@ export const contactFields = [
 										value: 'pager',
 									},
 									{
+										name: 'Work',
+										value: 'work',
+									},
+									{
+										name: 'Work Fax',
+										value: 'workFax',
+									},
+									{
 										name: 'Work Mobile',
 										value: 'workMobile',
 									},
 									{
 										name: 'Work Pager',
 										value: 'workPager',
-									},
-									{
-										name: 'Main',
-										value: 'main',
-									},
-									{
-										name: 'Google Voice',
-										value: 'googleVoice',
-									},
-									{
-										name: 'Other',
-										value: 'other',
 									},
 								],
 								default: '',
@@ -454,7 +451,7 @@ export const contactFields = [
 								name: 'value',
 								type: 'string',
 								default: '',
-								description: 'The phone number.',
+								description: 'The phone number',
 							},
 						],
 					},
@@ -464,7 +461,7 @@ export const contactFields = [
 				displayName: 'Relations',
 				name: 'relationsUi',
 				type: 'fixedCollection',
-				default: '',
+				default: {},
 				placeholder: 'Add Relation',
 				typeOptions: {
 					multipleValues: true,
@@ -479,7 +476,7 @@ export const contactFields = [
 								name: 'person',
 								type: 'string',
 								default: '',
-								description: 'The name of the other person this relation refers to.',
+								description: 'The name of the other person this relation refers to',
 							},
 							{
 								displayName: 'Type',
@@ -540,7 +537,7 @@ export const contactFields = [
 									},
 								],
 								default: '',
-								description: `The person's relation to the other person. The type can be custom or one of these predefined values`,
+								description: 'The person\'s relation to the other person. The type can be custom or one of these predefined values.',
 							},
 						],
 					},
@@ -704,7 +701,7 @@ export const contactFields = [
 				],
 			},
 		},
-		default: '',
+		default: [],
 		description: 'A field mask to restrict which fields on each person are returned. Multiple fields can be specified by separating them with commas.',
 	},
 	{
@@ -722,7 +719,7 @@ export const contactFields = [
 			},
 		},
 		default: false,
-		description: `Returns the data exactly in the way it got received from the API.`,
+		description: 'Whether to return the data exactly in the way it got received from the API',
 	},
 	/* -------------------------------------------------------------------------- */
 	/*                                 contact:getAll                             */
@@ -742,7 +739,7 @@ export const contactFields = [
 			},
 		},
 		default: false,
-		description: 'If all results should be returned or only up to a given limit.',
+		description: 'Whether to return all results or only up to a given limit',
 	},
 	{
 		displayName: 'Limit',
@@ -766,7 +763,7 @@ export const contactFields = [
 			maxValue: 500,
 		},
 		default: 100,
-		description: 'How many results to return.',
+		description: 'Max number of results to return',
 	},
 	{
 		displayName: 'Fields',
@@ -884,8 +881,45 @@ export const contactFields = [
 				],
 			},
 		},
-		default: '',
+		default: [],
 		description: 'A field mask to restrict which fields on each person are returned. Multiple fields can be specified by separating them with commas.',
+	},
+	{
+		displayName: 'Use Query',
+		name: 'useQuery',
+		type: 'boolean',
+		displayOptions: {
+			show: {
+				operation: [
+					'getAll',
+				],
+				resource: [
+					'contact',
+				],
+			},
+		},
+		default: false,
+		description: 'Whether or not to use a query to filter the results',
+	},
+	{
+		displayName: 'Query',
+		name: 'query',
+		type: 'string',
+		displayOptions: {
+			show: {
+				operation: [
+					'getAll',
+				],
+				resource: [
+					'contact',
+				],
+				useQuery: [
+					true,
+				],
+			},
+		},
+		default: '',
+		description: 'The plain-text query for the request. The query is used to match prefix phrases of the fields on a person. For example, a person with name "foo name" matches queries such as "f", "fo", "foo", "foo n", "nam", etc., but not "oo n".',
 	},
 	{
 		displayName: 'RAW Data',
@@ -902,7 +936,7 @@ export const contactFields = [
 			},
 		},
 		default: false,
-		description: `Returns the data exactly in the way it got received from the API.`,
+		description: 'Whether to return the data exactly in the way it got received from the API',
 	},
 	{
 		displayName: 'Options',
@@ -918,6 +952,9 @@ export const contactFields = [
 				resource: [
 					'contact',
 				],
+				useQuery: [
+					false,
+				],
 			},
 		},
 		options: [
@@ -929,26 +966,26 @@ export const contactFields = [
 					{
 						name: 'Last Modified Ascending',
 						value: 'LAST_MODIFIED_ASCENDING',
-						description: 'Sort people by when they were changed; older entries first.',
+						description: 'Sort people by when they were changed; older entries first',
 					},
 					{
 						name: 'Last Modified Descending',
 						value: 'LAST_MODIFIED_DESCENDING',
-						description: 'Sort people by when they were changed; newer entries first.',
+						description: 'Sort people by when they were changed; newer entries first',
 					},
 					{
 						name: 'First Name Ascending',
 						value: 'FIRST_NAME_ASCENDING',
-						description: 'Sort people by first name.',
+						description: 'Sort people by first name',
 					},
 					{
 						name: 'Last Name Ascending',
 						value: 'LAST_NAME_ASCENDING',
-						description: 'Sort people by last name.',
+						description: 'Sort people by last name',
 					},
 				],
 				default: '',
-				description: 'The order of the contacts returned in the result.',
+				description: 'The order of the contacts returned in the result',
 			},
 		],
 	},
@@ -1088,7 +1125,7 @@ export const contactFields = [
 				],
 			},
 		},
-		default: '',
+		default: [],
 		description: 'A field mask to restrict which fields on each person are returned. Multiple fields can be specified by separating them with commas.',
 	},
 	{
@@ -1149,14 +1186,12 @@ export const contactFields = [
 								name: 'city',
 								type: 'string',
 								default: '',
-								description: 'City',
 							},
 							{
 								displayName: 'Region',
 								name: 'region',
 								type: 'string',
 								default: '',
-								description: 'Region',
 							},
 							{
 								displayName: 'Country Code',
@@ -1169,7 +1204,6 @@ export const contactFields = [
 								name: 'postalCode',
 								type: 'string',
 								default: '',
-								description: 'Postal code',
 							},
 							{
 								displayName: 'Type',
@@ -1205,7 +1239,7 @@ export const contactFields = [
 				displayName: 'Company',
 				name: 'companyUi',
 				type: 'fixedCollection',
-				default: '',
+				default: {},
 				placeholder: 'Add Company',
 				typeOptions: {
 					multipleValues: true,
@@ -1247,7 +1281,7 @@ export const contactFields = [
 				displayName: 'Custom Fields',
 				name: 'customFieldsUi',
 				type: 'fixedCollection',
-				default: '',
+				default: {},
 				placeholder: 'Add Custom Field',
 				typeOptions: {
 					multipleValues: true,
@@ -1261,14 +1295,14 @@ export const contactFields = [
 								displayName: 'Key',
 								name: 'key',
 								type: 'string',
-								description: 'The end user specified key of the user defined data.',
+								description: 'The end user specified key of the user defined data',
 								default: '',
 							},
 							{
 								displayName: 'Value',
 								name: 'value',
 								type: 'string',
-								description: 'The end user specified value of the user defined data.',
+								description: 'The end user specified value of the user defined data',
 								default: '',
 							},
 						],
@@ -1279,7 +1313,7 @@ export const contactFields = [
 				displayName: 'Emails',
 				name: 'emailsUi',
 				type: 'fixedCollection',
-				default: '',
+				default: {},
 				placeholder: 'Add Email',
 				typeOptions: {
 					multipleValues: true,
@@ -1308,14 +1342,14 @@ export const contactFields = [
 									},
 								],
 								default: '',
-								description: `The type of the email address. The type can be custom or one of these predefined values`,
+								description: 'The type of the email address. The type can be custom or one of these predefined values.',
 							},
 							{
 								displayName: 'Value',
 								name: 'value',
 								type: 'string',
 								default: '',
-								description: 'The email address.',
+								description: 'The email address',
 							},
 						],
 					},
@@ -1325,9 +1359,9 @@ export const contactFields = [
 				displayName: 'Events',
 				name: 'eventsUi',
 				type: 'fixedCollection',
-				default: '',
+				default: {},
 				placeholder: 'Add Event',
-				description: 'An event related to the person.',
+				description: 'An event related to the person',
 				typeOptions: {
 					multipleValues: true,
 				},
@@ -1341,7 +1375,7 @@ export const contactFields = [
 								name: 'date',
 								type: 'dateTime',
 								default: '',
-								description: 'The date of the event.',
+								description: 'The date of the event',
 							},
 							{
 								displayName: 'Type',
@@ -1358,7 +1392,7 @@ export const contactFields = [
 									},
 								],
 								default: '',
-								description: `The type of the event. The type can be custom or one of these predefined values`,
+								description: 'The type of the event. The type can be custom or one of these predefined values.',
 							},
 						],
 					},
@@ -1369,10 +1403,10 @@ export const contactFields = [
 				name: 'fileAs',
 				type: 'string',
 				default: '',
-				description: 'The name that should be used to sort the person in a list.',
+				description: 'The name that should be used to sort the person in a list',
 			},
 			{
-				displayName: 'Group',
+				displayName: 'Group Names or IDs',
 				name: 'group',
 				type: 'multiOptions',
 				typeOptions: {
@@ -1411,7 +1445,7 @@ export const contactFields = [
 				displayName: 'Phone',
 				name: 'phoneUi',
 				type: 'fixedCollection',
-				default: '',
+				default: {},
 				placeholder: 'Add Phone',
 				typeOptions: {
 					multipleValues: true,
@@ -1427,24 +1461,28 @@ export const contactFields = [
 								type: 'options',
 								options: [
 									{
+										name: 'Google Voice',
+										value: 'googleVoice',
+									},
+									{
 										name: 'Home',
 										value: 'home',
-									},
-									{
-										name: 'Work',
-										value: 'work',
-									},
-									{
-										name: 'Mobile',
-										value: 'mobile',
 									},
 									{
 										name: 'Home Fax',
 										value: 'homeFax',
 									},
 									{
-										name: 'Work Fax',
-										value: 'workFax',
+										name: 'Main',
+										value: 'main',
+									},
+									{
+										name: 'Mobile',
+										value: 'mobile',
+									},
+									{
+										name: 'Other',
+										value: 'other',
 									},
 									{
 										name: 'Other Fax',
@@ -1455,24 +1493,20 @@ export const contactFields = [
 										value: 'pager',
 									},
 									{
+										name: 'Work',
+										value: 'work',
+									},
+									{
+										name: 'Work Fax',
+										value: 'workFax',
+									},
+									{
 										name: 'Work Mobile',
 										value: 'workMobile',
 									},
 									{
 										name: 'Work Pager',
 										value: 'workPager',
-									},
-									{
-										name: 'Main',
-										value: 'main',
-									},
-									{
-										name: 'Google Voice',
-										value: 'googleVoice',
-									},
-									{
-										name: 'Other',
-										value: 'other',
 									},
 								],
 								default: '',
@@ -1482,7 +1516,7 @@ export const contactFields = [
 								name: 'value',
 								type: 'string',
 								default: '',
-								description: 'The phone number.',
+								description: 'The phone number',
 							},
 						],
 					},
@@ -1492,7 +1526,7 @@ export const contactFields = [
 				displayName: 'Relations',
 				name: 'relationsUi',
 				type: 'fixedCollection',
-				default: '',
+				default: {},
 				placeholder: 'Add Relation',
 				typeOptions: {
 					multipleValues: true,
@@ -1507,7 +1541,7 @@ export const contactFields = [
 								name: 'person',
 								type: 'string',
 								default: '',
-								description: 'The name of the other person this relation refers to.',
+								description: 'The name of the other person this relation refers to',
 							},
 							{
 								displayName: 'Type',
@@ -1568,7 +1602,7 @@ export const contactFields = [
 									},
 								],
 								default: '',
-								description: `The person's relation to the other person. The type can be custom or one of these predefined values`,
+								description: 'The person\'s relation to the other person. The type can be custom or one of these predefined values.',
 							},
 						],
 					},
@@ -1576,4 +1610,4 @@ export const contactFields = [
 			},
 		],
 	},
-] as INodeProperties[];
+];

@@ -2,11 +2,12 @@ import {
 	INodeProperties,
 } from 'n8n-workflow';
 
-export const contactOperations = [
+export const contactOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		displayOptions: {
 			show: {
 				resource: [
@@ -42,11 +43,10 @@ export const contactOperations = [
 			},
 		],
 		default: 'create',
-		description: 'The operation to perform.',
 	},
-] as INodeProperties[];
+];
 
-export const contactFields = [
+export const contactFields: INodeProperties[] = [
 
 	/* -------------------------------------------------------------------------- */
 	/*                                 contact:create                             */
@@ -56,6 +56,7 @@ export const contactFields = [
 		name: 'email',
 		required: true,
 		type: 'string',
+		placeholder: 'name@email.com',
 		displayOptions: {
 			show: {
 				operation: [
@@ -67,13 +68,14 @@ export const contactFields = [
 			},
 		},
 		default: '',
-		description: 'The email address of the contact.',
+		description: 'The email address of the contact',
 	},
 	{
-		displayName: 'List ID',
+		displayName: 'List Name or ID',
 		name: 'listId',
 		required: true,
 		type: 'options',
+		description: 'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>',
 		typeOptions: {
 			loadOptionsMethod: 'getLists',
 		},
@@ -110,7 +112,7 @@ export const contactFields = [
 				displayName: 'Custom Fields',
 				name: 'customFieldsUi',
 				type: 'fixedCollection',
-				default: '',
+				default: {},
 				placeholder: 'Add Custom Field',
 				typeOptions: {
 					multipleValues: true,
@@ -122,20 +124,20 @@ export const contactFields = [
 						displayName: 'Custom Field',
 						values: [
 							{
-								displayName: 'Key',
+								displayName: 'Key Name or ID',
 								name: 'key',
 								type: 'options',
 								typeOptions: {
 									loadOptionsMethod: 'getCustomFields',
 								},
-								description: 'The end user specified key of the user defined data.',
+								description: 'The end user specified key of the user defined data. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 								default: '',
 							},
 							{
 								displayName: 'Value',
 								name: 'value',
 								type: 'string',
-								description: 'The end user specified value of the user defined data.',
+								description: 'The end user specified value of the user defined data',
 								default: '',
 							},
 						],
@@ -173,14 +175,14 @@ export const contactFields = [
 				description: 'The status of the contact. You can only send email to contacts with ACTIVE status.',
 			},
 			{
-				displayName: 'Tags',
+				displayName: 'Tag Names or IDs',
 				name: 'tags',
 				type: 'multiOptions',
 				typeOptions: {
 					loadOptionsMethod: 'getTags',
 				},
 				default: [],
-				description: 'The tags you want to set to the contact.',
+				description: 'The tags you want to set to the contact. Choose from the list, or specify IDs using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 			},
 		],
 	},
@@ -204,7 +206,7 @@ export const contactFields = [
 			},
 		},
 		default: '',
-		description: 'Can be ID or email.',
+		description: 'Can be ID or email',
 	},
 
 	/* -------------------------------------------------------------------------- */
@@ -233,10 +235,11 @@ export const contactFields = [
 	/*                                 contact:getAll                         */
 	/* -------------------------------------------------------------------------- */
 	{
-		displayName: 'List ID',
+		displayName: 'List Name or ID',
 		name: 'listId',
 		required: true,
 		type: 'options',
+		description: 'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>',
 		typeOptions: {
 			loadOptionsMethod: 'getLists',
 		},
@@ -267,7 +270,7 @@ export const contactFields = [
 			},
 		},
 		default: false,
-		description: 'If all results should be returned or only up to a given limit.',
+		description: 'Whether to return all results or only up to a given limit',
 	},
 	{
 		displayName: 'Limit',
@@ -291,7 +294,7 @@ export const contactFields = [
 			maxValue: 500,
 		},
 		default: 100,
-		description: 'How many results to return.',
+		description: 'Max number of results to return',
 	},
 	{
 		displayName: 'Additional Fields',
@@ -332,7 +335,7 @@ export const contactFields = [
 				name: 'fields',
 				type: 'string',
 				default: '',
-				description: 'A comma-separated list of attributes to include in the response.',
+				description: 'A comma-separated list of attributes to include in the response',
 			},
 			{
 				displayName: 'Sort By',
@@ -351,6 +354,7 @@ export const contactFields = [
 		name: 'email',
 		required: true,
 		type: 'string',
+		placeholder: 'name@email.com',
 		displayOptions: {
 			show: {
 				operation: [
@@ -381,20 +385,20 @@ export const contactFields = [
 		placeholder: 'Add Field',
 		options: [
 			{
-				displayName: 'Add Tags',
+				displayName: 'Add Tag Names or IDs',
 				name: 'addTags',
 				type: 'multiOptions',
 				typeOptions: {
 					loadOptionsMethod: 'getTags',
 				},
 				default: [],
-				description: 'The tags you want to add to the contact.',
+				description: 'The tags you want to add to the contact. Choose from the list, or specify IDs using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 			},
 			{
 				displayName: 'Custom Fields',
 				name: 'customFieldsUi',
 				type: 'fixedCollection',
-				default: '',
+				default: {},
 				placeholder: 'Add Custom Field',
 				typeOptions: {
 					multipleValues: true,
@@ -406,20 +410,20 @@ export const contactFields = [
 						displayName: 'Custom Field',
 						values: [
 							{
-								displayName: 'Key',
+								displayName: 'Key Name or ID',
 								name: 'key',
 								type: 'options',
 								typeOptions: {
 									loadOptionsMethod: 'getCustomFields',
 								},
-								description: 'The end user specified key of the user defined data.',
+								description: 'The end user specified key of the user defined data. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 								default: '',
 							},
 							{
 								displayName: 'Value',
 								name: 'value',
 								type: 'string',
-								description: 'The end user specified value of the user defined data.',
+								description: 'The end user specified value of the user defined data',
 								default: '',
 							},
 						],
@@ -427,6 +431,7 @@ export const contactFields = [
 				],
 			},
 			{
+				// eslint-disable-next-line n8n-nodes-base/node-param-display-name-wrong-for-dynamic-multi-options
 				displayName: 'Remove Tags',
 				name: 'removeTags',
 				type: 'multiOptions',
@@ -434,7 +439,7 @@ export const contactFields = [
 					loadOptionsMethod: 'getTags',
 				},
 				default: [],
-				description: 'The tags you want to add to the contact.',
+				description: 'The tags you want to add to the contact. Choose from the list, or specify IDs using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 			},
 			{
 				displayName: 'Status',
@@ -466,15 +471,15 @@ export const contactFields = [
 				description: 'The status of the contact. You can only send email to contacts with ACTIVE status.',
 			},
 			{
-				displayName: 'Tags',
+				displayName: 'Tag Names or IDs',
 				name: 'tags',
 				type: 'multiOptions',
 				typeOptions: {
 					loadOptionsMethod: 'getTags',
 				},
 				default: [],
-				description: 'The tags you want to set to the contact. Will replace all existing ones.',
+				description: 'The tags you want to set to the contact. Will replace all existing ones. Choose from the list, or specify IDs using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 			},
 		],
 	},
-] as INodeProperties[];
+];

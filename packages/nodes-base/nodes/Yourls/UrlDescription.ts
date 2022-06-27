@@ -2,11 +2,12 @@ import {
 	INodeProperties,
 } from 'n8n-workflow';
 
-export const urlOperations = [
+export const urlOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		displayOptions: {
 			show: {
 				resource: [
@@ -32,11 +33,10 @@ export const urlOperations = [
 			},
 		],
 		default: 'shorten',
-		description: 'The operation to perform.',
 	},
-] as INodeProperties[];
+];
 
-export const urlFields = [
+export const urlFields: INodeProperties[] = [
 
 	/* -------------------------------------------------------------------------- */
 	/*                                url:shorten                                 */
@@ -57,7 +57,7 @@ export const urlFields = [
 			},
 		},
 		default: '',
-		description: 'The URL to shorten.',
+		description: 'The URL to shorten',
 	},
 	{
 		displayName: 'Additional Fields',
@@ -110,7 +110,7 @@ export const urlFields = [
 			},
 		},
 		default: '',
-		description: 'The short URL to expand.',
+		description: 'The short URL to expand',
 	},
 
 	/* -------------------------------------------------------------------------- */
@@ -132,6 +132,6 @@ export const urlFields = [
 			},
 		},
 		default: '',
-		description: 'The short URL for which to get stats.',
+		description: 'The short URL for which to get stats',
 	},
-] as INodeProperties[];
+];

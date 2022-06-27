@@ -1,11 +1,13 @@
 import {
+	IAuthenticateGeneric,
+	ICredentialTestRequest,
 	ICredentialType,
 	INodeProperties,
 } from 'n8n-workflow';
 
 export class GithubApi implements ICredentialType {
 	name = 'githubApi';
-	displayName = 'Github API';
+	displayName = 'GitHub API';
 	documentationUrl = 'github';
 	properties: INodeProperties[] = [
 		{
@@ -13,7 +15,7 @@ export class GithubApi implements ICredentialType {
 			name: 'server',
 			type: 'string',
 			default: 'https://api.github.com',
-			description: 'The server to connect to. Does only have to get changed if Github Enterprise gets used.',
+			description: 'The server to connect to. Only has to be set if Github Enterprise is used.',
 		},
 		{
 			displayName: 'User',
@@ -28,4 +30,21 @@ export class GithubApi implements ICredentialType {
 			default: '',
 		},
 	];
+
+	authenticate: IAuthenticateGeneric = {
+		type: 'generic',
+		properties: {
+			headers: {
+				Authorization: '=token {{$credentials?.accessToken}}',
+			},
+		},
+	};
+
+	test: ICredentialTestRequest = {
+		request: {
+			baseURL: '={{$credentials?.server}}',
+			url: '/user',
+			method: 'GET',
+		},
+	};
 }

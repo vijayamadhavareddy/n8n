@@ -2,13 +2,13 @@ import {
 	INodeProperties,
 } from 'n8n-workflow';
 
-export const customerOperations = [
+export const customerOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		default: 'get',
-		description: 'Operation to perform',
 		options: [
 			{
 				name: 'Create',
@@ -44,9 +44,9 @@ export const customerOperations = [
 			},
 		},
 	},
-] as INodeProperties[];
+];
 
-export const customerFields = [
+export const customerFields: INodeProperties[] = [
 	// ----------------------------------
 	//       customer: create
 	// ----------------------------------
@@ -128,7 +128,7 @@ export const customerFields = [
 							{
 								displayName: 'Country',
 								name: 'country',
-								description: 'Two-letter country code (<a target="_blank" href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">ISO 3166-1 alpha-2</a>)',
+								description: 'Two-letter country code (<a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">ISO 3166-1 alpha-2</a>)',
 								type: 'string',
 								default: '',
 							},
@@ -154,6 +154,7 @@ export const customerFields = [
 				displayName: 'Email',
 				name: 'email',
 				type: 'string',
+				placeholder: 'name@email.com',
 				default: '',
 				description: 'Email of the customer to create',
 			},
@@ -199,6 +200,7 @@ export const customerFields = [
 				displayName: 'Shipping',
 				name: 'shipping',
 				type: 'fixedCollection',
+				default: {},
 				description: 'Shipping information for the customer',
 				typeOptions: {
 					multipleValues: true,
@@ -257,7 +259,7 @@ export const customerFields = [
 											{
 												displayName: 'Country',
 												name: 'country',
-												description: 'Two-letter country code (<a target="_blank" href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">ISO 3166-1 alpha-2</a>)',
+												description: 'Two-letter country code (<a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">ISO 3166-1 alpha-2</a>)',
 												type: 'string',
 												default: '',
 											},
@@ -354,7 +356,7 @@ export const customerFields = [
 		name: 'limit',
 		type: 'number',
 		default: 50,
-		description: 'How many results to return',
+		description: 'Max number of results to return',
 		typeOptions: {
 			minValue: 1,
 			maxValue: 1000,
@@ -394,6 +396,7 @@ export const customerFields = [
 				displayName: 'Email',
 				name: 'email',
 				type: 'string',
+				placeholder: 'name@email.com',
 				default: '',
 				description: 'Customer\'s email to filter by',
 			},
@@ -481,7 +484,7 @@ export const customerFields = [
 							{
 								displayName: 'Country',
 								name: 'country',
-								description: 'Two-letter country code (<a target="_blank" href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">ISO 3166-1 alpha-2</a>)',
+								description: 'Two-letter country code (<a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">ISO 3166-1 alpha-2</a>)',
 								type: 'string',
 								default: '',
 							},
@@ -507,6 +510,7 @@ export const customerFields = [
 				displayName: 'Email',
 				name: 'email',
 				type: 'string',
+				placeholder: 'name@email.com',
 				default: '',
 				description: 'Email of the customer to create',
 			},
@@ -514,6 +518,7 @@ export const customerFields = [
 				displayName: 'Metadata',
 				name: 'metadata',
 				type: 'fixedCollection',
+				default: {},
 				placeholder: 'Add Metadata Item',
 				description: 'Set of key-value pairs to attach to the customer to create',
 				typeOptions: {
@@ -618,7 +623,7 @@ export const customerFields = [
 											{
 												displayName: 'Country',
 												name: 'country',
-												description: 'Two-letter country code (<a target="_blank" href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">ISO 3166-1 alpha-2</a>)',
+												description: 'Two-letter country code (<a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">ISO 3166-1 alpha-2</a>)',
 												type: 'string',
 												default: '',
 											},
@@ -646,4 +651,4 @@ export const customerFields = [
 			},
 		],
 	},
-] as INodeProperties[];
+];

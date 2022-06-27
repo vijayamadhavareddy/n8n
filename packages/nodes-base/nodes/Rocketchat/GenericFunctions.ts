@@ -10,11 +10,7 @@ import {
 import { NodeApiError, NodeOperationError, } from 'n8n-workflow';
 
 export async function rocketchatApiRequest(this: IExecuteFunctions | ILoadOptionsFunctions, resource: string, method: string, operation: string, body: any = {}, headers?: object): Promise<any> { // tslint:disable-line:no-any
-	const credentials = this.getCredentials('rocketchatApi');
-
-	if (credentials === undefined) {
-		throw new NodeOperationError(this.getNode(), 'No credentials got returned!');
-	}
+	const credentials = await this.getCredentials('rocketchatApi');
 
 	const headerWithAuthentication = Object.assign({}, headers,
 		{

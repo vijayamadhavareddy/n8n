@@ -2,11 +2,12 @@ import {
 	INodeProperties,
 } from 'n8n-workflow';
 
-export const playlistItemOperations = [
+export const playlistItemOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		displayOptions: {
 			show: {
 				resource: [
@@ -28,7 +29,7 @@ export const playlistItemOperations = [
 			{
 				name: 'Get',
 				value: 'get',
-				description: `Get a playlist's item`,
+				description: 'Get a playlist\'s item',
 			},
 			{
 				name: 'Get All',
@@ -37,18 +38,18 @@ export const playlistItemOperations = [
 			},
 		],
 		default: 'add',
-		description: 'The operation to perform.',
 	},
-] as INodeProperties[];
+];
 
-export const playlistItemFields = [
+export const playlistItemFields: INodeProperties[] = [
 	/* -------------------------------------------------------------------------- */
 	/*                                 playlistItem:add                           */
 	/* -------------------------------------------------------------------------- */
 	{
-		displayName: 'Playlist ID',
+		displayName: 'Playlist Name or ID',
 		name: 'playlistId',
 		type: 'options',
+		description: 'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>',
 		typeOptions: {
 			loadOptionsMethod: 'getPlaylists',
 		},
@@ -104,22 +105,21 @@ export const playlistItemFields = [
 				name: 'endAt',
 				type: 'dateTime',
 				default: '',
-				description: `The time, measured in seconds from the start of the video, when the video should stop playing.`,
+				description: 'The time, measured in seconds from the start of the video, when the video should stop playing',
 			},
 			{
 				displayName: 'Note',
 				name: 'note',
 				type: 'string',
 				default: '',
-				description: `A user-generated note for this item. The property value has a maximum length of 280 characters.`,
+				description: 'A user-generated note for this item. The property value has a maximum length of 280 characters.',
 			},
 			{
 				displayName: 'On Behalf Of Content Owner',
 				name: 'onBehalfOfContentOwner',
 				type: 'string',
 				default: '',
-				description: `The onBehalfOfContentOwner parameter indicates that the request's authorization credentials identify<br>
-				a YouTube CMS user who is acting on behalf of the content owner specified in the parameter value`,
+				description: 'The onBehalfOfContentOwner parameter indicates that the request\'s authorization credentials identify a YouTube CMS user who is acting on behalf of the content owner specified in the parameter value',
 			},
 			{
 				displayName: 'Position',
@@ -129,14 +129,14 @@ export const playlistItemFields = [
 					minValue: 0,
 				},
 				default: '',
-				description: `The order in which the item appears in the playlist. The value uses a zero-based index, so the first item has a position of 0, the second item has a position of 1, and so forth.`,
+				description: 'The order in which the item appears in the playlist. The value uses a zero-based index, so the first item has a position of 0, the second item has a position of 1, and so forth.',
 			},
 			{
 				displayName: 'Start At',
 				name: 'startAt',
 				type: 'dateTime',
 				default: '',
-				description: `The time, measured in seconds from the start of the video, when the video should start playing.`,
+				description: 'The time, measured in seconds from the start of the video, when the video should start playing',
 			},
 		],
 	},
@@ -197,7 +197,7 @@ export const playlistItemFields = [
 				],
 			},
 		},
-		description: 'The fields parameter specifies a comma-separated list of one or more playlistItem resource properties that the API response will include.',
+		description: 'The fields parameter specifies a comma-separated list of one or more playlistItem resource properties that the API response will include',
 		default: ['*'],
 	},
 	{
@@ -222,8 +222,7 @@ export const playlistItemFields = [
 				name: 'onBehalfOfContentOwner',
 				type: 'string',
 				default: '',
-				description: `The onBehalfOfContentOwner parameter indicates that the request's authorization credentials identify<br>
-				a YouTube CMS user who is acting on behalf of the content owner specified in the parameter value`,
+				description: 'The onBehalfOfContentOwner parameter indicates that the request\'s authorization credentials identify a YouTube CMS user who is acting on behalf of the content owner specified in the parameter value',
 			},
 		],
 	},
@@ -269,8 +268,7 @@ export const playlistItemFields = [
 				name: 'onBehalfOfContentOwner',
 				type: 'string',
 				default: '',
-				description: `The onBehalfOfContentOwner parameter indicates that the request's authorization credentials identify<br>
-				a YouTube CMS user who is acting on behalf of the content owner specified in the parameter value`,
+				description: 'The onBehalfOfContentOwner parameter indicates that the request\'s authorization credentials identify a YouTube CMS user who is acting on behalf of the content owner specified in the parameter value',
 			},
 		],
 	},
@@ -278,9 +276,10 @@ export const playlistItemFields = [
 	/*                                 playlistItem:getAll                        */
 	/* -------------------------------------------------------------------------- */
 	{
-		displayName: 'Playlist ID',
+		displayName: 'Playlist Name or ID',
 		name: 'playlistId',
 		type: 'options',
+		description: 'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>',
 		typeOptions: {
 			loadOptionsMethod: 'getPlaylists',
 		},
@@ -334,7 +333,7 @@ export const playlistItemFields = [
 				],
 			},
 		},
-		description: 'The fields parameter specifies a comma-separated list of one or more playlistItem resource properties that the API response will include.',
+		description: 'The fields parameter specifies a comma-separated list of one or more playlistItem resource properties that the API response will include',
 		default: ['*'],
 	},
 	{
@@ -352,7 +351,7 @@ export const playlistItemFields = [
 			},
 		},
 		default: false,
-		description: 'If all results should be returned or only up to a given limit.',
+		description: 'Whether to return all results or only up to a given limit',
 	},
 	{
 		displayName: 'Limit',
@@ -376,7 +375,7 @@ export const playlistItemFields = [
 			maxValue: 50,
 		},
 		default: 25,
-		description: 'How many results to return.',
+		description: 'Max number of results to return',
 	},
 	{
 		displayName: 'Options',
@@ -400,9 +399,8 @@ export const playlistItemFields = [
 				name: 'onBehalfOfContentOwner',
 				type: 'string',
 				default: '',
-				description: `The onBehalfOfContentOwner parameter indicates that the request's authorization credentials identify<br>
-				a YouTube CMS user who is acting on behalf of the content owner specified in the parameter value`,
+				description: 'The onBehalfOfContentOwner parameter indicates that the request\'s authorization credentials identify a YouTube CMS user who is acting on behalf of the content owner specified in the parameter value',
 			},
 		],
 	},
-] as INodeProperties[];
+];

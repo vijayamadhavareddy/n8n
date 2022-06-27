@@ -14,10 +14,7 @@ import {
 } from 'n8n-workflow';
 
 export async function togglApiRequest(this: ITriggerFunctions | IPollFunctions | IHookFunctions | IExecuteFunctions | IExecuteSingleFunctions | ILoadOptionsFunctions, method: string, resource: string, body: any = {}, query?: IDataObject, uri?: string): Promise<any> { // tslint:disable-line:no-any
-	const credentials = this.getCredentials('togglApi');
-	if (credentials === undefined) {
-		throw new NodeOperationError(this.getNode(), 'No credentials got returned!');
-	}
+	const credentials = await this.getCredentials('togglApi');
 	const headerWithAuthentication = Object.assign({},
 		{ Authorization: ` Basic ${Buffer.from(`${credentials.username}:${credentials.password}`).toString('base64')}` });
 
@@ -25,7 +22,7 @@ export async function togglApiRequest(this: ITriggerFunctions | IPollFunctions |
 		headers: headerWithAuthentication,
 		method,
 		qs: query,
-		uri: uri || `https://www.toggl.com/api/v8${resource}`,
+		uri: uri || `https://api.track.toggl.com/api/v8${resource}`,
 		body,
 		json: true,
 	};

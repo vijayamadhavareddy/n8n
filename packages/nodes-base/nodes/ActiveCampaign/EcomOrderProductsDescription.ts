@@ -6,11 +6,12 @@ import {
 	activeCampaignDefaultGetAllProperties,
 } from './GenericFunctions';
 
-export const ecomOrderProductsOperations = [
+export const ecomOrderProductsOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		displayOptions: {
 			show: {
 				resource: [
@@ -36,11 +37,10 @@ export const ecomOrderProductsOperations = [
 			},
 		],
 		default: 'getAll',
-		description: 'The operation to perform.',
 	},
-] as INodeProperties[];
+];
 
-export const ecomOrderProductsFields = [
+export const ecomOrderProductsFields: INodeProperties[] = [
 	// ----------------------------------
 	//         ecommerceOrderProducts:getByOrderId
 	// ----------------------------------
@@ -59,7 +59,7 @@ export const ecomOrderProductsFields = [
 				],
 			},
 		},
-		description: 'The ID of the order whose products you\'d like returned.',
+		description: 'The ID of the order whose products you\'d like returned',
 	},
 
 	// ----------------------------------
@@ -80,11 +80,11 @@ export const ecomOrderProductsFields = [
 				],
 			},
 		},
-		description: 'The ID of the product you\'d like returned.',
+		description: 'The ID of the product you\'d like returned',
 	},
 
 	// ----------------------------------
 	//         ecommerceOrderProducts:getAll
 	// ----------------------------------
 	...activeCampaignDefaultGetAllProperties('ecommerceOrderProducts', 'getAll'),
-] as INodeProperties[];
+];

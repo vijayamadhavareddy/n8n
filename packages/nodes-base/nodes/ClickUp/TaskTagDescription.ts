@@ -2,11 +2,12 @@ import {
 	INodeProperties,
 } from 'n8n-workflow';
 
-export const taskTagOperations = [
+export const taskTagOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		displayOptions: {
 			show: {
 				resource: [
@@ -27,11 +28,10 @@ export const taskTagOperations = [
 			},
 		],
 		default: 'add',
-		description: 'The operation to perform.',
 	},
-] as INodeProperties[];
+];
 
-export const taskTagFields = [
+export const taskTagFields: INodeProperties[] = [
 	/* -------------------------------------------------------------------------- */
 	/*                                taskTag:add                                 */
 	/* -------------------------------------------------------------------------- */
@@ -94,18 +94,18 @@ export const taskTagFields = [
 				name: 'custom_task_ids',
 				type: 'boolean',
 				default: false,
-				description: `If you want to reference a task by it's custom task id, this value must be true`,
+				description: 'Whether to reference a task by it\'s custom task ID',
 			},
 			{
-				displayName: 'Team ID',
+				displayName: 'Team Name or ID',
 				name: 'team_id',
 				type: 'options',
 				typeOptions: {
 					loadOptionsMethod: 'getTeams',
 				},
 				default: '',
-				description: `Only used when the parameter is set to custom_task_ids=true`,
+				description: 'Only used when the parameter is set to custom_task_ids=true. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 			},
 		],
 	},
-] as INodeProperties[];
+];

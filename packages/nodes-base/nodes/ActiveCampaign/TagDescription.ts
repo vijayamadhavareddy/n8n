@@ -6,11 +6,12 @@ import {
 	activeCampaignDefaultGetAllProperties,
 } from './GenericFunctions';
 
-export const tagOperations = [
+export const tagOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		displayOptions: {
 			show: {
 				resource: [
@@ -46,11 +47,10 @@ export const tagOperations = [
 			},
 		],
 		default: 'create',
-		description: 'The operation to perform.',
 	},
-] as INodeProperties[];
+];
 
-export const tagFields = [
+export const tagFields: INodeProperties[] = [
 	// ----------------------------------
 	//         contact:create
 	// ----------------------------------
@@ -147,13 +147,13 @@ export const tagFields = [
 		},
 		default: 0,
 		required: true,
-		description: 'ID of the tag to update.',
+		description: 'ID of the tag to update',
 	},
 	{
 		displayName: 'Update Fields',
 		name: 'updateFields',
 		type: 'collection',
-		description: 'The fields to update.',
+		description: 'The fields to update',
 		placeholder: 'Add Field',
 		displayOptions: {
 			show: {
@@ -172,7 +172,7 @@ export const tagFields = [
 				name: 'tag',
 				type: 'string',
 				default: '',
-				description: 'Name of the contact.',
+				description: 'Name of the contact',
 			},
 			{
 				displayName: 'Description',
@@ -202,7 +202,7 @@ export const tagFields = [
 		},
 		default: 0,
 		required: true,
-		description: 'ID of the tag to delete.',
+		description: 'ID of the tag to delete',
 	},
 	// ----------------------------------
 	//         contact:get
@@ -223,10 +223,10 @@ export const tagFields = [
 		},
 		default: 0,
 		required: true,
-		description: 'ID of the tag to get.',
+		description: 'ID of the tag to get',
 	},
 	// ----------------------------------
 	//         tag:getAll
 	// ----------------------------------
 	...activeCampaignDefaultGetAllProperties('tag', 'getAll'),
-] as INodeProperties[];
+];

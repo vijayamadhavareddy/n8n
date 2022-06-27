@@ -7,11 +7,12 @@ import {
 	makeGetAllFields,
 } from './SharedFields';
 
-export const productOperations = [
+export const productOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		displayOptions: {
 			show: {
 				resource: [
@@ -52,11 +53,10 @@ export const productOperations = [
 			},
 		],
 		default: 'create',
-		description: 'Operation to perform',
 	},
-] as INodeProperties[];
+];
 
-export const productFields = [
+export const productFields: INodeProperties[] = [
 	// ----------------------------------------
 	//           product: create
 	// ----------------------------------------
@@ -198,7 +198,7 @@ export const productFields = [
 	{
 		displayName: 'Product ID',
 		name: 'productId',
-		description: 'ID of the product to delete.',
+		description: 'ID of the product to delete',
 		type: 'string',
 		required: true,
 		default: '',
@@ -220,7 +220,7 @@ export const productFields = [
 	{
 		displayName: 'Product ID',
 		name: 'productId',
-		description: 'ID of the product to retrieve.',
+		description: 'ID of the product to retrieve',
 		type: 'string',
 		required: true,
 		default: '',
@@ -247,7 +247,7 @@ export const productFields = [
 	{
 		displayName: 'Product ID',
 		name: 'productId',
-		description: 'ID of the product to update.',
+		description: 'ID of the product to update',
 		type: 'string',
 		required: true,
 		default: '',
@@ -349,4 +349,4 @@ export const productFields = [
 			},
 		],
 	},
-] as INodeProperties[];
+];

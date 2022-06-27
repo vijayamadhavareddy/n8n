@@ -2,11 +2,12 @@ import {
 	INodeProperties
 } from 'n8n-workflow';
 
-export const stateOperations = [
+export const stateOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		displayOptions: {
 			show: {
 				resource: [
@@ -16,7 +17,7 @@ export const stateOperations = [
 		},
 		options: [
 			{
-				name: 'Create or update',
+				name: 'Create or Update',
 				value: 'upsert',
 				description: 'Create a new record, or update the current one if it already exists (upsert)',
 			},
@@ -32,18 +33,21 @@ export const stateOperations = [
 			},
 		],
 		default: 'get',
-		description: 'The operation to perform.',
 	},
-] as INodeProperties[];
+];
 
-export const stateFields = [
+export const stateFields: INodeProperties[] = [
 	/* -------------------------------------------------------------------------- */
 	/*                                state:get                                   */
 	/* -------------------------------------------------------------------------- */
 	{
-		displayName: 'Entity ID',
+		displayName: 'Entity Name or ID',
 		name: 'entityId',
-		type: 'string',
+		type: 'options',
+		description: 'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>',
+		typeOptions: {
+			loadOptionsMethod: 'getAllEntities',
+		},
 		displayOptions: {
 			show: {
 				operation: [
@@ -56,7 +60,6 @@ export const stateFields = [
 		},
 		required: true,
 		default: '',
-		description: 'The entity ID.',
 	},
 
 	/* -------------------------------------------------------------------------- */
@@ -77,7 +80,7 @@ export const stateFields = [
 			},
 		},
 		default: false,
-		description: 'If all results should be returned or only up to a given limit.',
+		description: 'Whether to return all results or only up to a given limit',
 	},
 	{
 		displayName: 'Limit',
@@ -101,16 +104,19 @@ export const stateFields = [
 			maxValue: 100,
 		},
 		default: 50,
-		description: 'How many results to return.',
+		description: 'Max number of results to return',
 	},
 
 	/* -------------------------------------------------------------------------- */
 	/*                                state:upsert                                */
 	/* -------------------------------------------------------------------------- */
 	{
-		displayName: 'Entity ID',
+		displayName: 'Entity Name or ID',
 		name: 'entityId',
-		type: 'string',
+		type: 'options',
+		typeOptions: {
+			loadOptionsMethod: 'getAllEntities',
+		},
 		displayOptions: {
 			show: {
 				operation: [
@@ -123,7 +129,7 @@ export const stateFields = [
 		},
 		required: true,
 		default: '',
-		description: 'The entity ID for which a state will be created.',
+		description: 'The entity ID for which a state will be created. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 	},
 	{
 		displayName: 'State',
@@ -171,17 +177,17 @@ export const stateFields = [
 						name: 'name',
 						type: 'string',
 						default: '',
-						description: 'Name of the attribute.',
+						description: 'Name of the attribute',
 					},
 					{
 						displayName: 'Value',
 						name: 'value',
 						type: 'string',
 						default: '',
-						description: 'Value of the attribute.',
+						description: 'Value of the attribute',
 					},
 				],
 			},
 		],
 	},
-] as INodeProperties[];
+];

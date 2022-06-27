@@ -2,11 +2,12 @@ import {
 	INodeProperties,
 } from 'n8n-workflow';
 
-export const accountOperations = [
+export const accountOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		displayOptions: {
 			show: {
 				resource: [
@@ -43,9 +44,9 @@ export const accountOperations = [
 		],
 		default: 'create',
 	},
-] as INodeProperties[];
+];
 
-export const accountFields = [
+export const accountFields: INodeProperties[] = [
 	// ----------------------------------------
 	//             account: create
 	// ----------------------------------------
@@ -99,14 +100,14 @@ export const accountFields = [
 				description: 'Annual revenue of the account',
 			},
 			{
-				displayName: 'Business Type ID',
+				displayName: 'Business Type Name or ID',
 				name: 'business_type_id',
 				type: 'options',
 				default: '',
 				typeOptions: {
 					loadOptionsMethod: 'getBusinessTypes',
 				},
-				description: 'ID of the business that the account belongs to',
+				description: 'ID of the business that the account belongs to. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 			},
 			{
 				displayName: 'City',
@@ -130,14 +131,14 @@ export const accountFields = [
 				description: 'Facebook username of the account',
 			},
 			{
-				displayName: 'Industry Type ID',
+				displayName: 'Industry Type Name or ID',
 				name: 'industry_type_id',
 				type: 'options',
 				default: '',
 				typeOptions: {
 					loadOptionsMethod: 'getIndustryTypes',
 				},
-				description: 'ID of the industry that the account belongs to',
+				description: 'ID of the industry that the account belongs to. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 			},
 			{
 				displayName: 'LinkedIn',
@@ -154,14 +155,14 @@ export const accountFields = [
 				description: 'Number of employees in the account',
 			},
 			{
-				displayName: 'Owner ID',
+				displayName: 'Owner Name or ID',
 				name: 'owner_id',
 				type: 'options',
 				default: '',
 				typeOptions: {
 					loadOptionsMethod: 'getUsers',
 				},
-				description: 'ID of the user to whom the account is assigned',
+				description: 'ID of the user to whom the account is assigned. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 			},
 			{
 				displayName: 'Parent Sales Account ID',
@@ -185,14 +186,14 @@ export const accountFields = [
 				description: 'State that the account belongs to',
 			},
 			{
-				displayName: 'Territory ID',
+				displayName: 'Territory Name or ID',
 				name: 'territory_id',
 				type: 'options',
 				default: '',
 				typeOptions: {
 					loadOptionsMethod: 'getTerritories',
 				},
-				description: 'ID of the territory that the account belongs to',
+				description: 'ID of the territory that the account belongs to. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 			},
 			{
 				displayName: 'Twitter',
@@ -266,9 +267,10 @@ export const accountFields = [
 	//             account: getAll
 	// ----------------------------------------
 	{
-		displayName: 'View',
+		displayName: 'View Name or ID',
 		name: 'view',
 		type: 'options',
+		description: 'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>',
 		required: true,
 		typeOptions: {
 			loadOptionsMethod: 'getAccountViews',
@@ -307,7 +309,7 @@ export const accountFields = [
 		name: 'limit',
 		type: 'number',
 		default: 50,
-		description: 'How many results to return',
+		description: 'Max number of results to return',
 		typeOptions: {
 			minValue: 1,
 		},
@@ -379,14 +381,14 @@ export const accountFields = [
 				description: 'Annual revenue of the account',
 			},
 			{
-				displayName: 'Business Type ID',
+				displayName: 'Business Type Name or ID',
 				name: 'business_type_id',
 				type: 'options',
 				default: '',
 				typeOptions: {
 					loadOptionsMethod: 'getBusinessTypes',
 				},
-				description: 'ID of the business that the account belongs to',
+				description: 'ID of the business that the account belongs to. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 			},
 			{
 				displayName: 'City',
@@ -410,14 +412,14 @@ export const accountFields = [
 				description: 'Facebook username of the account',
 			},
 			{
-				displayName: 'Industry Type ID',
+				displayName: 'Industry Type Name or ID',
 				name: 'industry_type_id',
 				type: 'options',
 				default: '',
 				typeOptions: {
 					loadOptionsMethod: 'getIndustryTypes',
 				},
-				description: 'ID of the industry that the account belongs to',
+				description: 'ID of the industry that the account belongs to. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 			},
 			{
 				displayName: 'LinkedIn',
@@ -441,14 +443,14 @@ export const accountFields = [
 				description: 'Number of employees in the account',
 			},
 			{
-				displayName: 'Owner ID',
+				displayName: 'Owner Name or ID',
 				name: 'owner_id',
 				type: 'options',
 				default: '',
 				typeOptions: {
 					loadOptionsMethod: 'getUsers',
 				},
-				description: 'ID of the user to whom the account is assigned',
+				description: 'ID of the user to whom the account is assigned. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 			},
 			{
 				displayName: 'Parent Sales Account ID',
@@ -472,14 +474,14 @@ export const accountFields = [
 				description: 'State that the account belongs to',
 			},
 			{
-				displayName: 'Territory ID',
+				displayName: 'Territory Name or ID',
 				name: 'territory_id',
 				type: 'options',
 				default: '',
 				typeOptions: {
 					loadOptionsMethod: 'getTerritories',
 				},
-				description: 'ID of the territory that the account belongs to',
+				description: 'ID of the territory that the account belongs to. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 			},
 			{
 				displayName: 'Twitter',
@@ -504,4 +506,4 @@ export const accountFields = [
 			},
 		],
 	},
-] as INodeProperties[];
+];

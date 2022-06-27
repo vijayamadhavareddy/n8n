@@ -2,11 +2,12 @@ import {
 	INodeProperties,
 } from 'n8n-workflow';
 
-export const fileOperations = [
+export const fileOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		displayOptions: {
 			show: {
 				resource: [
@@ -27,11 +28,10 @@ export const fileOperations = [
 			},
 		],
 		default: 'download',
-		description: 'The operation to perform.',
 	},
-] as INodeProperties[];
+];
 
-export const fileFields = [
+export const fileFields: INodeProperties[] = [
 	/* -------------------------------------------------------------------------- */
 	/*                                file:download                               */
 	/* -------------------------------------------------------------------------- */
@@ -52,7 +52,7 @@ export const fileFields = [
 				],
 			},
 		},
-		description: 'The table identifier.',
+		description: 'The table identifier',
 	},
 	{
 		displayName: 'Record ID',
@@ -71,7 +71,7 @@ export const fileFields = [
 				],
 			},
 		},
-		description: 'The unique identifier of the record.',
+		description: 'The unique identifier of the record',
 	},
 	{
 		displayName: 'Field ID',
@@ -90,7 +90,7 @@ export const fileFields = [
 				],
 			},
 		},
-		description: 'The unique identifier of the field.',
+		description: 'The unique identifier of the field',
 	},
 	{
 		displayName: 'Version Number',
@@ -109,7 +109,7 @@ export const fileFields = [
 				],
 			},
 		},
-		description: 'The file attachment version number.',
+		description: 'The file attachment version number',
 	},
 	{
 		displayName: 'Binary Property',
@@ -126,7 +126,7 @@ export const fileFields = [
 		name: 'binaryPropertyName',
 		type: 'string',
 		default: 'data',
-		description: 'Object property name which holds binary data.',
+		description: 'Object property name which holds binary data',
 		required: true,
 	},
-] as INodeProperties[];
+];

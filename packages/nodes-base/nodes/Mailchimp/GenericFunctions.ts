@@ -35,11 +35,7 @@ export async function mailchimpApiRequest(this: IHookFunctions | IExecuteFunctio
 
 	try {
 		if (authenticationMethod === 'apiKey') {
-			const credentials = this.getCredentials('mailchimpApi');
-
-			if (credentials === undefined) {
-				throw new NodeOperationError(this.getNode(), 'No credentials got returned!');
-			}
+			const credentials = await this.getCredentials('mailchimpApi');
 
 			options.headers = Object.assign({}, headers, { Authorization: `apikey ${credentials.apiKey}` });
 
@@ -52,7 +48,7 @@ export async function mailchimpApiRequest(this: IHookFunctions | IExecuteFunctio
 
 			return await this.helpers.request!(options);
 		} else {
-			const credentials = this.getCredentials('mailchimpOAuth2Api') as IDataObject;
+			const credentials = await this.getCredentials('mailchimpOAuth2Api');
 
 			const { api_endpoint } = await getMetadata.call(this, credentials.oauthTokenData as IDataObject);
 
@@ -95,8 +91,8 @@ export function validateJSON(json: string | undefined): any { // tslint:disable-
 	return result;
 }
 
-function getMetadata(this: IHookFunctions | IExecuteFunctions | IExecuteSingleFunctions | ILoadOptionsFunctions, oauthTokenData: IDataObject) {
-	const credentials = this.getCredentials('mailchimpOAuth2Api') as IDataObject;
+async function getMetadata(this: IHookFunctions | IExecuteFunctions | IExecuteSingleFunctions | ILoadOptionsFunctions, oauthTokenData: IDataObject) {
+	const credentials = await this.getCredentials('mailchimpOAuth2Api');
 	const options: OptionsWithUrl = {
 		headers: {
 			'Accept': 'application/json',

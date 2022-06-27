@@ -2,11 +2,12 @@ import {
 	INodeProperties,
 } from 'n8n-workflow';
 
-export const trackOperations = [
+export const trackOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		displayOptions: {
 			show: {
 				resource: [
@@ -27,11 +28,10 @@ export const trackOperations = [
 			},
 		],
 		default: 'page',
-		description: 'The operation to perform.',
 	},
-] as INodeProperties[];
+];
 
-export const trackFields = [
+export const trackFields: INodeProperties[] = [
 
 	/* -------------------------------------------------------------------------- */
 	/*                                 track:page                                 */
@@ -71,7 +71,7 @@ export const trackFields = [
 			},
 		},
 		default: '',
-		description: `The user's distinct ID.`,
+		description: 'The user\'s distinct ID',
 	},
 	{
 		displayName: 'Additional Fields',
@@ -168,8 +168,8 @@ export const trackFields = [
 				name: 'timestamp',
 				type: 'dateTime',
 				default: '',
-				description: `If not set, it'll automatically be set to the current time.`,
+				description: 'If not set, it\'ll automatically be set to the current time',
 			},
 		],
 	},
-] as INodeProperties[];
+];

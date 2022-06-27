@@ -25,10 +25,7 @@ export async function ouraApiRequest(
 	option: IDataObject = {},
 ) {
 
-	const credentials = this.getCredentials('ouraApi');
-	if (credentials === undefined) {
-		throw new NodeOperationError(this.getNode(), 'No credentials got returned!');
-	}
+	const credentials = await this.getCredentials('ouraApi');
 	let options: OptionsWithUri = {
 		headers: {
 			Authorization: `Bearer ${credentials.accessToken}`,

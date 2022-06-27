@@ -2,11 +2,12 @@ import {
 	INodeProperties,
 } from 'n8n-workflow';
 
-export const labelOperations = [
+export const labelOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		displayOptions: {
 			show: {
 				resource: [
@@ -37,11 +38,10 @@ export const labelOperations = [
 			},
 		],
 		default: 'create',
-		description: 'The operation to perform',
 	},
-] as INodeProperties[];
+];
 
-export const labelFields = [
+export const labelFields: INodeProperties[] = [
 	{
 		displayName: 'Name',
 		name: 'name',
@@ -110,7 +110,7 @@ export const labelFields = [
 				],
 			},
 		},
-		description: 'The visibility of the label in the label list in the Gmail web interface.',
+		description: 'The visibility of the label in the label list in the Gmail web interface',
 	},
 	{
 		displayName: 'Message List Visibility',
@@ -122,7 +122,7 @@ export const labelFields = [
 				value: 'hide',
 			},
 			{
-				name: 'show',
+				name: 'Show',
 				value: 'show',
 			},
 		],
@@ -138,7 +138,7 @@ export const labelFields = [
 				],
 			},
 		},
-		description: 'The visibility of messages with this label in the message list in the Gmail web interface.',
+		description: 'The visibility of messages with this label in the message list in the Gmail web interface',
 	},
 	/* -------------------------------------------------------------------------- */
 	/*                                 label:getAll                               */
@@ -158,7 +158,7 @@ export const labelFields = [
 			},
 		},
 		default: false,
-		description: 'If all results should be returned or only up to a given limit.',
+		description: 'Whether to return all results or only up to a given limit',
 	},
 	{
 		displayName: 'Limit',
@@ -182,6 +182,6 @@ export const labelFields = [
 			maxValue: 500,
 		},
 		default: 100,
-		description: 'How many results to return.',
+		description: 'Max number of results to return',
 	},
-] as INodeProperties[];
+];

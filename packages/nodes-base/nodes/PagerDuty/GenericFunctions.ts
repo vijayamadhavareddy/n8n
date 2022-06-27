@@ -48,11 +48,7 @@ export async function pagerDutyApiRequest(this: IExecuteFunctions | IWebhookFunc
 
 	try {
 		if (authenticationMethod === 'apiToken') {
-			const credentials = this.getCredentials('pagerDutyApi');
-
-			if (credentials === undefined) {
-				throw new NodeOperationError(this.getNode(), 'No credentials got returned!');
-			}
+			const credentials = await this.getCredentials('pagerDutyApi');
 
 			options.headers!['Authorization'] = `Token token=${credentials.apiToken}`;
 

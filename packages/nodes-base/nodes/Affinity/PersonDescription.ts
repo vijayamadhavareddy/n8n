@@ -2,11 +2,12 @@ import {
 	INodeProperties,
 } from 'n8n-workflow';
 
-export const personOperations = [
+export const personOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		displayOptions: {
 			show: {
 				resource: [
@@ -42,11 +43,10 @@ export const personOperations = [
 			},
 		],
 		default: 'create',
-		description: 'The operation to perform.',
 	},
-] as INodeProperties[];
+];
 
-export const personFields = [
+export const personFields: INodeProperties[] = [
 
 	/* -------------------------------------------------------------------------- */
 	/*                                person:create                               */
@@ -67,7 +67,7 @@ export const personFields = [
 				],
 			},
 		},
-		description: 'The first name of the person.',
+		description: 'The first name of the person',
 	},
 	{
 		displayName: 'Last Name',
@@ -85,7 +85,7 @@ export const personFields = [
 				],
 			},
 		},
-		description: 'The last name of the person.',
+		description: 'The last name of the person',
 	},
 	{
 		displayName: 'Additional Fields',
@@ -105,14 +105,14 @@ export const personFields = [
 		},
 		options: [
 			{
-				displayName: 'Organizations',
+				displayName: 'Organization Names or IDs',
 				name: 'organizations',
 				type: 'multiOptions',
 				typeOptions: {
 					loadOptionsMethod: 'getOrganizations',
 				},
 				default: [],
-				description: 'Organizations that the person is associated with.',
+				description: 'Organizations that the person is associated with. Choose from the list, or specify IDs using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 			},
 		],
 	},
@@ -157,7 +157,7 @@ export const personFields = [
 				],
 			},
 		},
-		description: 'Unique identifier for the person.',
+		description: 'Unique identifier for the person',
 	},
 	{
 		displayName: 'Update Fields',
@@ -181,24 +181,24 @@ export const personFields = [
 				name: 'firstName',
 				type: 'string',
 				default: '',
-				description: 'The first name of the person.',
+				description: 'The first name of the person',
 			},
 			{
 				displayName: 'Last Name',
 				name: 'lastName',
 				type: 'string',
 				default: '',
-				description: 'The last name of the person.',
+				description: 'The last name of the person',
 			},
 			{
-				displayName: 'Organizations',
+				displayName: 'Organization Names or IDs',
 				name: 'organizations',
 				type: 'multiOptions',
 				typeOptions: {
 					loadOptionsMethod: 'getOrganizations',
 				},
 				default: [],
-				description: 'Organizations that the person is associated with.',
+				description: 'Organizations that the person is associated with. Choose from the list, or specify IDs using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 			},
 		],
 	},
@@ -243,7 +243,7 @@ export const personFields = [
 				],
 			},
 		},
-		description: 'Unique identifier for the person.',
+		description: 'Unique identifier for the person',
 	},
 	{
 		displayName: 'Options',
@@ -267,7 +267,7 @@ export const personFields = [
 				name: 'withInteractionDates',
 				type: 'boolean',
 				default: false,
-				description: 'When true, interaction dates will be present on the returned resources.',
+				description: 'Whether interaction dates will be present on the returned resources',
 			},
 		],
 	},
@@ -289,7 +289,7 @@ export const personFields = [
 			},
 		},
 		default: false,
-		description: 'If all results should be returned or only up to a given limit.',
+		description: 'Whether to return all results or only up to a given limit',
 	},
 	{
 		displayName: 'Limit',
@@ -313,7 +313,7 @@ export const personFields = [
 			maxValue: 10,
 		},
 		default: 5,
-		description: 'How many results to return.',
+		description: 'Max number of results to return',
 	},
 	{
 		displayName: 'Options',
@@ -344,7 +344,7 @@ export const personFields = [
 				name: 'withInteractionDates',
 				type: 'boolean',
 				default: false,
-				description: 'When true, interaction dates will be present on the returned resources.',
+				description: 'Whether interaction dates will be present on the returned resources',
 			},
 		],
 	},
@@ -367,6 +367,6 @@ export const personFields = [
 				],
 			},
 		},
-		description: 'Unique identifier for the person.',
+		description: 'Unique identifier for the person',
 	},
-] as INodeProperties[];
+];

@@ -6,13 +6,13 @@ import {
 	employeeAdditionalFieldsOptions,
 } from './EmployeeAdditionalFieldsOptions';
 
-export const employeeOperations = [
+export const employeeOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		default: 'get',
-		description: 'Operation to perform',
 		options: [
 			{
 				name: 'Create',
@@ -39,9 +39,9 @@ export const employeeOperations = [
 			},
 		},
 	},
-] as INodeProperties[];
+];
 
-export const employeeFields = [
+export const employeeFields: INodeProperties[] = [
 	// ----------------------------------
 	//         employee: create
 	// ----------------------------------
@@ -105,7 +105,7 @@ export const employeeFields = [
 		type: 'string',
 		required: true,
 		default: '',
-		description: 'The ID of the employee to retrieve.',
+		description: 'The ID of the employee to retrieve',
 		displayOptions: {
 			show: {
 				resource: [
@@ -126,7 +126,7 @@ export const employeeFields = [
 		name: 'returnAll',
 		type: 'boolean',
 		default: false,
-		description: 'Return all results.',
+		description: 'Whether to return all results or only up to a given limit',
 		displayOptions: {
 			show: {
 				resource: [
@@ -142,8 +142,8 @@ export const employeeFields = [
 		displayName: 'Limit',
 		name: 'limit',
 		type: 'number',
-		default: 5,
-		description: 'The number of results to return.',
+		default: 50,
+		description: 'Max number of results to return',
 		typeOptions: {
 			minValue: 1,
 			maxValue: 1000,
@@ -175,7 +175,7 @@ export const employeeFields = [
 				type: 'string',
 				default: '',
 				placeholder: 'WHERE Metadata.LastUpdatedTime > \'2021-01-01\'',
-				description: 'The condition for selecting employees. See the <a href="https://developer.intuit.com/app/developer/qbo/docs/develop/explore-the-quickbooks-online-api/data-queries" target="_blank">guide</a> for supported syntax.',
+				description: 'The condition for selecting employees. See the <a href="https://developer.intuit.com/app/developer/qbo/docs/develop/explore-the-quickbooks-online-api/data-queries">guide</a> for supported syntax.',
 				typeOptions: {
 					alwaysOpenEditWindow: true,
 				},
@@ -202,7 +202,7 @@ export const employeeFields = [
 		type: 'string',
 		required: true,
 		default: '',
-		description: 'The ID of the employee to update.',
+		description: 'The ID of the employee to update',
 		displayOptions: {
 			show: {
 				resource: [
@@ -233,4 +233,4 @@ export const employeeFields = [
 		},
 		options: employeeAdditionalFieldsOptions,
 	},
-] as INodeProperties[];
+];

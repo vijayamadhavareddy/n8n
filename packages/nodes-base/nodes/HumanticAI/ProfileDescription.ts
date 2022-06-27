@@ -2,11 +2,12 @@ import {
 	INodeProperties,
 } from 'n8n-workflow';
 
-export const profileOperations = [
+export const profileOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		displayOptions: {
 			show: {
 				resource: [
@@ -32,11 +33,10 @@ export const profileOperations = [
 			},
 		],
 		default: 'create',
-		description: 'The operation to perform.',
 	},
-] as INodeProperties[];
+];
 
-export const profileFields = [
+export const profileFields: INodeProperties[] = [
 	/* -------------------------------------------------------------------------- */
 	/*                                 profile:create                             */
 	/* -------------------------------------------------------------------------- */
@@ -56,7 +56,7 @@ export const profileFields = [
 				],
 			},
 		},
-		description: `The LinkedIn profile URL or email ID for creating a Humantic profile. If you are sending the resume, this should be a unique string.`,
+		description: 'The LinkedIn profile URL or email ID for creating a Humantic profile. If you are sending the resume, this should be a unique string.',
 	},
 	{
 		displayName: 'Send Resume',
@@ -73,7 +73,7 @@ export const profileFields = [
 				],
 			},
 		},
-		description: `Send a resume for a resume based analysis.`,
+		description: 'Whether to send a resume for a resume based analysis',
 	},
 	{
 		displayName: 'Binary Property',
@@ -93,7 +93,7 @@ export const profileFields = [
 				],
 			},
 		},
-		description: `The resume in PDF or DOCX format.`,
+		description: 'The resume in PDF or DOCX format',
 	},
 
 	/* -------------------------------------------------------------------------- */
@@ -115,7 +115,7 @@ export const profileFields = [
 				],
 			},
 		},
-		description: `This value is the same as the User ID that was provided when the analysis was created. This could be a LinkedIn URL, email ID, or a unique string in case of resume based analysis.`,
+		description: 'This value is the same as the User ID that was provided when the analysis was created. This could be a LinkedIn URL, email ID, or a unique string in case of resume based analysis.',
 	},
 	{
 		displayName: 'Options',
@@ -149,8 +149,7 @@ export const profileFields = [
 					},
 				],
 				default: [],
-				description: `Fetch the Humantic profile of the user for a particular persona type.<br>
-				Multiple persona values can be supported using comma as a delimiter.`,
+				description: 'Fetch the Humantic profile of the user for a particular persona type. Multiple persona values can be supported using comma as a delimiter.',
 			},
 		],
 	},
@@ -176,7 +175,7 @@ export const profileFields = [
 				],
 			},
 		},
-		description: `This value is the same as the User ID that was provided when the analysis was created. Currently only supported for profiles created using LinkedIn URL.`,
+		description: 'This value is the same as the User ID that was provided when the analysis was created. Currently only supported for profiles created using LinkedIn URL.',
 	},
 	{
 		displayName: 'Send Resume',
@@ -193,7 +192,7 @@ export const profileFields = [
 				],
 			},
 		},
-		description: `Send a resume for a resume of the user.`,
+		description: 'Whether to send a resume for a resume of the user',
 	},
 	{
 		displayName: 'Text',
@@ -213,7 +212,7 @@ export const profileFields = [
 				],
 			},
 		},
-		description: `Additional text written by the user.`,
+		description: 'Additional text written by the user',
 	},
 	{
 		displayName: 'Binary Property',
@@ -233,6 +232,6 @@ export const profileFields = [
 				],
 			},
 		},
-		description: `The resume in PDF or DOCX format.`,
+		description: 'The resume in PDF or DOCX format',
 	},
-] as INodeProperties[];
+];

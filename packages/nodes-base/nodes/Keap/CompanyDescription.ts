@@ -2,11 +2,12 @@ import {
 	INodeProperties,
  } from 'n8n-workflow';
 
-export const companyOperations = [
+export const companyOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		displayOptions: {
 			show: {
 				resource: [
@@ -27,11 +28,10 @@ export const companyOperations = [
 			},
 		],
 		default: 'create',
-		description: 'The operation to perform.',
 	},
-] as INodeProperties[];
+];
 
-export const companyFields = [
+export const companyFields: INodeProperties[] = [
 
 /* -------------------------------------------------------------------------- */
 /*                                 company:create                             */
@@ -106,7 +106,7 @@ export const companyFields = [
 		typeOptions: {
 			multipleValues: false,
 		},
-		default: '',
+		default: {},
 		placeholder: 'Add Address',
 		displayOptions: {
 			show: {
@@ -274,7 +274,7 @@ export const companyFields = [
 			},
 		},
 		default: false,
-		description: 'If all results should be returned or only up to a given limit.',
+		description: 'Whether to return all results or only up to a given limit',
 	},
 	{
 		displayName: 'Limit',
@@ -298,7 +298,7 @@ export const companyFields = [
 			maxValue: 200,
 		},
 		default: 100,
-		description: 'How many results to return.',
+		description: 'Max number of results to return',
 	},
 	{
 		displayName: 'Options',
@@ -366,9 +366,8 @@ export const companyFields = [
 				name: 'fields',
 				type: 'string',
 				default: '',
-				description: `Comma-delimited list of Company properties to include in the response.</br>
-				(Fields such as notes, fax_number and custom_fields aren't included, by default.)`,
+				description: 'Comma-delimited list of Company properties to include in the response. (Fields such as notes, fax_number and custom_fields aren\'t included, by default.).',
 			},
 		],
 	},
-] as INodeProperties[];
+];

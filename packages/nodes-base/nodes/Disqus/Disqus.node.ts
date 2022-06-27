@@ -16,6 +16,7 @@ export class Disqus implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'Disqus',
 		name: 'disqus',
+		// eslint-disable-next-line n8n-nodes-base/node-class-description-icon-not-svg
 		icon: 'file:disqus.png',
 		group: ['input'],
 		version: 1,
@@ -23,7 +24,6 @@ export class Disqus implements INodeType {
 		description: 'Access data on Disqus',
 		defaults: {
 			name: 'Disqus',
-			color: '#22BB44',
 		},
 		inputs: ['main'],
 		outputs: ['main'],
@@ -38,6 +38,7 @@ export class Disqus implements INodeType {
 				displayName: 'Resource',
 				name: 'resource',
 				type: 'options',
+				noDataExpression: true,
 				options: [
 					{
 						name: 'Forum',
@@ -45,7 +46,6 @@ export class Disqus implements INodeType {
 					},
 				],
 				default: 'forum',
-				description: 'The resource to operate on.',
 			},
 
 			// ----------------------------------
@@ -55,6 +55,7 @@ export class Disqus implements INodeType {
 				displayName: 'Operation',
 				name: 'operation',
 				type: 'options',
+				noDataExpression: true,
 				displayOptions: {
 					show: {
 						resource: [
@@ -85,14 +86,13 @@ export class Disqus implements INodeType {
 					},
 				],
 				default: 'get',
-				description: 'The operation to perform.',
 			},
 
 			// ----------------------------------
 			//         forum:get
 			// ----------------------------------
 			{
-				displayName: 'Forum name',
+				displayName: 'Forum Name',
 				name: 'id',
 				type: 'string',
 				default: '',
@@ -107,7 +107,7 @@ export class Disqus implements INodeType {
 						],
 					},
 				},
-				description: 'The short name(aka ID) of the forum to get.',
+				description: 'The short name(aka ID) of the forum to get',
 			},
 			{
 				displayName: 'Additional Fields',
@@ -132,7 +132,7 @@ export class Disqus implements INodeType {
 						type: 'multiOptions',
 						options: [
 							{
-								name: 'counters',
+								name: 'Counters',
 								value: 'counters',
 							},
 							{
@@ -169,7 +169,6 @@ export class Disqus implements INodeType {
 							},
 						],
 						default: [],
-						description: 'The resource to operate on.',
 					},
 					{
 						displayName: 'Related',
@@ -191,7 +190,7 @@ export class Disqus implements INodeType {
 			//         forum:getPosts
 			// ----------------------------------
 			{
-				displayName: 'Forum name',
+				displayName: 'Forum Name',
 				name: 'id',
 				type: 'string',
 				default: '',
@@ -206,7 +205,7 @@ export class Disqus implements INodeType {
 						],
 					},
 				},
-				description: 'The short name(aka ID) of the forum to get.',
+				description: 'The short name(aka ID) of the forum to get',
 			},
 			{
 				displayName: 'Return All',
@@ -223,7 +222,7 @@ export class Disqus implements INodeType {
 					},
 				},
 				default: false,
-				description: 'If all results should be returned or only up to a given limit.',
+				description: 'Whether to return all results or only up to a given limit',
 			},
 			{
 				displayName: 'Limit',
@@ -247,7 +246,7 @@ export class Disqus implements INodeType {
 					maxValue: 100,
 				},
 				default: 100,
-				description: 'How many results to return.',
+				description: 'Max number of results to return',
 			},
 			{
 				displayName: 'Additional Fields',
@@ -292,16 +291,12 @@ export class Disqus implements INodeType {
 								value: 'Is_Anonymous',
 							},
 							{
-								name: 'Is_Flagged',
-								value: 'Is_Flagged',
-							},
-							{
-								name: 'No_Issue',
-								value: 'No_Issue',
-							},
-							{
 								name: 'Is_At_Flag_Limit',
 								value: 'Is_At_Flag_Limit',
+							},
+							{
+								name: 'Is_Flagged',
+								value: 'Is_Flagged',
 							},
 							{
 								name: 'Is_Toxic',
@@ -312,12 +307,16 @@ export class Disqus implements INodeType {
 								value: 'Modified_By_Rule',
 							},
 							{
+								name: 'No_Issue',
+								value: 'No_Issue',
+							},
+							{
 								name: 'Shadow_Banned',
 								value: 'Shadow_Banned',
 							},
 						],
 						default: [],
-						description: 'You may specify filters for your response.',
+						description: 'You may specify filters for your response',
 					},
 					{
 						displayName: 'Include',
@@ -325,12 +324,12 @@ export class Disqus implements INodeType {
 						type: 'multiOptions',
 						options: [
 							{
-								name: 'approved',
+								name: 'Approved',
 								value: 'approved',
 							},
 						],
 						default: [],
-						description: 'You may specify relations to include with your response.',
+						description: 'You may specify relations to include with your response',
 					},
 					{
 						displayName: 'Order',
@@ -347,14 +346,14 @@ export class Disqus implements INodeType {
 							},
 						],
 						default: 'asc',
-						description: 'You may specify order to sort your response.',
+						description: 'You may specify order to sort your response',
 					},
 					{
 						displayName: 'Query',
 						name: 'query',
 						type: 'string',
 						default: '',
-						description: 'You may specify query forChoices: asc, desc your response.',
+						description: 'You may specify query forChoices: asc, desc your response',
 					},
 					{
 						displayName: 'Related',
@@ -362,7 +361,7 @@ export class Disqus implements INodeType {
 						type: 'multiOptions',
 						options: [
 							{
-								name: 'thread',
+								name: 'Thread',
 								value: 'thread',
 							},
 						],
@@ -383,7 +382,7 @@ export class Disqus implements INodeType {
 			//         forum:getCategories
 			// ----------------------------------
 			{
-				displayName: 'Forum name',
+				displayName: 'Forum Name',
 				name: 'id',
 				type: 'string',
 				default: '',
@@ -398,7 +397,7 @@ export class Disqus implements INodeType {
 						],
 					},
 				},
-				description: 'The short name(aka ID) of the forum to get Categories.',
+				description: 'The short name(aka ID) of the forum to get Categories',
 			},
 			{
 				displayName: 'Return All',
@@ -415,7 +414,7 @@ export class Disqus implements INodeType {
 					},
 				},
 				default: false,
-				description: 'If all results should be returned or only up to a given limit.',
+				description: 'Whether to return all results or only up to a given limit',
 			},
 			{
 				displayName: 'Limit',
@@ -439,7 +438,7 @@ export class Disqus implements INodeType {
 					maxValue: 100,
 				},
 				default: 100,
-				description: 'How many results to return.',
+				description: 'Max number of results to return',
 			},
 			{
 				displayName: 'Additional Fields',
@@ -473,7 +472,7 @@ export class Disqus implements INodeType {
 							},
 						],
 						default: 'asc',
-						description: 'You may specify order to sort your response.',
+						description: 'You may specify order to sort your response',
 					},
 				],
 			},
@@ -482,7 +481,7 @@ export class Disqus implements INodeType {
 			//         forum:getThreads
 			// ----------------------------------
 			{
-				displayName: 'Forum name',
+				displayName: 'Forum Name',
 				name: 'id',
 				type: 'string',
 				default: '',
@@ -497,7 +496,7 @@ export class Disqus implements INodeType {
 						],
 					},
 				},
-				description: 'The short name(aka ID) of the forum to get Threads.',
+				description: 'The short name(aka ID) of the forum to get Threads',
 			},
 			{
 				displayName: 'Return All',
@@ -514,7 +513,7 @@ export class Disqus implements INodeType {
 					},
 				},
 				default: false,
-				description: 'If all results should be returned or only up to a given limit.',
+				description: 'Whether to return all results or only up to a given limit',
 			},
 			{
 				displayName: 'Limit',
@@ -538,7 +537,7 @@ export class Disqus implements INodeType {
 					maxValue: 100,
 				},
 				default: 100,
-				description: 'How many results to return.',
+				description: 'Max number of results to return',
 			},
 			{
 				displayName: 'Additional Fields',
@@ -567,7 +566,7 @@ export class Disqus implements INodeType {
 								value: 'author',
 							},
 							{
-								name: 'forum',
+								name: 'Forum',
 								value: 'forum',
 							},
 						],
@@ -580,20 +579,20 @@ export class Disqus implements INodeType {
 						type: 'multiOptions',
 						options: [
 							{
-								name: 'closed',
+								name: 'Closed',
 								value: 'closed',
 							},
 							{
-								name: 'open',
+								name: 'Open',
 								value: 'open',
 							},
 							{
-								name: 'killed',
+								name: 'Killed',
 								value: 'killed',
 							},
 						],
 						default: [],
-						description: 'You may specify relations to include with your response.',
+						description: 'You may specify relations to include with your response',
 					},
 					{
 						displayName: 'Order',
@@ -610,7 +609,7 @@ export class Disqus implements INodeType {
 							},
 						],
 						default: 'asc',
-						description: 'You may specify order to sort your response.',
+						description: 'You may specify order to sort your response',
 					},
 					{
 						displayName: 'Since',
@@ -624,7 +623,7 @@ export class Disqus implements INodeType {
 						name: 'threadId',
 						type: 'string',
 						default: '',
-						description: 'Looks up a thread by ID. You may pass us the "ident"<br />query type instead of an ID by including "forum". You may<br />pass us the "link" query type to filter by URL. You must pass<br />the "forum" if you do not have the Pro API Access addon.',
+						description: 'Looks up a thread by ID. You may pass us the "ident" query type instead of an ID by including "forum". You may pass us the "link" query type to filter by URL. You must pass the "forum" if you do not have the Pro API Access addon.',
 					},
 				],
 			},

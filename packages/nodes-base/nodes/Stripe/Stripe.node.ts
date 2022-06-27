@@ -38,14 +38,7 @@ import {
 	sourceOperations,
 	tokenFields,
 	tokenOperations,
-	payoutOperations,
-	balanceTransactionsOperations,
-	balanceTransactionsFields
 } from './descriptions';
-import {balance} from "./operations/balanceOperations";
-import {customerCard} from "./operations/customerCardOperations";
-import {payout} from "./operations/payoutOperations";
-import { balanceTransactions } from './operations/balanceTransactions';
 
 export class Stripe implements INodeType {
 	description: INodeTypeDescription = {
@@ -58,7 +51,6 @@ export class Stripe implements INodeType {
 		description: 'Consume the Stripe API',
 		defaults: {
 			name: 'Stripe',
-			color: '#6772e5',
 		},
 		inputs: ['main'],
 		outputs: ['main'],
@@ -73,6 +65,7 @@ export class Stripe implements INodeType {
 				displayName: 'Resource',
 				name: 'resource',
 				type: 'options',
+				noDataExpression: true,
 				options: [
 					{
 						name: 'Balance',
@@ -102,25 +95,8 @@ export class Stripe implements INodeType {
 						name: 'Token',
 						value: 'token',
 					},
-					{
-						name: 'Payout',
-						value: 'payout',
-					},
-					{
-						name: 'Balance Transactions',
-						value: 'balanceTransactions',
-					},
 				],
 				default: 'balance',
-				description: 'Resource to consume',
-			},
-			{
-				displayName: 'Credential Name',
-				name: 'credentialName',
-				type: 'string',
-				description: 'Custom Credential Name',
-				default: '',
-				required: false
 			},
 			...balanceOperations,
 			...customerCardOperations,
@@ -135,9 +111,6 @@ export class Stripe implements INodeType {
 			...sourceFields,
 			...tokenOperations,
 			...tokenFields,
-			...payoutOperations,
-			...balanceTransactionsOperations,
-			...balanceTransactionsFields
 		],
 	};
 
@@ -148,7 +121,7 @@ export class Stripe implements INodeType {
 			},
 			async getCurrencies(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
 				const returnData: INodePropertyOptions[] = [];
-				const {data} = await stripeApiRequest.call(this, 'GET', '/country_specs', {});
+				const { data } = await stripeApiRequest.call(this, 'GET', '/country_specs', {});
 				for (const currency of data[0].supported_payment_currencies) {
 					returnData.push({
 						name: currency.toUpperCase(),
@@ -173,299 +146,348 @@ export class Stripe implements INodeType {
 
 			try {
 
-				switch (resource) {
-					case 'balance':
-						responseData = await balance.execute(this, operation)
-						break;
-					case 'customerCard':
-						responseData = await customerCard.execute(this, operation, i);
-						break;
-					case 'charge':
+				if (resource === 'balance') {
 
-						// *********************************************************************
-						//                             charge
-						// *********************************************************************
+					// *********************************************************************
+					//                             balance
+					// *********************************************************************
 
-						// https://stripe.com/docs/api/charges
+					// https://stripe.com/docs/api/balance
 
-						if (operation === 'create') {
+					if (operation === 'get') {
 
-							// ----------------------------------
-							//          charge: create
-							// ----------------------------------
+						// ----------------------------------
+						//       balance: get
+						// ----------------------------------
 
-							const body = {
-								customer: this.getNodeParameter('customerId', i),
-								currency: (this.getNodeParameter('currency', i) as string).toLowerCase(),
-								amount: this.getNodeParameter('amount', i),
-								source: this.getNodeParameter('source', i),
-							} as IDataObject;
+						responseData = await stripeApiRequest.call(this, 'GET', '/balance', {}, {});
 
-							const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
+					}
 
-							if (!isEmpty(additionalFields)) {
-								Object.assign(body, adjustChargeFields(additionalFields));
-							}
+				} else if (resource === 'customerCard') {
 
-							responseData = await stripeApiRequest.call(this, 'POST', '/charges', body, {});
+					// *********************************************************************
+					//                           customer card
+					// *********************************************************************
 
-						} else if (operation === 'get') {
+					// https://stripe.com/docs/api/cards
 
-							// ----------------------------------
-							//           charge: get
-							// ----------------------------------
+					if (operation === 'add') {
 
-							const chargeId = this.getNodeParameter('chargeId', i);
-							responseData = await stripeApiRequest.call(this, 'GET', `/charges/${chargeId}`, {}, {});
+						// ----------------------------------
+						//         customerCard: add
+						// ----------------------------------
 
-						} else if (operation === 'getAll') {
+						const body = {
+							source: this.getNodeParameter('token', i),
+						} as IDataObject;
 
-							// ----------------------------------
-							//          charge: getAll
-							// ----------------------------------
+						const customerId = this.getNodeParameter('customerId', i);
+						const endpoint = `/customers/${customerId}/sources`;
+						responseData = await stripeApiRequest.call(this, 'POST', endpoint, body, {});
 
-							responseData = await handleListing.call(this, resource);
+					} else if (operation === 'remove') {
 
-						} else if (operation === 'update') {
+						// ----------------------------------
+						//       customerCard: remove
+						// ----------------------------------
 
-							// ----------------------------------
-							//         charge: update
-							// ----------------------------------
+						const customerId = this.getNodeParameter('customerId', i);
+						const cardId = this.getNodeParameter('cardId', i);
+						const endpoint = `/customers/${customerId}/sources/${cardId}`;
+						responseData = await stripeApiRequest.call(this, 'DELETE', endpoint, {}, {});
 
-							const body = {} as IDataObject;
+					} else if (operation === 'get') {
 
-							const updateFields = this.getNodeParameter('updateFields', i) as IDataObject;
+						// ----------------------------------
+						//        customerCard: get
+						// ----------------------------------
 
-							if (isEmpty(updateFields)) {
-								throw new Error(`Please enter at least one field to update for the ${resource}.`);
-							}
+						const customerId = this.getNodeParameter('customerId', i);
+						const sourceId = this.getNodeParameter('sourceId', i);
+						const endpoint = `/customers/${customerId}/sources/${sourceId}`;
+						responseData = await stripeApiRequest.call(this, 'GET', endpoint, {}, {});
 
-							Object.assign(body, adjustChargeFields(updateFields));
+					}
 
-							const chargeId = this.getNodeParameter('chargeId', i);
-							responseData = await stripeApiRequest.call(this, 'POST', `/charges/${chargeId}`, body, {});
+				} else if (resource === 'charge') {
 
+					// *********************************************************************
+					//                             charge
+					// *********************************************************************
+
+					// https://stripe.com/docs/api/charges
+
+					if (operation === 'create') {
+
+						// ----------------------------------
+						//          charge: create
+						// ----------------------------------
+
+						const body = {
+							customer: this.getNodeParameter('customerId', i),
+							currency: (this.getNodeParameter('currency', i) as string).toLowerCase(),
+							amount: this.getNodeParameter('amount', i),
+							source: this.getNodeParameter('source', i),
+						} as IDataObject;
+
+						const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
+
+						if (!isEmpty(additionalFields)) {
+							Object.assign(body, adjustChargeFields(additionalFields));
 						}
 
-						break;
-					case 'coupon':
+						responseData = await stripeApiRequest.call(this, 'POST', '/charges', body, {});
 
-						// *********************************************************************
-						//                             coupon
-						// *********************************************************************
+					} else if (operation === 'get') {
 
-						// https://stripe.com/docs/api/coupons
+						// ----------------------------------
+						//           charge: get
+						// ----------------------------------
 
-						if (operation === 'create') {
+						const chargeId = this.getNodeParameter('chargeId', i);
+						responseData = await stripeApiRequest.call(this, 'GET', `/charges/${chargeId}`, {}, {});
 
-							// ----------------------------------
-							//          coupon: create
-							// ----------------------------------
+					} else if (operation === 'getAll') {
 
-							const body = {
-								duration: this.getNodeParameter('duration', i),
-							} as IDataObject;
+						// ----------------------------------
+						//          charge: getAll
+						// ----------------------------------
 
-							const type = this.getNodeParameter('type', i);
+						responseData = await handleListing.call(this, resource, i);
 
-							if (type === 'fixedAmount') {
-								body.amount_off = this.getNodeParameter('amountOff', i);
-								body.currency = this.getNodeParameter('currency', i);
-							} else {
-								body.percent_off = this.getNodeParameter('percentOff', i);
-							}
+					} else if (operation === 'update') {
 
-							responseData = await stripeApiRequest.call(this, 'POST', '/coupons', body, {});
+						// ----------------------------------
+						//         charge: update
+						// ----------------------------------
 
-						} else if (operation === 'getAll') {
+						const body = {} as IDataObject;
 
-							// ----------------------------------
-							//          coupon: getAll
-							// ----------------------------------
+						const updateFields = this.getNodeParameter('updateFields', i) as IDataObject;
 
-							responseData = await handleListing.call(this, resource);
-
+						if (isEmpty(updateFields)) {
+							throw new Error(`Please enter at least one field to update for the ${resource}.`);
 						}
 
-						break;
-					case 'customer':
+						Object.assign(body, adjustChargeFields(updateFields));
 
-						// *********************************************************************
-						//                             customer
-						// *********************************************************************
+						const chargeId = this.getNodeParameter('chargeId', i);
+						responseData = await stripeApiRequest.call(this, 'POST', `/charges/${chargeId}`, body, {});
 
-						// https://stripe.com/docs/api/customers
+					}
 
-						if (operation === 'create') {
+				} else if (resource === 'coupon') {
 
-							// ----------------------------------
-							//         customer: create
-							// ----------------------------------
+					// *********************************************************************
+					//                             coupon
+					// *********************************************************************
 
-							const body = {
-								name: this.getNodeParameter('name', i),
-							} as IDataObject;
+					// https://stripe.com/docs/api/coupons
 
-							const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
+					if (operation === 'create') {
 
-							if (!isEmpty(additionalFields)) {
-								Object.assign(body, adjustCustomerFields(additionalFields));
-							}
+						// ----------------------------------
+						//          coupon: create
+						// ----------------------------------
 
-							responseData = await stripeApiRequest.call(this, 'POST', '/customers', body, {});
+						const body = {
+							duration: this.getNodeParameter('duration', i),
+						} as IDataObject;
 
-						} else if (operation === 'delete') {
+						const type = this.getNodeParameter('type', i);
 
-							// ----------------------------------
-							//         customer: delete
-							// ----------------------------------
-
-							const customerId = this.getNodeParameter('customerId', i);
-							responseData = await stripeApiRequest.call(this, 'DELETE', `/customers/${customerId}`, {}, {});
-
-						} else if (operation === 'get') {
-
-							// ----------------------------------
-							//          customer: get
-							// ----------------------------------
-
-							const customerId = this.getNodeParameter('customerId', i);
-							responseData = await stripeApiRequest.call(this, 'GET', `/customers/${customerId}`, {}, {});
-
-						} else if (operation === 'getAll') {
-
-							// ----------------------------------
-							//        customer: getAll
-							// ----------------------------------
-
-							const qs = {} as IDataObject;
-							const filters = this.getNodeParameter('filters', i) as IDataObject;
-
-							if (!isEmpty(filters)) {
-								qs.email = filters.email;
-							}
-
-							responseData = await handleListing.call(this, resource, qs);
-
-						} else if (operation === 'update') {
-
-							// ----------------------------------
-							//        customer: update
-							// ----------------------------------
-
-							const body = {} as IDataObject;
-
-							const updateFields = this.getNodeParameter('updateFields', i) as IDataObject;
-
-							if (isEmpty(updateFields)) {
-								throw new Error(`Please enter at least one field to update for the ${resource}.`);
-							}
-
-							Object.assign(body, adjustCustomerFields(updateFields));
-
-							const customerId = this.getNodeParameter('customerId', i);
-							responseData = await stripeApiRequest.call(this, 'POST', `/customers/${customerId}`, body, {});
-
-						}
-						break;
-					case 'source':
-
-						// *********************************************************************
-						//                             source
-						// *********************************************************************
-
-						// https://stripe.com/docs/api/sources
-
-						if (operation === 'create') {
-
-							// ----------------------------------
-							//         source: create
-							// ----------------------------------
-
-							const customerId = this.getNodeParameter('customerId', i);
-
-							const body = {
-								type: this.getNodeParameter('type', i),
-								amount: this.getNodeParameter('amount', i),
-								currency: this.getNodeParameter('currency', i),
-							} as IDataObject;
-
-							const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
-
-							if (!isEmpty(additionalFields)) {
-								Object.assign(body, adjustMetadata(additionalFields));
-							}
-
-							responseData = await stripeApiRequest.call(this, 'POST', '/sources', body, {});
-
-							// attach source to customer
-							const endpoint = `/customers/${customerId}/sources`;
-							await stripeApiRequest.call(this, 'POST', endpoint, {source: responseData.id}, {});
-
-						} else if (operation === 'delete') {
-
-							// ----------------------------------
-							//          source: delete
-							// ----------------------------------
-
-							const sourceId = this.getNodeParameter('sourceId', i);
-							const customerId = this.getNodeParameter('customerId', i);
-							const endpoint = `/customers/${customerId}/sources/${sourceId}`;
-							responseData = await stripeApiRequest.call(this, 'DELETE', endpoint, {}, {});
-
-						} else if (operation === 'get') {
-
-							// ----------------------------------
-							//          source: get
-							// ----------------------------------
-
-							const sourceId = this.getNodeParameter('sourceId', i);
-							responseData = await stripeApiRequest.call(this, 'GET', `/sources/${sourceId}`, {}, {});
-
+						if (type === 'fixedAmount') {
+							body.amount_off = this.getNodeParameter('amountOff', i);
+							body.currency = this.getNodeParameter('currency', i);
+						} else {
+							body.percent_off = this.getNodeParameter('percentOff', i);
 						}
 
-						break;
-					case 'token':
-						// *********************************************************************
-						//                             token
-						// *********************************************************************
+						responseData = await stripeApiRequest.call(this, 'POST', '/coupons', body, {});
 
-						// https://stripe.com/docs/api/tokens
+					} else if (operation === 'getAll') {
 
-						if (operation === 'create') {
+						// ----------------------------------
+						//          coupon: getAll
+						// ----------------------------------
 
-							// ----------------------------------
-							//          token: create
-							// ----------------------------------
+						responseData = await handleListing.call(this, resource, i);
 
-							const type = this.getNodeParameter('type', i);
-							const body = {} as IDataObject;
+					}
 
-							if (type !== 'cardToken') {
-								throw new Error('Only card token creation implemented.');
-							}
+				} else if (resource === 'customer') {
 
-							body.card = {
-								number: this.getNodeParameter('number', i),
-								exp_month: this.getNodeParameter('expirationMonth', i),
-								exp_year: this.getNodeParameter('expirationYear', i),
-								cvc: this.getNodeParameter('cvc', i),
-							};
+					// *********************************************************************
+					//                             customer
+					// *********************************************************************
 
-							responseData = await stripeApiRequest.call(this, 'POST', '/tokens', body, {});
+					// https://stripe.com/docs/api/customers
+
+					if (operation === 'create') {
+
+						// ----------------------------------
+						//         customer: create
+						// ----------------------------------
+
+						const body = {
+							name: this.getNodeParameter('name', i),
+						} as IDataObject;
+
+						const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
+
+						if (!isEmpty(additionalFields)) {
+							Object.assign(body, adjustCustomerFields(additionalFields));
 						}
-						break;
-					case 'payout':
-						responseData = await payout.execute(this, operation, i)
-						break;
-					case 'balanceTransactions':
-						responseData = await balanceTransactions.execute(this, operation, i);
-						break;
+
+						responseData = await stripeApiRequest.call(this, 'POST', '/customers', body, {});
+
+					} else if (operation === 'delete') {
+
+						// ----------------------------------
+						//         customer: delete
+						// ----------------------------------
+
+						const customerId = this.getNodeParameter('customerId', i);
+						responseData = await stripeApiRequest.call(this, 'DELETE', `/customers/${customerId}`, {}, {});
+
+					} else if (operation === 'get') {
+
+						// ----------------------------------
+						//          customer: get
+						// ----------------------------------
+
+						const customerId = this.getNodeParameter('customerId', i);
+						responseData = await stripeApiRequest.call(this, 'GET', `/customers/${customerId}`, {}, {});
+
+					} else if (operation === 'getAll') {
+
+						// ----------------------------------
+						//        customer: getAll
+						// ----------------------------------
+
+						const qs = {} as IDataObject;
+						const filters = this.getNodeParameter('filters', i) as IDataObject;
+
+						if (!isEmpty(filters)) {
+							qs.email = filters.email;
+						}
+
+						responseData = await handleListing.call(this, resource, i, qs);
+
+					} else if (operation === 'update') {
+
+						// ----------------------------------
+						//        customer: update
+						// ----------------------------------
+
+						const body = {} as IDataObject;
+
+						const updateFields = this.getNodeParameter('updateFields', i) as IDataObject;
+
+						if (isEmpty(updateFields)) {
+							throw new Error(`Please enter at least one field to update for the ${resource}.`);
+						}
+
+						Object.assign(body, adjustCustomerFields(updateFields));
+
+						const customerId = this.getNodeParameter('customerId', i);
+						responseData = await stripeApiRequest.call(this, 'POST', `/customers/${customerId}`, body, {});
+
+					}
+
+				} else if (resource === 'source') {
+
+					// *********************************************************************
+					//                             source
+					// *********************************************************************
+
+					// https://stripe.com/docs/api/sources
+
+					if (operation === 'create') {
+
+						// ----------------------------------
+						//         source: create
+						// ----------------------------------
+
+						const customerId = this.getNodeParameter('customerId', i);
+
+						const body = {
+							type: this.getNodeParameter('type', i),
+							amount: this.getNodeParameter('amount', i),
+							currency: this.getNodeParameter('currency', i),
+						} as IDataObject;
+
+						const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
+
+						if (!isEmpty(additionalFields)) {
+							Object.assign(body, adjustMetadata(additionalFields));
+						}
+
+						responseData = await stripeApiRequest.call(this, 'POST', '/sources', body, {});
+
+						// attach source to customer
+						const endpoint = `/customers/${customerId}/sources`;
+						await stripeApiRequest.call(this, 'POST', endpoint, { source: responseData.id }, {});
+
+					} else if (operation === 'delete') {
+
+						// ----------------------------------
+						//          source: delete
+						// ----------------------------------
+
+						const sourceId = this.getNodeParameter('sourceId', i);
+						const customerId = this.getNodeParameter('customerId', i);
+						const endpoint = `/customers/${customerId}/sources/${sourceId}`;
+						responseData = await stripeApiRequest.call(this, 'DELETE', endpoint, {}, {});
+
+					} else if (operation === 'get') {
+
+						// ----------------------------------
+						//          source: get
+						// ----------------------------------
+
+						const sourceId = this.getNodeParameter('sourceId', i);
+						responseData = await stripeApiRequest.call(this, 'GET', `/sources/${sourceId}`, {}, {});
+
+					}
+
+				} else if (resource === 'token') {
+
+					// *********************************************************************
+					//                             token
+					// *********************************************************************
+
+					// https://stripe.com/docs/api/tokens
+
+					if (operation === 'create') {
+
+						// ----------------------------------
+						//          token: create
+						// ----------------------------------
+
+						const type = this.getNodeParameter('type', i);
+						const body = {} as IDataObject;
+
+						if (type !== 'cardToken') {
+							throw new Error('Only card token creation implemented.');
+						}
+
+						body.card = {
+							number: this.getNodeParameter('number', i),
+							exp_month: this.getNodeParameter('expirationMonth', i),
+							exp_year: this.getNodeParameter('expirationYear', i),
+							cvc: this.getNodeParameter('cvc', i),
+						};
+
+						responseData = await stripeApiRequest.call(this, 'POST', '/tokens', body, {});
+					}
+
 				}
 
 			} catch (error) {
 				if (this.continueOnFail()) {
-					returnData.push({error: error.message});
+					returnData.push({ error: error.message });
 					continue;
 				}
 

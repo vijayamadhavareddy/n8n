@@ -2,7 +2,7 @@ import {
 	INodeProperties,
 } from 'n8n-workflow';
 
-export const listOperations = [
+export const listOperations: INodeProperties[] = [
 	// ----------------------------------
 	//         list
 	// ----------------------------------
@@ -10,6 +10,7 @@ export const listOperations = [
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		displayOptions: {
 			show: {
 				resource: [
@@ -40,16 +41,15 @@ export const listOperations = [
 			},
 		],
 		default: 'create',
-		description: 'The operation to perform.',
 	},
-] as INodeProperties[];
+];
 
-export const listFields = [
+export const listFields: INodeProperties[] = [
 	// ----------------------------------
 	//         list:create
 	// ----------------------------------
 	{
-		displayName: 'Board ID',
+		displayName: 'Board Name or ID',
 		name: 'boardId',
 		type: 'options',
 		typeOptions: {
@@ -67,7 +67,7 @@ export const listFields = [
 				],
 			},
 		},
-		description: 'The ID of the board the list should be created in',
+		description: 'The ID of the board the list should be created in. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 	},
 	{
 		displayName: 'Title',
@@ -86,14 +86,14 @@ export const listFields = [
 				],
 			},
 		},
-		description: 'The title of the list.',
+		description: 'The title of the list',
 	},
 
 	// ----------------------------------
 	//         list:delete
 	// ----------------------------------
 	{
-		displayName: 'Board ID',
+		displayName: 'Board Name or ID',
 		name: 'boardId',
 		type: 'options',
 		typeOptions: {
@@ -111,10 +111,10 @@ export const listFields = [
 				],
 			},
 		},
-		description: 'The ID of the board that list belongs to.',
+		description: 'The ID of the board that list belongs to. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 	},
 	{
-		displayName: 'List ID',
+		displayName: 'List Name or ID',
 		name: 'listId',
 		type: 'options',
 		typeOptions: {
@@ -135,14 +135,14 @@ export const listFields = [
 				],
 			},
 		},
-		description: 'The ID of the list to delete.',
+		description: 'The ID of the list to delete. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 	},
 
 	// ----------------------------------
 	//         list:get
 	// ----------------------------------
 	{
-		displayName: 'Board ID',
+		displayName: 'Board Name or ID',
 		name: 'boardId',
 		type: 'options',
 		typeOptions: {
@@ -160,7 +160,7 @@ export const listFields = [
 				],
 			},
 		},
-		description: 'The ID of the board that list belongs to.',
+		description: 'The ID of the board that list belongs to. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 	},
 	{
 		displayName: 'List ID',
@@ -178,14 +178,14 @@ export const listFields = [
 				],
 			},
 		},
-		description: 'The ID of the list to get.',
+		description: 'The ID of the list to get',
 	},
 
 	// ----------------------------------
 	//         list:getAll
 	// ----------------------------------
 	{
-		displayName: 'Board ID',
+		displayName: 'Board Name or ID',
 		name: 'boardId',
 		type: 'options',
 		typeOptions: {
@@ -203,7 +203,7 @@ export const listFields = [
 				],
 			},
 		},
-		description: 'ID of the board where the lists are in.',
+		description: 'ID of the board where the lists are in. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 	},
 	{
 		displayName: 'Return All',
@@ -220,7 +220,7 @@ export const listFields = [
 			},
 		},
 		default: false,
-		description: 'If all results should be returned or only up to a given limit.',
+		description: 'Whether to return all results or only up to a given limit',
 	},
 	{
 		displayName: 'Limit',
@@ -244,7 +244,7 @@ export const listFields = [
 			maxValue: 200,
 		},
 		default: 100,
-		description: 'How many results to return.',
+		description: 'Max number of results to return',
 	},
 
-] as INodeProperties[];
+];

@@ -2,11 +2,12 @@ import {
 	INodeProperties,
 } from 'n8n-workflow';
 
-export const logOperations = [
+export const logOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		required: true,
 		default: 'getAll',
 		displayOptions: {
@@ -39,9 +40,9 @@ export const logOperations = [
 			},
 		],
 	},
-] as INodeProperties[];
+];
 
-export const logFields = [
+export const logFields: INodeProperties[] = [
 	{
 		displayName: 'Task ID',
 		name: 'taskId',
@@ -76,7 +77,7 @@ export const logFields = [
 			},
 		},
 		default: false,
-		description: 'If all results should be returned or only up to a given limit.',
+		description: 'Whether to return all results or only up to a given limit',
 	},
 	{
 		displayName: 'Limit',
@@ -100,13 +101,14 @@ export const logFields = [
 			maxValue: 500,
 		},
 		default: 100,
-		description: 'How many results to return.',
+		description: 'Max number of results to return',
 	},
 	// required attributs
 	{
 		displayName: 'Log ID',
 		name: 'id',
 		type: 'string',
+		default: '',
 		required: true,
 		displayOptions: {
 			show: {
@@ -186,9 +188,10 @@ export const logFields = [
 	},
 	// required for responder execution
 	{
-		displayName: 'Responder ID',
+		displayName: 'Responder Name or ID',
 		name: 'responder',
 		type: 'options',
+		description: 'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>',
 		required: true,
 		default: '',
 		typeOptions: {
@@ -250,7 +253,7 @@ export const logFields = [
 								name: 'binaryProperty',
 								type: 'string',
 								default: 'data',
-								description: 'Object property name which holds binary data.',
+								description: 'Object property name which holds binary data',
 							},
 						],
 					},
@@ -259,4 +262,4 @@ export const logFields = [
 			},
 		],
 	},
-] as INodeProperties[];
+];

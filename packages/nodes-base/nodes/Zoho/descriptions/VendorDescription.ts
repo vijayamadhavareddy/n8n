@@ -9,11 +9,12 @@ import {
 	makeGetAllFields,
 } from './SharedFields';
 
-export const vendorOperations = [
+export const vendorOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		displayOptions: {
 			show: {
 				resource: [
@@ -54,11 +55,10 @@ export const vendorOperations = [
 			},
 		],
 		default: 'create',
-		description: 'Operation to perform',
 	},
-] as INodeProperties[];
+];
 
-export const vendorFields = [
+export const vendorFields: INodeProperties[] = [
 	// ----------------------------------------
 	//            vendor: create
 	// ----------------------------------------
@@ -171,7 +171,7 @@ export const vendorFields = [
 	{
 		displayName: 'Vendor ID',
 		name: 'vendorId',
-		description: 'ID of the vendor to delete.',
+		description: 'ID of the vendor to delete',
 		type: 'string',
 		required: true,
 		default: '',
@@ -193,7 +193,7 @@ export const vendorFields = [
 	{
 		displayName: 'Vendor ID',
 		name: 'vendorId',
-		description: 'ID of the vendor to retrieve.',
+		description: 'ID of the vendor to retrieve',
 		type: 'string',
 		required: true,
 		default: '',
@@ -220,7 +220,7 @@ export const vendorFields = [
 	{
 		displayName: 'Vendor ID',
 		name: 'vendorId',
-		description: 'ID of the vendor to update.',
+		description: 'ID of the vendor to update',
 		type: 'string',
 		required: true,
 		default: '',
@@ -298,4 +298,4 @@ export const vendorFields = [
 			},
 		],
 	},
-] as INodeProperties[];
+];

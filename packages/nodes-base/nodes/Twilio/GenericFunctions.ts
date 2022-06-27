@@ -21,17 +21,13 @@ import {
  * @returns {Promise<any>}
  */
 export async function twilioApiRequest(this: IHookFunctions | IExecuteFunctions, method: string, endpoint: string, body: IDataObject, query?: IDataObject): Promise<any> { // tslint:disable-line:no-any
-	const credentials = this.getCredentials('twilioApi') as {
+	const credentials = await this.getCredentials('twilioApi') as {
 		accountSid: string;
 		authType: 'authToken' | 'apiKey';
 		authToken: string;
 		apiKeySid: string;
 		apiKeySecret: string;
 	};
-
-	if (credentials === undefined) {
-		throw new NodeOperationError(this.getNode(), 'No credentials got returned!');
-	}
 
 	if (query === undefined) {
 		query = {};
@@ -62,4 +58,18 @@ export async function twilioApiRequest(this: IHookFunctions | IExecuteFunctions,
 	} catch (error) {
 		throw new NodeApiError(this.getNode(), error);
 	}
+}
+
+const XML_CHAR_MAP: { [key: string]: string } = {
+	'<': '&lt;',
+	'>': '&gt;',
+	'&': '&amp;',
+	'"': '&quot;',
+	'\'': '&apos;',
+};
+
+export function escapeXml(str: string) {
+	return str.replace(/[<>&"']/g, (ch: string) => {
+		return XML_CHAR_MAP[ch];
+	});
 }

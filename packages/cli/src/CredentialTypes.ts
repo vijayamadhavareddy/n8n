@@ -1,48 +1,33 @@
 import {
 	ICredentialType,
+	ICredentialTypeData,
 	ICredentialTypes as ICredentialTypesInterface,
 } from 'n8n-workflow';
-
-import {
-	CredentialsOverwrites,
-	ICredentialsTypeData,
-} from './';
+import { RESPONSE_ERROR_MESSAGES } from './constants';
 
 class CredentialTypesClass implements ICredentialTypesInterface {
+	credentialTypes: ICredentialTypeData = {};
 
-	credentialTypes: ICredentialsTypeData = {};
-
-
-	async init(credentialTypes: ICredentialsTypeData): Promise<void> {
+	async init(credentialTypes: ICredentialTypeData): Promise<void> {
 		this.credentialTypes = credentialTypes;
-
-		// Load the credentials overwrites if any exist
-		const credentialsOverwrites = CredentialsOverwrites().getAll();
-
-		for (const credentialType of Object.keys(credentialsOverwrites)) {
-			if (credentialTypes[credentialType] === undefined) {
-				continue;
-			}
-
-			// Add which properties got overwritten that the Editor-UI knows
-			// which properties it should hide
-			credentialTypes[credentialType].__overwrittenProperties = Object.keys(credentialsOverwrites[credentialType]);
-		}
 	}
 
 	getAll(): ICredentialType[] {
-		return Object.values(this.credentialTypes);
+		return Object.values(this.credentialTypes).map((data) => data.type);
 	}
 
 	getByName(credentialType: string): ICredentialType {
-		return this.credentialTypes[credentialType];
+		try {
+			return this.credentialTypes[credentialType].type;
+		} catch (error) {
+			throw new Error(`${RESPONSE_ERROR_MESSAGES.NO_CREDENTIAL}: ${credentialType}`);
+		}
 	}
 }
 
-
-
 let credentialTypesInstance: CredentialTypesClass | undefined;
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export function CredentialTypes(): CredentialTypesClass {
 	if (credentialTypesInstance === undefined) {
 		credentialTypesInstance = new CredentialTypesClass();

@@ -2,11 +2,12 @@ import {
 	INodeProperties,
 } from 'n8n-workflow';
 
-export const messageOperations = [
+export const messageOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		displayOptions: {
 			show: {
 				resource: [
@@ -27,17 +28,16 @@ export const messageOperations = [
 			},
 		],
 		default: 'create',
-		description: 'The operation to perform.',
 	},
-] as INodeProperties[];
+];
 
-export const messageFields = [
+export const messageFields: INodeProperties[] = [
 
 	/* -------------------------------------------------------------------------- */
 	/*                              message:create                                */
 	/* -------------------------------------------------------------------------- */
 	{
-		displayName: 'Room ID',
+		displayName: 'Room Name or ID',
 		name: 'roomId',
 		type: 'options',
 		typeOptions: {
@@ -56,7 +56,7 @@ export const messageFields = [
 			},
 		},
 		required: true,
-		description: 'The channel to send the message to.',
+		description: 'The channel to send the message to. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 	},
 	{
 		displayName: 'Text',
@@ -77,7 +77,7 @@ export const messageFields = [
 				],
 			},
 		},
-		description: 'The text to send.',
+		description: 'The text to send',
 	},
 	{
 		displayName: 'Message Type',
@@ -97,21 +97,21 @@ export const messageFields = [
 			{
 				name: 'Emote',
 				value: 'm.emote',
-				description: 'Perform an action (similar to /me in IRC).',
+				description: 'Perform an action (similar to /me in IRC)',
 			},
 			{
 				name: 'Notice',
 				value: 'm.notice',
-				description: 'Send a notice.',
+				description: 'Send a notice',
 			},
 			{
 				name: 'Text',
 				value: 'm.text',
-				description: 'Send a text message.',
+				description: 'Send a text message',
 			},
 		],
 		default: 'm.text',
-		description: 'The type of message to send.',
+		description: 'The type of message to send',
 	},
 	{
 		displayName: 'Message Format',
@@ -140,11 +140,12 @@ export const messageFields = [
 			},
 		],
 		default: 'plain',
-		description: `The format of the message's body.`,
+		description: 'The format of the message\'s body',
 	},
 	{
 		displayName: 'Fallback Text',
 		name: 'fallbackText',
+		default: '',
 		displayOptions: {
 			show: {
 				resource: [
@@ -162,7 +163,7 @@ export const messageFields = [
 		typeOptions: {
 			alwaysOpenEditWindow: true,
 		},
-		description: 'A plain text message to display in case the HTML cannot be rendered by the Matrix client.',
+		description: 'A plain text message to display in case the HTML cannot be rendered by the Matrix client',
 	},
 
 
@@ -170,7 +171,7 @@ export const messageFields = [
 	/*                                message:getAll                           */
 	/* ----------------------------------------------------------------------- */
 	{
-		displayName: 'Room ID',
+		displayName: 'Room Name or ID',
 		name: 'roomId',
 		type: 'options',
 		default: '',
@@ -187,7 +188,7 @@ export const messageFields = [
 				],
 			},
 		},
-		description: 'The token to start returning events from. This token can be obtained from a prev_batch token returned for each room by the sync API',
+		description: 'The token to start returning events from. This token can be obtained from a prev_batch token returned for each room by the sync API. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 		required: true,
 	},
 	{
@@ -205,7 +206,7 @@ export const messageFields = [
 				],
 			},
 		},
-		description: 'If all results should be returned or only up to a given limit.',
+		description: 'Whether to return all results or only up to a given limit',
 		required: true,
 	},
 	{
@@ -230,7 +231,7 @@ export const messageFields = [
 			maxValue: 500,
 		},
 		default: 100,
-		description: 'How many results to return.',
+		description: 'Max number of results to return',
 	},
 	{
 		displayName: 'Other Options',
@@ -247,7 +248,6 @@ export const messageFields = [
 			},
 		},
 		default: {},
-		description: 'Other options',
 		placeholder: 'Add options',
 		options: [
 			{
@@ -255,11 +255,11 @@ export const messageFields = [
 				name: 'filter',
 				type: 'string',
 				default: '',
-				description: 'A JSON RoomEventFilter to filter returned events with. More information can be found on this <a href="https://matrix.org/docs/spec/client_server/r0.6.0" target="_blank">page</a>.',
+				description: 'A JSON RoomEventFilter to filter returned events with. More information can be found on this <a href="https://matrix.org/docs/spec/client_server/r0.6.0">page</a>.',
 				placeholder: '{"contains_url":true,"types":["m.room.message", "m.sticker"]}',
 			},
 		],
 	},
 
 
-] as INodeProperties[];
+];

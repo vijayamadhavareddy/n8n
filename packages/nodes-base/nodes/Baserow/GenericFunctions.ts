@@ -30,11 +30,7 @@ export async function baserowApiRequest(
 	qs: IDataObject = {},
 	jwtToken: string,
 ) {
-	const credentials = this.getCredentials('baserowApi') as BaserowCredentials;
-
-	if (credentials === undefined) {
-		throw new NodeOperationError(this.getNode(), 'No credentials got returned!');
-	}
+	const credentials = await this.getCredentials('baserowApi') as BaserowCredentials;
 
 	const options: OptionsWithUri = {
 		headers: {

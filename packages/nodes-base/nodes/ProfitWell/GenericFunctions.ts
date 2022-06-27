@@ -15,10 +15,7 @@ import {
 
 export async function profitWellApiRequest(this: IHookFunctions | IExecuteFunctions | IExecuteSingleFunctions | ILoadOptionsFunctions, method: string, resource: string, body: any = {}, qs: IDataObject = {}, uri?: string, option: IDataObject = {}): Promise<any> { // tslint:disable-line:no-any
 	try {
-		const credentials = this.getCredentials('profitWellApi');
-		if (credentials === undefined) {
-			throw new NodeOperationError(this.getNode(), 'No credentials got returned!');
-		}
+		const credentials = await this.getCredentials('profitWellApi');
 		let options: OptionsWithUri = {
 			headers: {
 				'Authorization': credentials.accessToken,

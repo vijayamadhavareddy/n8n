@@ -2,13 +2,13 @@ import {
 	INodeProperties,
 } from 'n8n-workflow';
 
-export const purchaseOperations = [
+export const purchaseOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		default: 'get',
-		description: 'Operation to perform',
 		options: [
 			{
 				name: 'Get',
@@ -27,9 +27,9 @@ export const purchaseOperations = [
 			},
 		},
 	},
-] as INodeProperties[];
+];
 
-export const purchaseFields = [
+export const purchaseFields: INodeProperties[] = [
 	// ----------------------------------
 	//         purchase: get
 	// ----------------------------------
@@ -39,7 +39,7 @@ export const purchaseFields = [
 		type: 'string',
 		required: true,
 		default: '',
-		description: 'The ID of the purchase to retrieve.',
+		description: 'The ID of the purchase to retrieve',
 		displayOptions: {
 			show: {
 				resource: [
@@ -60,7 +60,7 @@ export const purchaseFields = [
 		name: 'returnAll',
 		type: 'boolean',
 		default: false,
-		description: 'Return all results.',
+		description: 'Whether to return all results or only up to a given limit',
 		displayOptions: {
 			show: {
 				resource: [
@@ -76,8 +76,8 @@ export const purchaseFields = [
 		displayName: 'Limit',
 		name: 'limit',
 		type: 'number',
-		default: 5,
-		description: 'The number of results to return.',
+		default: 50,
+		description: 'Max number of results to return',
 		typeOptions: {
 			minValue: 1,
 			maxValue: 1000,
@@ -109,7 +109,7 @@ export const purchaseFields = [
 				type: 'string',
 				default: '',
 				placeholder: 'WHERE Metadata.LastUpdatedTime > \'2021-01-01\'',
-				description: 'The condition for selecting purchases. See the <a href="https://developer.intuit.com/app/developer/qbo/docs/develop/explore-the-quickbooks-online-api/data-queries" target="_blank">guide</a> for supported syntax.',
+				description: 'The condition for selecting purchases. See the <a href="https://developer.intuit.com/app/developer/qbo/docs/develop/explore-the-quickbooks-online-api/data-queries">guide</a> for supported syntax.',
 				typeOptions: {
 					alwaysOpenEditWindow: true,
 				},
@@ -126,4 +126,4 @@ export const purchaseFields = [
 			},
 		},
 	},
-] as INodeProperties[];
+];

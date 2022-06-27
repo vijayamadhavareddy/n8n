@@ -6,13 +6,13 @@ import {
 	paymentAdditionalFieldsOptions
 } from './PaymentAdditionalFieldsOptions';
 
-export const paymentOperations = [
+export const paymentOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		default: 'get',
-		description: 'Operation to perform',
 		options: [
 			{
 				name: 'Create',
@@ -51,18 +51,18 @@ export const paymentOperations = [
 			},
 		},
 	},
-] as INodeProperties[];
+];
 
-export const paymentFields = [
+export const paymentFields: INodeProperties[] = [
 	// ----------------------------------
 	//         payment: create
 	// ----------------------------------
 	{
-		displayName: 'For Customer ID',
+		displayName: 'For Customer Name or ID',
 		name: 'CustomerRef',
 		type: 'options',
 		required: true,
-		description: 'The ID of the customer who the payment is for.',
+		description: 'The ID of the customer who the payment is for. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 		default: [],
 		typeOptions: {
 			loadOptionsMethod: 'getCustomers',
@@ -81,7 +81,7 @@ export const paymentFields = [
 	{
 		displayName: 'Total Amount',
 		name: 'TotalAmt',
-		description: 'Total amount of the transaction.',
+		description: 'Total amount of the transaction',
 		type: 'number',
 		default: 0,
 		displayOptions: {
@@ -123,7 +123,7 @@ export const paymentFields = [
 		type: 'string',
 		required: true,
 		default: '',
-		description: 'The ID of the payment to delete.',
+		description: 'The ID of the payment to delete',
 		displayOptions: {
 			show: {
 				resource: [
@@ -145,7 +145,7 @@ export const paymentFields = [
 		type: 'string',
 		required: true,
 		default: '',
-		description: 'The ID of the payment to retrieve.',
+		description: 'The ID of the payment to retrieve',
 		displayOptions: {
 			show: {
 				resource: [
@@ -163,7 +163,7 @@ export const paymentFields = [
 		type: 'boolean',
 		required: true,
 		default: false,
-		description: 'Download estimate as PDF file',
+		description: 'Whether to download estimate as PDF file',
 		displayOptions: {
 			show: {
 				resource: [
@@ -181,7 +181,7 @@ export const paymentFields = [
 		type: 'string',
 		required: true,
 		default: 'data',
-		description: 'Name of the binary property to which to write to.',
+		description: 'Name of the binary property to which to write to',
 		displayOptions: {
 			show: {
 				resource: [
@@ -203,7 +203,7 @@ export const paymentFields = [
 		required: true,
 		default: '',
 		placeholder: 'data.pdf',
-		description: 'Name of the file that will be downloaded.',
+		description: 'Name of the file that will be downloaded',
 		displayOptions: {
 			show: {
 				resource: [
@@ -227,7 +227,7 @@ export const paymentFields = [
 		name: 'returnAll',
 		type: 'boolean',
 		default: false,
-		description: 'Return all results.',
+		description: 'Whether to return all results or only up to a given limit',
 		displayOptions: {
 			show: {
 				resource: [
@@ -243,8 +243,8 @@ export const paymentFields = [
 		displayName: 'Limit',
 		name: 'limit',
 		type: 'number',
-		default: 5,
-		description: 'The number of results to return.',
+		default: 50,
+		description: 'Max number of results to return',
 		typeOptions: {
 			minValue: 1,
 			maxValue: 1000,
@@ -276,7 +276,7 @@ export const paymentFields = [
 				type: 'string',
 				default: '',
 				placeholder: 'WHERE Metadata.LastUpdatedTime > \'2021-01-01\'',
-				description: 'The condition for selecting payments. See the <a href="https://developer.intuit.com/app/developer/qbo/docs/develop/explore-the-quickbooks-online-api/data-queries" target="_blank">guide</a> for supported syntax.',
+				description: 'The condition for selecting payments. See the <a href="https://developer.intuit.com/app/developer/qbo/docs/develop/explore-the-quickbooks-online-api/data-queries">guide</a> for supported syntax.',
 				typeOptions: {
 					alwaysOpenEditWindow: true,
 				},
@@ -303,7 +303,7 @@ export const paymentFields = [
 		type: 'string',
 		required: true,
 		default: '',
-		description: 'The ID of the payment to send.',
+		description: 'The ID of the payment to send',
 		displayOptions: {
 			show: {
 				resource: [
@@ -319,9 +319,10 @@ export const paymentFields = [
 		displayName: 'Email',
 		name: 'email',
 		type: 'string',
+		placeholder: 'name@email.com',
 		required: true,
 		default: '',
-		description: 'The email of the recipient of the payment.',
+		description: 'The email of the recipient of the payment',
 		displayOptions: {
 			show: {
 				resource: [
@@ -343,7 +344,7 @@ export const paymentFields = [
 		type: 'string',
 		required: true,
 		default: '',
-		description: 'The ID of the payment to void.',
+		description: 'The ID of the payment to void',
 		displayOptions: {
 			show: {
 				resource: [
@@ -365,7 +366,7 @@ export const paymentFields = [
 		type: 'string',
 		required: true,
 		default: '',
-		description: 'The ID of the payment to update.',
+		description: 'The ID of the payment to update',
 		displayOptions: {
 			show: {
 				resource: [
@@ -396,4 +397,4 @@ export const paymentFields = [
 		},
 		options: paymentAdditionalFieldsOptions,
 	},
-] as INodeProperties[];
+];

@@ -1,5 +1,4 @@
 import {
-	BINARY_ENCODING,
 	IExecuteFunctions,
 } from 'n8n-core';
 
@@ -38,12 +37,13 @@ import {
 	commentOperations
 } from './CommentDescription';
 import { v4 as uuid } from 'uuid';
-import * as moment from 'moment';
+import moment from 'moment';
 
 export class Twist implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'Twist',
 		name: 'twist',
+		// eslint-disable-next-line n8n-nodes-base/node-class-description-icon-not-svg
 		icon: 'file:twist.png',
 		group: ['input'],
 		version: 1,
@@ -51,7 +51,6 @@ export class Twist implements INodeType {
 		description: 'Consume Twist API',
 		defaults: {
 			name: 'Twist',
-			color: '#316fea',
 		},
 		inputs: ['main'],
 		outputs: ['main'],
@@ -66,6 +65,7 @@ export class Twist implements INodeType {
 				displayName: 'Resource',
 				name: 'resource',
 				type: 'options',
+				noDataExpression: true,
 				options: [
 					{
 						name: 'Channel',
@@ -85,7 +85,6 @@ export class Twist implements INodeType {
 					},
 				],
 				default: 'messageConversation',
-				description: 'The resource to operate on.',
 			},
 			...channelOperations,
 			...channelFields,
@@ -170,7 +169,7 @@ export class Twist implements INodeType {
 	async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
 		const items = this.getInputData();
 		const returnData: IDataObject[] = [];
-		const length = (items.length as unknown) as number;
+		const length = items.length;
 		const qs: IDataObject = {};
 		let responseData;
 		const resource = this.getNodeParameter('resource', 0) as string;
@@ -278,6 +277,8 @@ export class Twist implements INodeType {
 									throw new Error(`No binary data property "${binaryProperty}" does not exists on item!`);
 								}
 
+								const dataBuffer = await this.helpers.getBinaryDataBuffer(i, binaryProperty);
+
 								attachments.push(await twistApiRequest.call(
 									this,
 									'POST',
@@ -287,7 +288,7 @@ export class Twist implements INodeType {
 									{
 										formData: {
 											file_name: {
-												value: Buffer.from(binaryData.data, BINARY_ENCODING),
+												value: dataBuffer,
 												options: {
 													filename: binaryData.fileName,
 												},
@@ -380,6 +381,8 @@ export class Twist implements INodeType {
 									throw new Error(`No binary data property "${binaryProperty}" does not exists on item!`);
 								}
 
+								const dataBuffer = await this.helpers.getBinaryDataBuffer(i, binaryProperty);
+
 								attachments.push(await twistApiRequest.call(
 									this,
 									'POST',
@@ -389,7 +392,7 @@ export class Twist implements INodeType {
 									{
 										formData: {
 											file_name: {
-												value: Buffer.from(binaryData.data, BINARY_ENCODING),
+												value: dataBuffer,
 												options: {
 													filename: binaryData.fileName,
 												},
@@ -452,6 +455,8 @@ export class Twist implements INodeType {
 									throw new NodeOperationError(this.getNode(), `No binary data property "${binaryProperty}" does not exists on item!`);
 								}
 
+								const dataBuffer = await this.helpers.getBinaryDataBuffer(i, binaryProperty);
+
 								attachments.push(await twistApiRequest.call(
 									this,
 									'POST',
@@ -461,7 +466,7 @@ export class Twist implements INodeType {
 									{
 										formData: {
 											file_name: {
-												value: Buffer.from(binaryData.data, BINARY_ENCODING),
+												value: dataBuffer,
 												options: {
 													filename: binaryData.fileName,
 												},
@@ -547,6 +552,8 @@ export class Twist implements INodeType {
 									throw new Error(`No binary data property "${binaryProperty}" does not exists on item!`);
 								}
 
+								const dataBuffer = await this.helpers.getBinaryDataBuffer(i, binaryProperty);
+
 								attachments.push(await twistApiRequest.call(
 									this,
 									'POST',
@@ -556,7 +563,7 @@ export class Twist implements INodeType {
 									{
 										formData: {
 											file_name: {
-												value: Buffer.from(binaryData.data, BINARY_ENCODING),
+												value: dataBuffer,
 												options: {
 													filename: binaryData.fileName,
 												},
@@ -619,6 +626,8 @@ export class Twist implements INodeType {
 									throw new Error(`No binary data property "${binaryProperty}" does not exists on item!`);
 								}
 
+								const dataBuffer = await this.helpers.getBinaryDataBuffer(i, binaryProperty);
+
 								attachments.push(await twistApiRequest.call(
 									this,
 									'POST',
@@ -628,7 +637,7 @@ export class Twist implements INodeType {
 									{
 										formData: {
 											file_name: {
-												value: Buffer.from(binaryData.data, BINARY_ENCODING),
+												value: dataBuffer,
 												options: {
 													filename: binaryData.fileName,
 												},
@@ -720,6 +729,8 @@ export class Twist implements INodeType {
 									throw new Error(`No binary data property "${binaryProperty}" does not exists on item!`);
 								}
 
+								const dataBuffer = await this.helpers.getBinaryDataBuffer(i, binaryProperty);
+
 								attachments.push(await twistApiRequest.call(
 									this,
 									'POST',
@@ -729,7 +740,7 @@ export class Twist implements INodeType {
 									{
 										formData: {
 											file_name: {
-												value: Buffer.from(binaryData.data, BINARY_ENCODING),
+												value: dataBuffer,
 												options: {
 													filename: binaryData.fileName,
 												},

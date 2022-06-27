@@ -2,11 +2,12 @@ import {
 	INodeProperties,
 } from 'n8n-workflow';
 
-export const goalKeyResultOperations = [
+export const goalKeyResultOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		displayOptions: {
 			show: {
 				resource: [
@@ -32,11 +33,10 @@ export const goalKeyResultOperations = [
 			},
 		],
 		default: 'create',
-		description: 'The operation to perform.',
 	},
-] as INodeProperties[];
+];
 
-export const goalKeyResultFields = [
+export const goalKeyResultFields: INodeProperties[] = [
 
 	/* -------------------------------------------------------------------------- */
 	/*                                goalKeyResult:create                        */
@@ -174,7 +174,7 @@ export const goalKeyResultFields = [
 				name: 'unit',
 				type: 'string',
 				default: '',
-				description: `Only matters for type Number and Currency. For Currency the unit must be a valid currency code.`,
+				description: 'Only matters for type Number and Currency. For Currency the unit must be a valid currency code.',
 			},
 		],
 	},
@@ -284,8 +284,8 @@ export const goalKeyResultFields = [
 				name: 'unit',
 				type: 'string',
 				default: '',
-				description: `Only matters for type Number and Currency. For Currency the unit must be a valid currency code.`,
+				description: 'Only matters for type Number and Currency. For Currency the unit must be a valid currency code.',
 			},
 		],
 	},
-] as INodeProperties[];
+];

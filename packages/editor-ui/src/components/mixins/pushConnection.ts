@@ -16,6 +16,8 @@ import { titleChange } from '@/components/mixins/titleChange';
 import { workflowHelpers } from '@/components/mixins/workflowHelpers';
 
 import mixins from 'vue-typed-mixins';
+import { WORKFLOW_SETTINGS_MODAL_KEY } from '@/constants';
+import { getTriggerNodeServiceName } from '../helpers';
 
 export const pushConnection = mixins(
 	externalHooks,
@@ -59,7 +61,7 @@ export const pushConnection = mixins(
 
 				const connectionUrl = `${this.$store.getters.getRestUrl}/push?sessionId=${this.sessionId}`;
 
-				this.eventSource = new EventSource(connectionUrl);
+				this.eventSource = new EventSource(connectionUrl, { withCredentials: true });
 				this.eventSource.addEventListener('message', this.pushMessageReceived, false);
 
 				this.eventSource.addEventListener('open', () => {
@@ -164,7 +166,7 @@ export const pushConnection = mixins(
 
 				if (receivedData.type === 'sendConsoleMessage') {
 					const pushData = receivedData.data;
-					console.log(pushData.source, pushData.message); // eslint-disable-line no-console
+					console.log(pushData.source, ...pushData.messages); // eslint-disable-line no-console
 					return true;
 				}
 
@@ -217,22 +219,84 @@ export const pushConnection = mixins(
 
 					// @ts-ignore
 					const workflow = this.getWorkflow();
-					if (runDataExecuted.finished !== true) {
+					if (runDataExecuted.waitTill !== undefined) {
+						const {
+							activeExecutionId,
+							workflowSettings,
+							saveManualExecutions,
+						} = this.$store.getters;
+
+						const isSavingExecutions= workflowSettings.saveManualExecutions === undefined ? saveManualExecutions : workflowSettings.saveManualExecutions;
+
+						let action;
+						if (!isSavingExecutions) {
+							action = '<a class="open-settings">Turn on saving manual executions</a> and run again to see what happened after this node.';
+						}
+						else {
+							action = `<a href="/execution/${activeExecutionId}" target="_blank">View the execution</a> to see what happened after this node.`;
+						}
+
+						// Workflow did start but had been put to wait
+						this.$titleSet(workflow.name as string, 'IDLE');
+						this.$showToast({
+							title: 'Workflow started waiting',
+							message: `${action} <a href="https://docs.n8n.io/nodes/n8n-nodes-base.wait/" target="_blank">More info</a>`,
+							type: 'success',
+							duration: 0,
+							onLinkClick: async (e: HTMLLinkElement) => {
+								if (e.classList.contains('open-settings')) {
+									if (this.$store.getters.isNewWorkflow) {
+										await this.saveAsNewWorkflow();
+									}
+									this.$store.dispatch('ui/openModal', WORKFLOW_SETTINGS_MODAL_KEY);
+								}
+							},
+						});
+					} else if (runDataExecuted.finished !== true) {
 						this.$titleSet(workflow.name as string, 'ERROR');
 
 						this.$showMessage({
 							title: 'Problem executing workflow',
 							message: runDataExecutedErrorMessage,
 							type: 'error',
+							duration: 0,
 						});
 					} else {
 						// Workflow did execute without a problem
 						this.$titleSet(workflow.name as string, 'IDLE');
-						this.$showMessage({
-							title: 'Workflow got executed',
-							message: 'Workflow did get executed successfully!',
-							type: 'success',
-						});
+
+						const execution = this.$store.getters.getWorkflowExecution;
+						if (execution && execution.executedNode) {
+							const node = this.$store.getters.getNodeByName(execution.executedNode);
+							const nodeType = node && this.$store.getters.nodeType(node.type, node.typeVersion);
+							const nodeOutput = execution && execution.executedNode && execution.data && execution.data.resultData && execution.data.resultData.runData && execution.data.resultData.runData[execution.executedNode];
+							if (node && nodeType && !nodeOutput) {
+								this.$showMessage({
+									title: this.$locale.baseText('pushConnection.pollingNode.dataNotFound', {
+										interpolate: {
+											service: getTriggerNodeServiceName(nodeType),
+										},
+									}),
+									message: this.$locale.baseText('pushConnection.pollingNode.dataNotFound.message', {
+										interpolate: {
+											service: getTriggerNodeServiceName(nodeType),
+										},
+									}),
+									type: 'success',
+								});
+							} else {
+								this.$showMessage({
+									title: this.$locale.baseText('pushConnection.nodeExecutedSuccessfully'),
+									type: 'success',
+								});
+							}
+						}
+						else {
+							this.$showMessage({
+								title: this.$locale.baseText('pushConnection.workflowExecutedSuccessfully'),
+								type: 'success',
+							});
+						}
 					}
 
 					// It does not push the runData as it got already pushed with each
@@ -284,7 +348,7 @@ export const pushConnection = mixins(
 					const pushData = receivedData.data;
 					this.$store.commit('setExecutingNode', pushData.nodeName);
 				} else if (receivedData.type === 'testWebhookDeleted') {
-					// A test-webhook got deleted
+					// A test-webhook was deleted
 					const pushData = receivedData.data;
 
 					if (pushData.workflowId === this.$store.getters.workflowId) {

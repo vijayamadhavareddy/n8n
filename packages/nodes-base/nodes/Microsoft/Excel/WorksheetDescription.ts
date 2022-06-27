@@ -1,10 +1,11 @@
 import { INodeProperties } from 'n8n-workflow';
 
-export const worksheetOperations = [
+export const worksheetOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		displayOptions: {
 			show: {
 				resource: [
@@ -25,19 +26,19 @@ export const worksheetOperations = [
 			},
 		],
 		default: 'create',
-		description: 'The operation to perform.',
 	},
-] as INodeProperties[];
+];
 
-export const worksheetFields = [
+export const worksheetFields: INodeProperties[] = [
 
 /* -------------------------------------------------------------------------- */
 /*                                 worksheet:getAll                           */
 /* -------------------------------------------------------------------------- */
 	{
-		displayName: 'Workbook',
+		displayName: 'Workbook Name or ID',
 		name: 'workbook',
 		type: 'options',
+		description: 'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>',
 		typeOptions: {
 			loadOptionsMethod: 'getWorkbooks',
 		},
@@ -68,7 +69,7 @@ export const worksheetFields = [
 			},
 		},
 		default: false,
-		description: 'If all results should be returned or only up to a given limit.',
+		description: 'Whether to return all results or only up to a given limit',
 	},
 	{
 		displayName: 'Limit',
@@ -92,7 +93,7 @@ export const worksheetFields = [
 			maxValue: 500,
 		},
 		default: 100,
-		description: 'How many results to return.',
+		description: 'Max number of results to return',
 	},
 	{
 		displayName: 'Filters',
@@ -116,7 +117,7 @@ export const worksheetFields = [
 				name: 'fields',
 				type: 'string',
 				default: '',
-				description: `Fields the response will containt. Multiple can be added separated by ,.`,
+				description: 'Fields the response will containt. Multiple can be added separated by ,.',
 			},
 		],
 	},
@@ -124,9 +125,10 @@ export const worksheetFields = [
 /*                                 worksheet:getContent                       */
 /* -------------------------------------------------------------------------- */
 	{
-		displayName: 'Workbook',
+		displayName: 'Workbook Name or ID',
 		name: 'workbook',
 		type: 'options',
+		description: 'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>',
 		required: true,
 		typeOptions: {
 			loadOptionsMethod: 'getWorkbooks',
@@ -144,9 +146,10 @@ export const worksheetFields = [
 		default: '',
 	},
 	{
-		displayName: 'Worksheet',
+		displayName: 'Worksheet Name or ID',
 		name: 'worksheet',
 		type: 'options',
+		description: 'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>',
 		required: true,
 		typeOptions: {
 			loadOptionsMethod: 'getworksheets',
@@ -199,7 +202,7 @@ export const worksheetFields = [
 			},
 		},
 		default: false,
-		description: 'If the data should be returned RAW instead of parsed into keys according to their header.',
+		description: 'Whether the data should be returned RAW instead of parsed into keys according to their header',
 	},
 	{
 		displayName: 'Data Property',
@@ -219,7 +222,7 @@ export const worksheetFields = [
 				],
 			},
 		},
-		description: 'The name of the property into which to write the RAW data.',
+		description: 'The name of the property into which to write the RAW data',
 	},
 	{
 		displayName: 'Data Start Row',
@@ -244,7 +247,7 @@ export const worksheetFields = [
 				],
 			},
 		},
-		description: 'Index of the first row which contains<br />the actual data and not the keys. Starts with 0.',
+		description: 'Index of the first row which contains the actual data and not the keys. Starts with 0.',
 	},
 	{
 		displayName: 'Key Row',
@@ -269,7 +272,7 @@ export const worksheetFields = [
 			},
 		},
 		default: 0,
-		description: 'Index of the row which contains the keys. Starts at 0.<br />The incoming node data is matched to the keys for assignment. The matching is case sensitve.',
+		description: 'Index of the row which contains the keys. Starts at 0. The incoming node data is matched to the keys for assignment. The matching is case sensitve.',
 	},
 	{
 		displayName: 'Filters',
@@ -296,8 +299,8 @@ export const worksheetFields = [
 				name: 'fields',
 				type: 'string',
 				default: '',
-				description: `Fields the response will containt. Multiple can be added separated by ,.`,
+				description: 'Fields the response will containt. Multiple can be added separated by ,.',
 			},
 		],
 	},
-] as INodeProperties[];
+];

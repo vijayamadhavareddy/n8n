@@ -1,5 +1,4 @@
 import {
-	BINARY_ENCODING,
 	IExecuteFunctions,
 } from 'n8n-core';
 
@@ -27,7 +26,7 @@ import {
 	folderOperations,
 } from './FolderDescription';
 
-import * as moment from 'moment-timezone';
+import moment from 'moment-timezone';
 
 import {
 	noCase,
@@ -37,6 +36,7 @@ export class Box implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'Box',
 		name: 'box',
+		// eslint-disable-next-line n8n-nodes-base/node-class-description-icon-not-svg
 		icon: 'file:box.png',
 		group: ['input'],
 		version: 1,
@@ -44,7 +44,6 @@ export class Box implements INodeType {
 		description: 'Consume Box API',
 		defaults: {
 			name: 'Box',
-			color: '#00aeef',
 		},
 		inputs: ['main'],
 		outputs: ['main'],
@@ -59,6 +58,7 @@ export class Box implements INodeType {
 				displayName: 'Resource',
 				name: 'resource',
 				type: 'options',
+				noDataExpression: true,
 				options: [
 					{
 						name: 'File',
@@ -70,7 +70,6 @@ export class Box implements INodeType {
 					},
 				],
 				default: 'file',
-				description: 'The resource to operate on.',
 			},
 			...fileOperations,
 			...fileFields,
@@ -82,7 +81,7 @@ export class Box implements INodeType {
 	async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
 		const items = this.getInputData();
 		const returnData: IDataObject[] = [];
-		const length = items.length as unknown as number;
+		const length = items.length;
 		const qs: IDataObject = {};
 		let responseData;
 		const timezone = this.getTimezone();
@@ -132,7 +131,7 @@ export class Box implements INodeType {
 
 						let mimeType: string | undefined;
 
-						responseData = await boxApiRequest.call(this, 'GET', `/files/${fileId}/content`, {}, {}, undefined, { resolveWithFullResponse: true });
+						responseData = await boxApiRequest.call(this, 'GET', `/files/${fileId}/content`, {}, {}, undefined, { encoding: null, resolveWithFullResponse: true });
 
 						const newItem: INodeExecutionData = {
 							json: items[i].json,
@@ -277,6 +276,7 @@ export class Box implements INodeType {
 							}
 
 							const binaryData = (items[i].binary as IBinaryKeyData)[binaryPropertyName];
+							const binaryDataBuffer = await this.helpers.getBinaryDataBuffer(i, binaryPropertyName);
 
 							const body: IDataObject = {};
 
@@ -285,7 +285,7 @@ export class Box implements INodeType {
 							body['attributes'] = JSON.stringify(attributes);
 
 							body['file'] = {
-								value: Buffer.from(binaryData.data, BINARY_ENCODING),
+								value: binaryDataBuffer,
 								options: {
 									filename: binaryData.fileName,
 									contentType: binaryData.mimeType,

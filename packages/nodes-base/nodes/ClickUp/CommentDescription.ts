@@ -2,11 +2,12 @@ import {
 	INodeProperties,
 } from 'n8n-workflow';
 
-export const commentOperations = [
+export const commentOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		displayOptions: {
 			show: {
 				resource: [
@@ -37,11 +38,10 @@ export const commentOperations = [
 			},
 		],
 		default: 'create',
-		description: 'The operation to perform.',
 	},
-] as INodeProperties[];
+];
 
-export const commentFields = [
+export const commentFields: INodeProperties[] = [
 
 	/* -------------------------------------------------------------------------- */
 	/*                                comment:create                              */
@@ -137,7 +137,7 @@ export const commentFields = [
 				name: 'notifyAll',
 				type: 'boolean',
 				default: false,
-				description: 'If true, creation notifications will be sent to everyone including the creator of the comment.',
+				description: 'Whether creation notifications will be sent to everyone including the creator of the comment',
 			},
 		],
 	},
@@ -232,7 +232,7 @@ export const commentFields = [
 			maxValue: 100,
 		},
 		default: 50,
-		description: 'How many results to return.',
+		description: 'Max number of results to return',
 	},
 
 	/* -------------------------------------------------------------------------- */
@@ -292,4 +292,4 @@ export const commentFields = [
 			},
 		],
 	},
-] as INodeProperties[];
+];

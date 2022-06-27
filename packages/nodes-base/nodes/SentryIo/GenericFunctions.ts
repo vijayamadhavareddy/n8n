@@ -50,9 +50,9 @@ export async function sentryIoApiRequest(this: IHookFunctions | IExecuteFunction
 				credentialName = 'sentryIoServerApi';
 			}
 
-			const credentials = this.getCredentials(credentialName);
+			const credentials = await this.getCredentials(credentialName);
 
-			if (credentials?.url) {
+			if (credentials.url) {
 				options.uri = `${credentials?.url}${resource}`;
 			}
 

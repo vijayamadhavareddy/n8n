@@ -52,6 +52,7 @@ export class Wekan implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'Wekan',
 		name: 'wekan',
+		// eslint-disable-next-line n8n-nodes-base/node-class-description-icon-not-svg
 		icon: 'file:wekan.png',
 		group: ['transform'],
 		version: 1,
@@ -59,7 +60,6 @@ export class Wekan implements INodeType {
 		description: 'Consume Wekan API',
 		defaults: {
 			name: 'Wekan',
-			color: '#006581',
 		},
 		inputs: ['main'],
 		outputs: ['main'],
@@ -74,6 +74,7 @@ export class Wekan implements INodeType {
 				displayName: 'Resource',
 				name: 'resource',
 				type: 'options',
+				noDataExpression: true,
 				options: [
 					{
 						name: 'Board',
@@ -101,7 +102,6 @@ export class Wekan implements INodeType {
 					},
 				],
 				default: 'card',
-				description: 'The resource to operate on.',
 			},
 
 			// ----------------------------------

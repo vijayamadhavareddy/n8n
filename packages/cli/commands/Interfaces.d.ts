@@ -1,14 +1,14 @@
 interface IResult {
 	totalWorkflows: number;
 	summary: {
-		failedExecutions: number,
-		successfulExecutions: number,
-		warningExecutions: number,
-		errors: IExecutionError[],
-		warnings: IExecutionError[],
+		failedExecutions: number;
+		successfulExecutions: number;
+		warningExecutions: number;
+		errors: IExecutionError[];
+		warnings: IExecutionError[];
 	};
 	coveredNodes: {
-		[nodeType: string]: number
+		[nodeType: string]: number;
 	};
 	executions: IExecutionResult[];
 }
@@ -21,7 +21,7 @@ interface IExecutionResult {
 	error?: string;
 	changes?: string;
 	coveredNodes: {
-		[nodeType: string]: number
+		[nodeType: string]: number;
 	};
 }
 
@@ -53,3 +53,14 @@ declare module 'json-diff' {
 	}
 	export function diff(obj1: unknown, obj2: unknown, diffOptions: IDiffOptions): string;
 }
+
+type SmtpConfig = {
+	host: string;
+	port: number;
+	secure: boolean;
+	auth: {
+		user: string;
+		pass: string;
+	};
+	sender: string;
+};

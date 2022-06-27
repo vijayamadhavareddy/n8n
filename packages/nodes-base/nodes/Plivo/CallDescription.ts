@@ -2,11 +2,12 @@ import {
 	INodeProperties,
 } from 'n8n-workflow';
 
-export const callOperations = [
+export const callOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		displayOptions: {
 			show: {
 				resource: [
@@ -22,11 +23,10 @@ export const callOperations = [
 			},
 		],
 		default: 'make',
-		description: 'Operation to perform.',
 	},
-] as INodeProperties[];
+];
 
-export const callFields = [
+export const callFields: INodeProperties[] = [
 	// ----------------------------------
 	//           call: make
 	// ----------------------------------
@@ -36,7 +36,7 @@ export const callFields = [
 		type: 'string',
 		default: '',
 		placeholder: '+14156667777',
-		description: 'Caller ID for the call to make.',
+		description: 'Caller ID for the call to make',
 		required: true,
 		displayOptions: {
 			show: {
@@ -56,7 +56,7 @@ export const callFields = [
 		default: '',
 		placeholder: '+14156667778',
 		required: true,
-		description: 'Phone number to make the call to.',
+		description: 'Phone number to make the call to',
 		displayOptions: {
 			show: {
 				resource: [
@@ -73,7 +73,7 @@ export const callFields = [
 		name: 'answer_method',
 		type: 'options',
 		required: true,
-		description: 'HTTP verb to be used when invoking the Answer URL.',
+		description: 'HTTP verb to be used when invoking the Answer URL',
 		default: 'POST',
 		options: [
 			{
@@ -101,7 +101,7 @@ export const callFields = [
 		name: 'answer_url',
 		type: 'string',
 		default: '',
-		description: 'URL to be invoked by Plivo once the call is answered.<br>It should return the XML to handle the call once answered.',
+		description: 'URL to be invoked by Plivo once the call is answered. It should return the XML to handle the call once answered.',
 		required: true,
 		displayOptions: {
 			show: {
@@ -114,4 +114,4 @@ export const callFields = [
 			},
 		},
 	},
-] as INodeProperties[];
+];

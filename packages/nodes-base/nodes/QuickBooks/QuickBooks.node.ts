@@ -1,3 +1,4 @@
+/* eslint-disable n8n-nodes-base/filesystem-wrong-node-filename */
 import {
 	IExecuteFunctions,
 } from 'n8n-core';
@@ -28,11 +29,14 @@ import {
 	paymentOperations,
 	purchaseFields,
 	purchaseOperations,
+	transactionFields,
+	transactionOperations,
 	vendorFields,
 	vendorOperations,
 } from './descriptions';
 
 import {
+	adjustTransactionDates,
 	getRefAndSyncToken,
 	getSyncToken,
 	handleBinaryData,
@@ -41,6 +45,7 @@ import {
 	populateFields,
 	processLines,
 	quickBooksApiRequest,
+	simplifyTransactionReport,
 } from './GenericFunctions';
 
 import {
@@ -52,7 +57,9 @@ import {
 } from 'lodash';
 
 import {
+	DateFieldsUi,
 	QuickBooksOAuth2Credentials,
+	TransactionFields,
 } from './types';
 
 export class QuickBooks implements INodeType {
@@ -66,7 +73,6 @@ export class QuickBooks implements INodeType {
 		description: 'Consume the QuickBooks Online API',
 		defaults: {
 			name: 'QuickBooks Online',
-			color: '#2CA01C',
 		},
 		inputs: ['main'],
 		outputs: ['main'],
@@ -81,6 +87,7 @@ export class QuickBooks implements INodeType {
 				displayName: 'Resource',
 				name: 'resource',
 				type: 'options',
+				noDataExpression: true,
 				options: [
 					{
 						name: 'Bill',
@@ -115,12 +122,15 @@ export class QuickBooks implements INodeType {
 						value: 'purchase',
 					},
 					{
+						name: 'Transaction',
+						value: 'transaction',
+					},
+					{
 						name: 'Vendor',
 						value: 'vendor',
 					},
 				],
 				default: 'customer',
-				description: 'Resource to consume',
 			},
 			...billOperations,
 			...billFields,
@@ -138,6 +148,8 @@ export class QuickBooks implements INodeType {
 			...paymentFields,
 			...purchaseOperations,
 			...purchaseFields,
+			...transactionOperations,
+			...transactionFields,
 			...vendorOperations,
 			...vendorFields,
 		],
@@ -153,12 +165,28 @@ export class QuickBooks implements INodeType {
 				return await loadResource.call(this, 'preferences');
 			},
 
+			async getDepartments(this: ILoadOptionsFunctions) {
+				return await loadResource.call(this, 'department');
+			},
+
 			async getItems(this: ILoadOptionsFunctions) {
 				return await loadResource.call(this, 'item');
 			},
 
+			async getMemos(this: ILoadOptionsFunctions) {
+				return await loadResource.call(this, 'CreditMemo');
+			},
+
 			async getPurchases(this: ILoadOptionsFunctions) {
 				return await loadResource.call(this, 'purchase');
+			},
+
+			async getTaxCodeRefs(this: ILoadOptionsFunctions) {
+				return await loadResource.call(this, 'TaxCode');
+			},
+
+			async getTerms(this: ILoadOptionsFunctions) {
+				return await loadResource.call(this, 'Term');
 			},
 
 			async getVendors(this: ILoadOptionsFunctions) {
@@ -176,8 +204,7 @@ export class QuickBooks implements INodeType {
 		let responseData;
 		const returnData: IDataObject[] = [];
 
-		const { oauthTokenData } = this.getCredentials('quickBooksOAuth2Api') as QuickBooksOAuth2Credentials;
-
+		const { oauthTokenData } = await this.getCredentials('quickBooksOAuth2Api') as QuickBooksOAuth2Credentials;
 		const companyId = oauthTokenData.callbackQueryString.realmId;
 
 		for (let i = 0; i < items.length; i++) {
@@ -481,7 +508,6 @@ export class QuickBooks implements INodeType {
 						} as IDataObject;
 
 						body.Line = processLines.call(this, body, lines, resource);
-
 						const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
 
 						body = populateFields.call(this, body, additionalFields, resource);
@@ -946,6 +972,67 @@ export class QuickBooks implements INodeType {
 						const endpoint = `/v3/company/${companyId}/query`;
 						responseData = await handleListing.call(this, i, endpoint, resource);
 
+					}
+
+				} else if (resource === 'transaction') {
+
+					// *********************************************************************
+					//                            transaction
+					// *********************************************************************
+
+					// https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/transactionlist
+
+					if (operation === 'getReport') {
+
+						// ----------------------------------
+						//        transaction: getReport
+						// ----------------------------------
+
+						const {
+							columns,
+							memo,
+							term,
+							customer,
+							vendor,
+							...rest
+						} = this.getNodeParameter('filters', i) as TransactionFields;
+
+						let qs = { ...rest };
+
+						if (columns?.length) {
+							qs.columns = columns.join(',');
+						}
+
+						if (memo?.length) {
+							qs.memo = memo.join(',');
+						}
+
+						if (term?.length) {
+							qs.term = term.join(',');
+						}
+
+						if (customer?.length) {
+							qs.customer = customer.join(',');
+						}
+
+						if (vendor?.length) {
+							qs.vendor = vendor.join(',');
+						}
+
+						qs = adjustTransactionDates(qs);
+
+						const endpoint = `/v3/company/${companyId}/reports/TransactionList`;
+						responseData = await quickBooksApiRequest.call(this, 'GET', endpoint, qs, {});
+
+						const simplifyResponse = this.getNodeParameter('simple', i, true) as boolean;
+
+						if (!Object.keys(responseData?.Rows).length) {
+							responseData = [];
+						}
+
+						if (simplifyResponse && !Array.isArray(responseData)) {
+							responseData = simplifyTransactionReport(responseData);
+						}
 					}
 
 				} else if (resource === 'vendor') {

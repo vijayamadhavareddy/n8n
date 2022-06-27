@@ -2,11 +2,12 @@ import {
 	INodeProperties,
 } from 'n8n-workflow';
 
-export const eventOperations = [
+export const eventOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		displayOptions: {
 			show: {
 				resource: [
@@ -32,11 +33,10 @@ export const eventOperations = [
 			},
 		],
 		default: 'get',
-		description: 'The operation to perform.',
 	},
-] as INodeProperties[];
+];
 
-export const eventFields = [
+export const eventFields: INodeProperties[] = [
 
 	/* -------------------------------------------------------------------------- */
 	/*                                   event:getAll                             */
@@ -56,7 +56,7 @@ export const eventFields = [
 			},
 		},
 		default: false,
-		description: 'If all results should be returned or only up to a given limit.',
+		description: 'Whether to return all results or only up to a given limit',
 	},
 	{
 		displayName: 'Limit',
@@ -80,7 +80,7 @@ export const eventFields = [
 			maxValue: 500,
 		},
 		default: 100,
-		description: 'How many results to return.',
+		description: 'Max number of results to return',
 	},
 	{
 		displayName: 'Filters',
@@ -131,7 +131,6 @@ export const eventFields = [
 		type: 'string',
 		default: '',
 		required: true,
-		description: 'Event ID',
 		displayOptions: {
 			show: {
 				resource: [
@@ -165,7 +164,7 @@ export const eventFields = [
 				name: 'active',
 				type: 'boolean',
 				default: false,
-				description: 'Return only active dates in series',
+				description: 'Whether to return only active dates in series',
 			},
 			{
 				displayName: 'Session ID',
@@ -181,9 +180,10 @@ export const eventFields = [
 	/*                                   event:register                           */
 	/* -------------------------------------------------------------------------- */
 	{
-		displayName: 'Event ID',
+		displayName: 'Event Name or ID',
 		name: 'eventId',
 		type: 'options',
+		description: 'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>',
 		typeOptions: {
 			loadOptionsMethod: 'getEvents',
 		},
@@ -198,7 +198,6 @@ export const eventFields = [
 			},
 		},
 		default: '',
-		description: 'Event ID',
 	},
 	{
 		displayName: 'First Name',
@@ -222,6 +221,7 @@ export const eventFields = [
 		displayName: 'Email',
 		name: 'email',
 		type: 'string',
+		placeholder: 'name@email.com',
 		default: '',
 		required: true,
 		description: 'The registrant\'s email address',
@@ -258,7 +258,7 @@ export const eventFields = [
 				name: 'company',
 				type: 'string',
 				default: '',
-				description: 'The value for the predefined Company field.',
+				description: 'The value for the predefined Company field',
 			},
 			{
 				displayName: 'Custom Fields',
@@ -279,14 +279,14 @@ export const eventFields = [
 								name: 'fieldId',
 								type: 'string',
 								default: '',
-								description: 'Each custom field\'s unique identifier<br /> can be found within the Event\'s Registration block in the Customize tab.',
+								description: 'Each custom field\'s unique identifier can be found within the Event\'s Registration block in the Customize tab',
 							},
 							{
 								displayName: 'Value',
 								name: 'value',
 								type: 'string',
 								default: '',
-								description: 'The value to set on custom field.',
+								description: 'The value to set on custom field',
 							},
 						],
 					},
@@ -297,31 +297,31 @@ export const eventFields = [
 				name: 'ref_url',
 				type: 'string',
 				default: '',
-				description: 'Event Registration page URL. It can be useful when you<br /> do not know Event ID, but have Event link.',
+				description: 'Event Registration page URL. It can be useful when you do not know Event ID, but have Event link.',
 			},
 			{
 				displayName: 'GDPR',
 				name: 'gdpr',
 				type: 'string',
 				default: '',
-				description: 'The value for the predefined GDPR field.',
+				description: 'The value for the predefined GDPR field',
 			},
 			{
 				displayName: 'Last Name',
 				name: 'last_name',
 				type: 'string',
 				default: '',
-				description: 'The value for the predefined Last Name field.',
+				description: 'The value for the predefined Last Name field',
 			},
 			{
 				displayName: 'Phone Number',
 				name: 'phone_number',
 				type: 'string',
 				default: '',
-				description: 'The value for the predefined Phone Number field.',
+				description: 'The value for the predefined Phone Number field',
 			},
 			{
-				displayName: 'Session ID',
+				displayName: 'Session Name or ID',
 				name: 'date_id',
 				type: 'options',
 				typeOptions: {
@@ -331,15 +331,15 @@ export const eventFields = [
 					],
 				},
 				default: '',
-				description: 'Event Session ID',
+				description: 'Event Session ID. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 			},
 			{
 				displayName: 'Website',
 				name: 'website',
 				type: 'string',
 				default: '',
-				description: 'The value for the predefined Website field.',
+				description: 'The value for the predefined Website field',
 			},
 		],
 	},
-] as INodeProperties[];
+];

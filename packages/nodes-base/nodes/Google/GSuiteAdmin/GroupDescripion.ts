@@ -2,11 +2,12 @@ import {
 	INodeProperties,
 } from 'n8n-workflow';
 
-export const groupOperations = [
+export const groupOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		displayOptions: {
 			show: {
 				resource: [
@@ -42,11 +43,10 @@ export const groupOperations = [
 			},
 		],
 		default: 'create',
-		description: 'The operation to perform.',
 	},
-] as INodeProperties[];
+];
 
-export const groupFields = [
+export const groupFields: INodeProperties[] = [
 	/* -------------------------------------------------------------------------- */
 	/*                                 group:create                               */
 	/* -------------------------------------------------------------------------- */
@@ -54,6 +54,7 @@ export const groupFields = [
 		displayName: 'Email',
 		name: 'email',
 		type: 'string',
+		placeholder: 'name@email.com',
 		required: true,
 		displayOptions: {
 			show: {
@@ -66,7 +67,7 @@ export const groupFields = [
 			},
 		},
 		default: '',
-		description: `The group's email address. If your account has multiple domains, select the appropriate domain for the email address. The email must be unique`,
+		description: 'The group\'s email address. If your account has multiple domains, select the appropriate domain for the email address. The email must be unique',
 	},
 	{
 		displayName: 'Additional Fields',
@@ -90,16 +91,14 @@ export const groupFields = [
 				name: 'description',
 				type: 'string',
 				default: '',
-				description: `An extended description to help users determine the purpose of a group.<br>
-				For example, you can include information about who should join the group,<br>
-				the types of messages to send to the group, links to FAQs about the group, or related groups`,
+				description: 'An extended description to help users determine the purpose of a group. For example, you can include information about who should join the group, the types of messages to send to the group, links to FAQs about the group, or related groups.',
 			},
 			{
 				displayName: 'Name',
 				name: 'name',
 				type: 'string',
 				default: '',
-				description: `The group's display name`,
+				description: 'The group\'s display name',
 			},
 		],
 	},
@@ -122,7 +121,7 @@ export const groupFields = [
 			},
 		},
 		default: '',
-		description: `Identifies the group in the API request. The value can be the group's email address, group alias, or the unique group ID.`,
+		description: 'Identifies the group in the API request. The value can be the group\'s email address, group alias, or the unique group ID.',
 	},
 	/* -------------------------------------------------------------------------- */
 	/*                                 group:get                                  */
@@ -143,7 +142,7 @@ export const groupFields = [
 			},
 		},
 		default: '',
-		description: `Identifies the group in the API request. The value can be the group's email address, group alias, or the unique group ID.`,
+		description: 'Identifies the group in the API request. The value can be the group\'s email address, group alias, or the unique group ID.',
 	},
 	/* -------------------------------------------------------------------------- */
 	/*                                 group:getAll                               */
@@ -163,7 +162,7 @@ export const groupFields = [
 			},
 		},
 		default: false,
-		description: 'If all results should be returned or only up to a given limit.',
+		description: 'Whether to return all results or only up to a given limit',
 	},
 	{
 		displayName: 'Limit',
@@ -187,7 +186,7 @@ export const groupFields = [
 			maxValue: 500,
 		},
 		default: 100,
-		description: 'How many results to return.',
+		description: 'Max number of results to return',
 	},
 	{
 		displayName: 'Options',
@@ -211,7 +210,7 @@ export const groupFields = [
 				name: 'customer',
 				type: 'string',
 				default: '',
-				description: `The unique ID for the customer's G Suite account. In case of a multi-domain account, to fetch all groups for a customer, fill this field instead of domain`,
+				description: 'The unique ID for the customer\'s G Suite account. In case of a multi-domain account, to fetch all groups for a customer, fill this field instead of domain.',
 			},
 			{
 				displayName: 'Domain',
@@ -231,14 +230,14 @@ export const groupFields = [
 					},
 				],
 				default: '',
-				description: 'Property to use for sorting results.',
+				description: 'Property to use for sorting results',
 			},
 			{
 				displayName: 'Query',
 				name: 'query',
 				type: 'string',
 				default: '',
-				description: `Query string search. Complete documentation is <a href="https://developers.google.com/admin-sdk/directory/v1/guides/search-groups" target="_blank">at</a>`,
+				description: 'Query string search. Complete documentation is <a href="https://developers.google.com/admin-sdk/directory/v1/guides/search-groups">at</a>.',
 			},
 			{
 				displayName: 'Sort Order',
@@ -262,7 +261,7 @@ export const groupFields = [
 				name: 'userId',
 				type: 'string',
 				default: '',
-				description: `Email or immutable ID of the user if only those groups are to be listed, the given user is a member of. If it's an ID, it should match with the ID of the user object.`,
+				description: 'Email or immutable ID of the user if only those groups are to be listed, the given user is a member of. If it\'s an ID, it should match with the ID of the user object.',
 			},
 		],
 	},
@@ -285,7 +284,7 @@ export const groupFields = [
 			},
 		},
 		default: '',
-		description: `Identifies the group in the API request. The value can be the group's email address, group alias, or the unique group ID.`,
+		description: 'Identifies the group in the API request. The value can be the group\'s email address, group alias, or the unique group ID.',
 	},
 	{
 		displayName: 'Update Fields',
@@ -309,24 +308,23 @@ export const groupFields = [
 				name: 'description',
 				type: 'string',
 				default: '',
-				description: `An extended description to help users determine the purpose of a group.<br>
-				For example, you can include information about who should join the group,<br>
-				the types of messages to send to the group, links to FAQs about the group, or related groups`,
+				description: 'An extended description to help users determine the purpose of a group. For example, you can include information about who should join the group, the types of messages to send to the group, links to FAQs about the group, or related groups.',
 			},
 			{
 				displayName: 'Email',
 				name: 'email',
 				type: 'string',
+				placeholder: 'name@email.com',
 				default: '',
-				description: `The group's email address. If your account has multiple domains, select the appropriate domain for the email address. The email must be unique.`,
+				description: 'The group\'s email address. If your account has multiple domains, select the appropriate domain for the email address. The email must be unique.',
 			},
 			{
 				displayName: 'Name',
 				name: 'name',
 				type: 'string',
 				default: '',
-				description: `The group's display name`,
+				description: 'The group\'s display name',
 			},
 		],
 	},
-] as INodeProperties[];
+];

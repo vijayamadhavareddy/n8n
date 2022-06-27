@@ -39,10 +39,7 @@ export async function gitlabApiRequest(this: IHookFunctions | IExecuteFunctions,
 
 	try {
 		if (authenticationMethod === 'accessToken') {
-			const credentials = this.getCredentials('gitlabApi');
-			if (credentials === undefined) {
-				throw new NodeOperationError(this.getNode(), 'No credentials got returned!');
-			}
+			const credentials = await this.getCredentials('gitlabApi');
 
 			options.headers!['Private-Token'] = `${credentials.accessToken}`;
 
@@ -50,10 +47,7 @@ export async function gitlabApiRequest(this: IHookFunctions | IExecuteFunctions,
 
 			return await this.helpers.request(options);
 		} else {
-			const credentials = this.getCredentials('gitlabOAuth2Api');
-			if (credentials === undefined) {
-				throw new NodeOperationError(this.getNode(), 'No credentials got returned!');
-			}
+			const credentials = await this.getCredentials('gitlabOAuth2Api');
 
 			options.uri = `${(credentials.server as string).replace(/\/$/, '')}/api/v4${endpoint}`;
 

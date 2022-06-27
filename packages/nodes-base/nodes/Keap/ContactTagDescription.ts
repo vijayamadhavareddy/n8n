@@ -2,11 +2,12 @@ import {
 	INodeProperties,
  } from 'n8n-workflow';
 
-export const contactTagOperations = [
+export const contactTagOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		displayOptions: {
 			show: {
 				resource: [
@@ -23,20 +24,19 @@ export const contactTagOperations = [
 			{
 				name: 'Delete',
 				value: 'delete',
-				description: `Delete a contact's tag`,
+				description: 'Delete a contact\'s tag',
 			},
 			{
 				name: 'Get All',
 				value: 'getAll',
-				description: `Retrieve all contact's tags`,
+				description: 'Retrieve all contact\'s tags',
 			},
 		],
 		default: 'create',
-		description: 'The operation to perform.',
 	},
-] as INodeProperties[];
+];
 
-export const contactTagFields = [
+export const contactTagFields: INodeProperties[] = [
 
 /* -------------------------------------------------------------------------- */
 /*                                 contactTag:create                          */
@@ -59,7 +59,7 @@ export const contactTagFields = [
 		default: '',
 	},
 	{
-		displayName: 'Tag IDs',
+		displayName: 'Tag Names or IDs',
 		name: 'tagIds',
 		type: 'multiOptions',
 		typeOptions: {
@@ -150,7 +150,7 @@ export const contactTagFields = [
 			},
 		},
 		default: false,
-		description: 'If all results should be returned or only up to a given limit.',
+		description: 'Whether to return all results or only up to a given limit',
 	},
 	{
 		displayName: 'Limit',
@@ -174,6 +174,6 @@ export const contactTagFields = [
 			maxValue: 200,
 		},
 		default: 100,
-		description: 'How many results to return.',
+		description: 'Max number of results to return',
 	},
-] as INodeProperties[];
+];

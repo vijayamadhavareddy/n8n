@@ -6,13 +6,14 @@ import {
 	TLP,
 } from './AnalyzerInterface';
 
-export const respondersOperations = [
+export const respondersOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		required: true,
-		description: 'Choose an operation.',
+		description: 'Choose an operation',
 		displayOptions: {
 			show: {
 				resource: [
@@ -29,11 +30,11 @@ export const respondersOperations = [
 		],
 		default: 'execute',
 	},
-] as INodeProperties[];
+];
 
 export const responderFields: INodeProperties[] = [
 	{
-		displayName: 'Responder Type',
+		displayName: 'Responder Type Name or ID',
 		name: 'responder',
 		type: 'options',
 		required: true,
@@ -48,10 +49,10 @@ export const responderFields: INodeProperties[] = [
 				],
 			},
 		},
-		description: 'Choose the responder.',
+		description: 'Choose the responder. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 	},
 	{
-		displayName: 'Entity Type',
+		displayName: 'Entity Type Name or ID',
 		name: 'entityType',
 		type: 'options',
 		required: true,
@@ -69,14 +70,15 @@ export const responderFields: INodeProperties[] = [
 			],
 		},
 		default: '',
-		description: 'Choose the Data type.',
+		description: 'Choose the Data type. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 	},
 	{
 		displayName: 'JSON Parameters',
 		name: 'jsonObject',
 		type: 'boolean',
 		default: false,
-		description: 'Choose between providing JSON object or seperated attributes.',
+		// eslint-disable-next-line n8n-nodes-base/node-param-description-boolean-without-whether
+		description: 'Choose between providing JSON object or seperated attributes',
 		displayOptions: {
 			show: {
 				resource: [
@@ -107,7 +109,6 @@ export const responderFields: INodeProperties[] = [
 		name: 'parameters',
 		type: 'fixedCollection',
 		placeholder: 'Add Parameter',
-		required: false,
 		options: [
 			{
 				displayName: 'Case Attributes',
@@ -146,7 +147,7 @@ export const responderFields: INodeProperties[] = [
 								value: 3,
 							},
 						],
-						description: 'Severity of the case. Default=Medium',
+						description: 'Severity of the case. Default=Medium.',
 					},
 					{
 						displayName: 'Start Date',
@@ -160,14 +161,15 @@ export const responderFields: INodeProperties[] = [
 						name: 'owner',
 						type: 'string',
 						default: '',
-						description: `User who owns the case. This is automatically set to current user when status is set to InProgress.`,
+						description: 'User who owns the case. This is automatically set to current user when status is set to InProgress.',
 					},
 					{
 						displayName: 'Flag',
 						name: 'flag',
 						type: 'boolean',
 						default: false,
-						description: 'Flag of the case default=false.',
+						// eslint-disable-next-line n8n-nodes-base/node-param-description-boolean-without-whether
+						description: 'Flag of the case default=false',
 					},
 					{
 						displayName: 'TLP',
@@ -192,7 +194,7 @@ export const responderFields: INodeProperties[] = [
 								value: TLP.red,
 							},
 						],
-						description: 'Traffict Light Protocol (TLP). Default=Amber',
+						description: 'Traffict Light Protocol (TLP). Default=Amber.',
 					},
 					{
 						displayName: 'Tags',
@@ -238,7 +240,6 @@ export const responderFields: INodeProperties[] = [
 		name: 'parameters',
 		type: 'fixedCollection',
 		placeholder: 'Add Parameter',
-		required: false,
 		options: [
 			{
 				displayName: 'Alert Attributes',
@@ -277,14 +278,14 @@ export const responderFields: INodeProperties[] = [
 								value: 3,
 							},
 						],
-						description: 'Severity of the case. Default=Medium',
+						description: 'Severity of the case. Default=Medium.',
 					},
 					{
 						displayName: 'Date',
 						name: 'date',
 						type: 'dateTime',
 						default: '',
-						description: 'Date and time when the alert was raised default=now.',
+						description: 'Date and time when the alert was raised default=now',
 					},
 					{
 						displayName: 'Tags',
@@ -315,7 +316,7 @@ export const responderFields: INodeProperties[] = [
 								value: TLP.red,
 							},
 						],
-						description: 'Traffict Light Protocol (TLP). Default=Amber',
+						description: 'Traffict Light Protocol (TLP). Default=Amber.',
 					},
 					{
 						displayName: 'Status',
@@ -340,21 +341,21 @@ export const responderFields: INodeProperties[] = [
 								value: 'Imported',
 							},
 						],
-						description: 'Status of the alert. Default=New',
+						description: 'Status of the alert. Default=New.',
 					},
 					{
 						displayName: 'Type',
 						name: 'type',
 						type: 'string',
 						default: '',
-						description: 'Type of the alert.',
+						description: 'Type of the alert',
 					},
 					{
 						displayName: 'Source',
 						name: 'source',
 						type: 'string',
 						default: '',
-						description: 'Source of the alert.',
+						description: 'Source of the alert',
 					},
 					{
 						displayName: 'SourceRef',
@@ -374,7 +375,6 @@ export const responderFields: INodeProperties[] = [
 						name: 'artifacts',
 						type: 'fixedCollection',
 						placeholder: 'Add an artifact',
-						required: false,
 						typeOptions: {
 							multipleValues: true,
 							multipleValueButtonText: 'Add an Artifact',
@@ -448,7 +448,6 @@ export const responderFields: INodeProperties[] = [
 												value: 'user-agent',
 											},
 										],
-										description: '',
 									},
 									{
 										displayName: 'Data',
@@ -462,7 +461,6 @@ export const responderFields: INodeProperties[] = [
 											},
 										},
 										default: '',
-										description: '',
 									},
 									{
 										displayName: 'Binary Property',
@@ -476,21 +474,18 @@ export const responderFields: INodeProperties[] = [
 											},
 										},
 										default: 'data',
-										description: '',
 									},
 									{
 										displayName: 'Message',
 										name: 'message',
 										type: 'string',
 										default: '',
-										description: '',
 									},
 									{
 										displayName: 'Tags',
 										name: 'tags',
 										type: 'string',
 										default: '',
-										description: '',
 									},
 								],
 							},
@@ -536,7 +531,6 @@ export const responderFields: INodeProperties[] = [
 		name: 'parameters',
 		type: 'fixedCollection',
 		placeholder: 'Add Parameter',
-		required: false,
 		options: [
 			{
 				displayName: 'Observable Attributes',
@@ -631,7 +625,7 @@ export const responderFields: INodeProperties[] = [
 								],
 							},
 						},
-						description: 'Name of the binary property which contains the attachement data.',
+						description: 'Name of the binary property which contains the attachement data',
 					},
 					{
 						displayName: 'Message',
@@ -644,7 +638,7 @@ export const responderFields: INodeProperties[] = [
 						name: 'startDate',
 						type: 'dateTime',
 						default: '',
-						description: 'Date and time of the begin of the case default=now.',
+						description: 'Date and time of the begin of the case default=now',
 					},
 					{
 						displayName: 'TLP',
@@ -668,14 +662,14 @@ export const responderFields: INodeProperties[] = [
 								value: TLP.red,
 							},
 						],
-						description: 'Traffict Light Protocol (TLP). Default=Amber',
+						description: 'Traffict Light Protocol (TLP). Default=Amber.',
 					},
 					{
 						displayName: 'IOC',
 						name: 'ioc',
 						type: 'boolean',
 						default: false,
-						description: 'Indicates if the observable is an IOC (Indicator of compromise).',
+						description: 'Whether the observable is an IOC (Indicator of compromise)',
 					},
 					{
 						displayName: 'Status',
@@ -692,7 +686,7 @@ export const responderFields: INodeProperties[] = [
 								value: 'Deleted',
 							},
 						],
-						description: 'Status of the observable (Ok or Deleted) default=Ok.',
+						description: 'Status of the observable (Ok or Deleted) default=Ok',
 					},
 				],
 			},
@@ -734,7 +728,6 @@ export const responderFields: INodeProperties[] = [
 		name: 'parameters',
 		type: 'fixedCollection',
 		placeholder: 'Add Parameter',
-		required: false,
 		options: [
 			{
 				displayName: 'Task Attributes',
@@ -744,9 +737,8 @@ export const responderFields: INodeProperties[] = [
 						displayName: 'Title',
 						name: 'title',
 						type: 'string',
-						required: false,
 						default: '',
-						description: 'Title of the task.',
+						description: 'Title of the task',
 					},
 					{
 						displayName: 'Status',
@@ -818,7 +810,6 @@ export const responderFields: INodeProperties[] = [
 		name: 'parameters',
 		type: 'fixedCollection',
 		placeholder: 'Add Parameter',
-		required: false,
 		options: [
 			{
 				displayName: 'Log Attributes',

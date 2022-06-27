@@ -1,5 +1,5 @@
 import { URL } from 'url';
-import { sign } from 'aws4';
+import { Request, sign } from 'aws4';
 import { OptionsWithUri } from 'request';
 import { parseString as parseXml } from 'xml2js';
 
@@ -29,18 +29,20 @@ function getEndpointForService(service: string, credentials: ICredentialDataDecr
 }
 
 export async function awsApiRequest(this: IHookFunctions | IExecuteFunctions | ILoadOptionsFunctions | IWebhookFunctions, service: string, method: string, path: string, body?: string, headers?: object): Promise<any> { // tslint:disable-line:no-any
-	const credentials = this.getCredentials('aws');
-	if (credentials === undefined) {
-		throw new NodeOperationError(this.getNode(), 'No credentials got returned!');
-	}
+	const credentials = await this.getCredentials('aws');
 
 	// Concatenate path and instantiate URL object so it parses correctly query strings
 	const endpoint = new URL(getEndpointForService(service, credentials) + path);
 
 	// Sign AWS API request with the user credentials
-	const signOpts = { headers: headers || {}, host: endpoint.host, method, path, body };
-	sign(signOpts, { accessKeyId: `${credentials.accessKeyId}`.trim(), secretAccessKey: `${credentials.secretAccessKey}`.trim() });
+	const signOpts = { headers: headers || {}, host: endpoint.host, method, path, body } as Request;
+	const securityHeaders = {
+		accessKeyId: `${credentials.accessKeyId}`.trim(),
+		secretAccessKey: `${credentials.secretAccessKey}`.trim(),
+		sessionToken: credentials.temporaryCredentials ? `${credentials.sessionToken}`.trim() : undefined,
+	};
 
+	sign(signOpts, securityHeaders);
 
 	const options: OptionsWithUri = {
 		headers: signOpts.headers,

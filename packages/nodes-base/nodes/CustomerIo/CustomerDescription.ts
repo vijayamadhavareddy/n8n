@@ -1,10 +1,11 @@
 import { INodeProperties } from 'n8n-workflow';
 
-export const customerOperations = [
+export const customerOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		displayOptions: {
 			show: {
 				resource: [
@@ -14,22 +15,21 @@ export const customerOperations = [
 		},
 		options: [
 			{
-				name: 'Create/Update',
+				name: 'Create or Update',
 				value: 'upsert',
-				description: 'Create/Update a customer.',
+				description: 'Create a new customer, or update the current one if it already exists (upsert)',
 			},
 			{
 				name: 'Delete',
 				value: 'delete',
-				description: 'Delete a customer.',
+				description: 'Delete a customer',
 			},
 		],
 		default: 'upsert',
-		description: 'The operation to perform.',
 	},
-] as INodeProperties[];
+];
 
-export const customerFields = [
+export const customerFields: INodeProperties[] = [
 
 	/* -------------------------------------------------------------------------- */
 	/*                                   customer:delete			            */
@@ -50,7 +50,7 @@ export const customerFields = [
 				],
 			},
 		},
-		description: 'The unique identifier for the customer.',
+		description: 'The unique identifier for the customer',
 	},
 
 	/* -------------------------------------------------------------------------- */
@@ -72,14 +72,13 @@ export const customerFields = [
 				],
 			},
 		},
-		description: 'The unique identifier for the customer.',
+		description: 'The unique identifier for the customer',
 	},
 	{
 		displayName: 'JSON Parameters',
 		name: 'jsonParameters',
 		type: 'boolean',
 		default: false,
-		description: '',
 		displayOptions: {
 			show: {
 				resource: [
@@ -92,7 +91,7 @@ export const customerFields = [
 		},
 	},
 	{
-		displayName: ' Additional Fields',
+		displayName: 'Additional Fields',
 		name: 'additionalFieldsJson',
 		type: 'json',
 		typeOptions: {
@@ -112,7 +111,7 @@ export const customerFields = [
 				],
 			},
 		},
-		description: 'Object of values to set as described <a href="https://github.com/agilecrm/rest-api#1-companys---companies-api" target="_blank">here</a>.',
+		description: 'Object of values to set as described <a href="https://github.com/agilecrm/rest-api#1-companys---companies-api">here</a>',
 	},
 	{
 		displayName: 'Additional Fields',
@@ -138,7 +137,7 @@ export const customerFields = [
 				displayName: 'Custom Properties',
 				name: 'customProperties',
 				type: 'fixedCollection',
-				description: 'Custom Properties',
+				default: {},
 				typeOptions: {
 					multipleValues: true,
 				},
@@ -153,7 +152,7 @@ export const customerFields = [
 								type: 'string',
 								required: true,
 								default: '',
-								description: 'Property name.',
+								description: 'Property name',
 								placeholder: 'Plan',
 							},
 
@@ -163,7 +162,7 @@ export const customerFields = [
 								type: 'string',
 								required: true,
 								default: '',
-								description: 'Property value.',
+								description: 'Property value',
 								placeholder: 'Basic',
 							},
 						],
@@ -174,16 +173,17 @@ export const customerFields = [
 				displayName: 'Email',
 				name: 'email',
 				type: 'string',
+				placeholder: 'name@email.com',
 				default: '',
-				description: 'The email address of the user.',
+				description: 'The email address of the user',
 			},
 			{
-				displayName: 'Created at',
+				displayName: 'Created At',
 				name: 'createdAt',
 				type: 'dateTime',
 				default: '',
-				description: 'The UNIX timestamp from when the user was created.',
+				description: 'The UNIX timestamp from when the user was created',
 			},
 		],
 	},
-] as INodeProperties[];
+];

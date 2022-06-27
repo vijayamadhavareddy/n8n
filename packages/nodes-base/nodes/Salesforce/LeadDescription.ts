@@ -2,11 +2,12 @@ import {
 	INodeProperties,
 } from 'n8n-workflow';
 
-export const leadOperations = [
+export const leadOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		displayOptions: {
 			show: {
 				resource: [
@@ -53,7 +54,7 @@ export const leadOperations = [
 			{
 				name: 'Get Summary',
 				value: 'getSummary',
-				description: `Returns an overview of Lead's metadata`,
+				description: 'Returns an overview of Lead\'s metadata',
 			},
 			{
 				name: 'Update',
@@ -62,16 +63,16 @@ export const leadOperations = [
 			},
 		],
 		default: 'create',
-		description: 'The operation to perform.',
 	},
-] as INodeProperties[];
+];
 
-export const leadFields = [
+export const leadFields: INodeProperties[] = [
 
 	/* -------------------------------------------------------------------------- */
 	/*                                lead:create                                 */
 	/* -------------------------------------------------------------------------- */
 	{
+		// eslint-disable-next-line n8n-nodes-base/node-param-display-name-wrong-for-dynamic-options
 		displayName: 'Match Against',
 		name: 'externalId',
 		type: 'options',
@@ -93,7 +94,7 @@ export const leadFields = [
 				],
 			},
 		},
-		description: `The field to check to see if the lead already exists`,
+		description: 'The field to check to see if the lead already exists. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 	},
 	{
 		displayName: 'Value to Match',
@@ -111,7 +112,7 @@ export const leadFields = [
 				],
 			},
 		},
-		description: `If this value exists in the 'match against' field, update the lead. Otherwise create a new one`,
+		description: 'If this value exists in the \'match against\' field, update the lead. Otherwise create a new one.',
 	},
 	{
 		displayName: 'Company',
@@ -175,17 +176,23 @@ export const leadFields = [
 				type: 'number',
 				typeOptions: {
 					numberPrecision: 2,
-					numberStepSize: 1,
 				},
 				default: '',
-				description: 'Annual revenue for the company of the lead.',
+				description: 'Annual revenue for the company of the lead',
 			},
 			{
 				displayName: 'City',
 				name: 'city',
 				type: 'string',
 				default: '',
-				description: 'City for the address of the lead.',
+				description: 'City for the address of the lead',
+			},
+			{
+				displayName: 'Country',
+				name: 'country',
+				type: 'string',
+				default: '',
+				description: 'Country of the lead',
 			},
 			{
 				displayName: 'Custom Fields',
@@ -195,7 +202,7 @@ export const leadFields = [
 				typeOptions: {
 					multipleValues: true,
 				},
-				description: 'Filter by custom fields ',
+				description: 'Filter by custom fields',
 				default: {},
 				options: [
 					{
@@ -203,21 +210,21 @@ export const leadFields = [
 						displayName: 'Custom Field',
 						values: [
 							{
-								displayName: 'Field ID',
+								displayName: 'Field Name or ID',
 								name: 'fieldId',
 								type: 'options',
 								typeOptions: {
 									loadOptionsMethod: 'getCustomFields',
 								},
 								default: '',
-								description: 'The ID of the field to add custom field to.',
+								description: 'The ID of the field to add custom field to. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 							},
 							{
 								displayName: 'Value',
 								name: 'value',
 								type: 'string',
 								default: '',
-								description: 'The value to set on custom field.',
+								description: 'The value to set on custom field',
 							},
 						],
 					},
@@ -231,14 +238,15 @@ export const leadFields = [
 					alwaysOpenEditWindow: true,
 				},
 				default: '',
-				description: 'Description of the lead.',
+				description: 'Description of the lead',
 			},
 			{
 				displayName: 'Email',
 				name: 'email',
 				type: 'string',
+				placeholder: 'name@email.com',
 				default: '',
-				description: 'Email address for the lead.',
+				description: 'Email address for the lead',
 			},
 			{
 				displayName: 'Fist Name',
@@ -252,66 +260,62 @@ export const leadFields = [
 				name: 'industry',
 				type: 'string',
 				default: '',
-				description: 'Website for the lead.',
+				description: 'Website for the lead',
 			},
 			{
 				displayName: 'Is Unread By Owner',
 				name: 'IsUnreadByOwner',
-				type: 'Boolean',
+				type: 'boolean',
 				default: false,
-				description: 'If true, lead has been assigned, but not yet viewed. See Unread Leads for more information. Label is Unread By Owner.',
+				description: 'Whether true, lead has been assigned, but not yet viewed. See Unread Leads for more information. Label is Unread By Owner.',
 			},
 			{
 				displayName: 'Jigsaw',
 				name: 'jigsaw',
 				type: 'string',
 				default: '',
-				description: `references the ID of a contact in Data.com.
-				If a lead has a value in this field, it means that a contact was imported as a lead from Data.com.`,
+				description: 'References the ID of a contact in Data.com. If a lead has a value in this field, it means that a contact was imported as a lead from Data.com.',
 			},
 			{
-				displayName: 'Lead Source',
+				displayName: 'Lead Source Name or ID',
 				name: 'leadSource',
 				type: 'options',
 				typeOptions: {
 					loadOptionsMethod: 'getLeadSources',
 				},
 				default: '',
-				description: 'Source from which the lead was obtained.',
+				description: 'Source from which the lead was obtained. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 			},
 			{
 				displayName: 'Mobile Phone',
 				name: 'mobilePhone',
 				type: 'string',
 				default: '',
-				description: `Contact’s mobile phone number.`,
+				description: 'Contact’s mobile phone number',
 			},
 			{
 				displayName: 'Number Of Employees',
 				name: 'numberOfEmployees',
 				type: 'number',
-				typeOptions: {
-					numberStepSize: 1,
-				},
 				default: '',
 				description: 'Number of employees at the lead’s company. Label is Employees.',
 			},
 			{
-				displayName: 'Owner',
+				displayName: 'Owner Name or ID',
 				name: 'owner',
 				type: 'options',
 				typeOptions: {
 					loadOptionsMethod: 'getLeadOwners',
 				},
 				default: '',
-				description: 'The owner of the lead.',
+				description: 'The owner of the lead. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 			},
 			{
 				displayName: 'Phone',
 				name: 'phone',
 				type: 'string',
 				default: '',
-				description: 'Phone number for the lead.',
+				description: 'Phone number for the lead',
 			},
 			{
 				displayName: 'Postal Code',
@@ -321,56 +325,66 @@ export const leadFields = [
 				description: 'Postal code for the address of the lead. Label is Zip/Postal Code.',
 			},
 			{
+				displayName: 'Record Type Name or ID',
+				name: 'recordTypeId',
+				type: 'options',
+				description: 'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>',
+				typeOptions: {
+					loadOptionsMethod: 'getRecordTypes',
+				},
+				default: '',
+			},
+			{
 				displayName: 'Rating',
 				name: 'rating',
 				type: 'string',
 				default: '',
-				description: 'Rating of the lead.',
+				description: 'Rating of the lead',
 			},
 			{
 				displayName: 'Salutation',
 				name: 'salutation',
 				type: 'string',
 				default: '',
-				description: 'Salutation for the lead.',
+				description: 'Salutation for the lead',
 			},
 			{
 				displayName: 'State',
 				name: 'state',
 				type: 'string',
 				default: '',
-				description: 'State for the address of the lead.',
+				description: 'State for the address of the lead',
 			},
 			{
-				displayName: 'Status',
+				displayName: 'Status Name or ID',
 				name: 'status',
 				type: 'options',
 				typeOptions: {
 					loadOptionsMethod: 'getLeadStatuses',
 				},
 				default: '',
-				description: 'Status code for this converted lead.',
+				description: 'Status code for this converted lead. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 			},
 			{
 				displayName: 'Street',
 				name: 'street',
 				type: 'string',
 				default: '',
-				description: 'Street number and name for the address of the lead.',
+				description: 'Street number and name for the address of the lead',
 			},
 			{
 				displayName: 'Title',
 				name: 'title',
 				type: 'string',
 				default: '',
-				description: 'Title for the lead, for example CFO or CEO.',
+				description: 'Title for the lead, for example CFO or CEO',
 			},
 			{
 				displayName: 'Website',
 				name: 'website',
 				type: 'string',
 				default: '',
-				description: 'Website for the lead.',
+				description: 'Website for the lead',
 			},
 		],
 	},
@@ -394,7 +408,7 @@ export const leadFields = [
 				],
 			},
 		},
-		description: 'ID of Lead that needs to be fetched.',
+		description: 'ID of Lead that needs to be fetched',
 	},
 	{
 		displayName: 'Update Fields',
@@ -419,17 +433,16 @@ export const leadFields = [
 				type: 'number',
 				typeOptions: {
 					numberPrecision: 2,
-					numberStepSize: 1,
 				},
 				default: '',
-				description: 'Annual revenue for the company of the lead.',
+				description: 'Annual revenue for the company of the lead',
 			},
 			{
 				displayName: 'City',
 				name: 'city',
 				type: 'string',
 				default: '',
-				description: 'City for the address of the lead.',
+				description: 'City for the address of the lead',
 			},
 			{
 				displayName: 'Company',
@@ -439,6 +452,13 @@ export const leadFields = [
 				description: 'Company of the lead. If person account record types have been enabled, and if the value of Company is null, the lead converts to a person account.',
 			},
 			{
+				displayName: 'Country',
+				name: 'country',
+				type: 'string',
+				default: '',
+				description: 'Country of the lead',
+			},
+			{
 				displayName: 'Custom Fields',
 				name: 'customFieldsUi',
 				placeholder: 'Add Custom Field',
@@ -446,7 +466,7 @@ export const leadFields = [
 				typeOptions: {
 					multipleValues: true,
 				},
-				description: 'Filter by custom fields ',
+				description: 'Filter by custom fields',
 				default: {},
 				options: [
 					{
@@ -454,21 +474,21 @@ export const leadFields = [
 						displayName: 'Custom Field',
 						values: [
 							{
-								displayName: 'Field ID',
+								displayName: 'Field Name or ID',
 								name: 'fieldId',
 								type: 'options',
 								typeOptions: {
 									loadOptionsMethod: 'getCustomFields',
 								},
 								default: '',
-								description: 'The ID of the field to add custom field to.',
+								description: 'The ID of the field to add custom field to. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 							},
 							{
 								displayName: 'Value',
 								name: 'value',
 								type: 'string',
 								default: '',
-								description: 'The value to set on custom field.',
+								description: 'The value to set on custom field',
 							},
 						],
 					},
@@ -482,14 +502,15 @@ export const leadFields = [
 					alwaysOpenEditWindow: true,
 				},
 				default: '',
-				description: 'Description of the lead.',
+				description: 'Description of the lead',
 			},
 			{
 				displayName: 'Email',
 				name: 'email',
 				type: 'string',
+				placeholder: 'name@email.com',
 				default: '',
-				description: 'Email address for the lead.',
+				description: 'Email address for the lead',
 			},
 			{
 				displayName: 'Fist Name',
@@ -503,22 +524,21 @@ export const leadFields = [
 				name: 'industry',
 				type: 'string',
 				default: '',
-				description: 'Website for the lead.',
+				description: 'Website for the lead',
 			},
 			{
 				displayName: 'Is Unread By Owner',
 				name: 'IsUnreadByOwner',
-				type: 'Boolean',
+				type: 'boolean',
 				default: false,
-				description: 'If true, lead has been assigned, but not yet viewed. See Unread Leads for more information. Label is Unread By Owner.',
+				description: 'Whether true, lead has been assigned, but not yet viewed. See Unread Leads for more information. Label is Unread By Owner.',
 			},
 			{
 				displayName: 'Jigsaw',
 				name: 'jigsaw',
 				type: 'string',
 				default: '',
-				description: `references the ID of a contact in Data.com.
-				If a lead has a value in this field, it means that a contact was imported as a lead from Data.com.`,
+				description: 'References the ID of a contact in Data.com. If a lead has a value in this field, it means that a contact was imported as a lead from Data.com.',
 			},
 			{
 				displayName: 'Last Name',
@@ -528,41 +548,38 @@ export const leadFields = [
 				description: 'Required. Last name of the lead. Limited to 80 characters.',
 			},
 			{
-				displayName: 'Lead Source',
+				displayName: 'Lead Source Name or ID',
 				name: 'leadSource',
 				type: 'options',
 				typeOptions: {
 					loadOptionsMethod: 'getLeadSources',
 				},
 				default: '',
-				description: 'Source from which the lead was obtained.',
+				description: 'Source from which the lead was obtained. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 			},
 			{
 				displayName: 'Mobile Phone',
 				name: 'mobilePhone',
 				type: 'string',
 				default: '',
-				description: `Contact’s mobile phone number.`,
+				description: 'Contact’s mobile phone number',
 			},
 			{
 				displayName: 'Number Of Employees',
 				name: 'numberOfEmployees',
 				type: 'number',
-				typeOptions: {
-					numberStepSize: 1,
-				},
 				default: '',
 				description: 'Number of employees at the lead’s company. Label is Employees.',
 			},
 			{
-				displayName: 'Owner',
+				displayName: 'Owner Name or ID',
 				name: 'owner',
 				type: 'options',
 				typeOptions: {
 					loadOptionsMethod: 'getLeadOwners',
 				},
 				default: '',
-				description: 'The owner of the lead.',
+				description: 'The owner of the lead. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 			},
 			{
 				displayName: 'Postal Code',
@@ -576,59 +593,69 @@ export const leadFields = [
 				name: 'phone',
 				type: 'string',
 				default: '',
-				description: 'Phone number for the lead.',
+				description: 'Phone number for the lead',
+			},
+			{
+				displayName: 'Record Type Name or ID',
+				name: 'recordTypeId',
+				type: 'options',
+				description: 'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>',
+				typeOptions: {
+					loadOptionsMethod: 'getRecordTypes',
+				},
+				default: '',
 			},
 			{
 				displayName: 'Rating',
 				name: 'rating',
 				type: 'string',
 				default: '',
-				description: 'Rating of the lead.',
+				description: 'Rating of the lead',
 			},
 			{
 				displayName: 'Salutation',
 				name: 'salutation',
 				type: 'string',
 				default: '',
-				description: 'Salutation for the lead.',
+				description: 'Salutation for the lead',
 			},
 			{
 				displayName: 'State',
 				name: 'state',
 				type: 'string',
 				default: '',
-				description: 'State for the address of the lead.',
+				description: 'State for the address of the lead',
 			},
 			{
-				displayName: 'Status',
+				displayName: 'Status Name or ID',
 				name: 'status',
 				type: 'options',
 				typeOptions: {
 					loadOptionsMethod: 'getLeadStatuses',
 				},
 				default: '',
-				description: 'Status code for this converted lead.',
+				description: 'Status code for this converted lead. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 			},
 			{
 				displayName: 'Street',
 				name: 'street',
 				type: 'string',
 				default: '',
-				description: 'Street number and name for the address of the lead.',
+				description: 'Street number and name for the address of the lead',
 			},
 			{
 				displayName: 'Title',
 				name: 'title',
 				type: 'string',
 				default: '',
-				description: 'Title for the lead, for example CFO or CEO.',
+				description: 'Title for the lead, for example CFO or CEO',
 			},
 			{
 				displayName: 'Website',
 				name: 'website',
 				type: 'string',
 				default: '',
-				description: 'Website for the lead.',
+				description: 'Website for the lead',
 			},
 		],
 	},
@@ -652,7 +679,7 @@ export const leadFields = [
 				],
 			},
 		},
-		description: 'ID of Lead that needs to be fetched.',
+		description: 'ID of Lead that needs to be fetched',
 	},
 
 	/* -------------------------------------------------------------------------- */
@@ -674,7 +701,7 @@ export const leadFields = [
 				],
 			},
 		},
-		description: 'ID of Lead that needs to be fetched.',
+		description: 'ID of Lead that needs to be fetched',
 	},
 
 	/* -------------------------------------------------------------------------- */
@@ -695,7 +722,7 @@ export const leadFields = [
 			},
 		},
 		default: false,
-		description: 'If all results should be returned or only up to a given limit.',
+		description: 'Whether to return all results or only up to a given limit',
 	},
 	{
 		displayName: 'Limit',
@@ -719,7 +746,7 @@ export const leadFields = [
 			maxValue: 100,
 		},
 		default: 50,
-		description: 'How many results to return.',
+		description: 'Max number of results to return',
 	},
 	{
 		displayName: 'Options',
@@ -746,7 +773,7 @@ export const leadFields = [
 				typeOptions: {
 					multipleValues: true,
 				},
-				description: 'The condition to set.',
+				description: 'The condition to set',
 				default: {},
 				options: [
 					{
@@ -754,20 +781,29 @@ export const leadFields = [
 						displayName: 'Condition',
 						values: [
 							{
-								displayName: 'Field',
+								displayName: 'Field Name or ID',
 								name: 'field',
 								type: 'options',
 								typeOptions: {
 									loadOptionsMethod: 'getLeadFields',
 								},
 								default: '',
-								description: 'For date, number, or boolean, please use expressions.',
+								description: 'For date, number, or boolean, please use expressions. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 							},
+							// eslint-disable-next-line n8n-nodes-base/node-param-operation-without-no-data-expression
 							{
 								displayName: 'Operation',
 								name: 'operation',
 								type: 'options',
 								options: [
+									{
+										name: '<',
+										value: '<',
+									},
+									{
+										name: '<=',
+										value: '<=',
+									},
 									{
 										name: '=',
 										value: 'equal',
@@ -777,16 +813,8 @@ export const leadFields = [
 										value: '>',
 									},
 									{
-										name: '<',
-										value: '<',
-									},
-									{
 										name: '>=',
 										value: '>=',
-									},
-									{
-										name: '<=',
-										value: '<=',
 									},
 								],
 								default: 'equal',
@@ -830,10 +858,10 @@ export const leadFields = [
 				],
 			},
 		},
-		description: 'ID of contact that needs to be fetched.',
+		description: 'ID of contact that needs to be fetched',
 	},
 	{
-		displayName: 'Campaign',
+		displayName: 'Campaign Name or ID',
 		name: 'campaignId',
 		type: 'options',
 		typeOptions: {
@@ -851,7 +879,7 @@ export const leadFields = [
 				],
 			},
 		},
-		description: 'ID of the campaign that needs to be fetched.',
+		description: 'ID of the campaign that needs to be fetched. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 	},
 	{
 		displayName: 'Options',
@@ -875,7 +903,7 @@ export const leadFields = [
 				name: 'status',
 				type: 'string',
 				default: '',
-				description: 'Controls the HasResponded flag on this object.',
+				description: 'Controls the HasResponded flag on this object',
 			},
 		],
 	},
@@ -899,7 +927,7 @@ export const leadFields = [
 				],
 			},
 		},
-		description: 'ID of lead that needs to be fetched.',
+		description: 'ID of lead that needs to be fetched',
 	},
 	{
 		displayName: 'Title',
@@ -917,7 +945,7 @@ export const leadFields = [
 				],
 			},
 		},
-		description: 'Title of the note.',
+		description: 'Title of the note',
 	},
 	{
 		displayName: 'Options',
@@ -951,18 +979,18 @@ export const leadFields = [
 				name: 'isPrivate',
 				type: 'boolean',
 				default: false,
-				description: 'If true, only the note owner or a user with the “Modify All Data” permission can view the note or query it via the API',
+				description: 'Whether true, only the note owner or a user with the “Modify All Data” permission can view the note or query it via the API',
 			},
 			{
-				displayName: 'Owner',
+				displayName: 'Owner Name or ID',
 				name: 'owner',
 				type: 'options',
 				typeOptions: {
 					loadOptionsMethod: 'getUsers',
 				},
 				default: '',
-				description: 'ID of the user who owns the note.',
+				description: 'ID of the user who owns the note. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 			},
 		],
 	},
-] as INodeProperties[];
+];

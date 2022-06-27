@@ -13,7 +13,6 @@ import {
 } from 'xml2js';
 
 import {
-	BINARY_ENCODING,
 	IExecuteFunctions,
 } from 'n8n-core';
 
@@ -23,6 +22,7 @@ import {
 	INodeExecutionData,
 	INodeType,
 	INodeTypeDescription,
+	JsonObject,
 	NodeOperationError,
 } from 'n8n-workflow';
 
@@ -58,7 +58,6 @@ export class AwsS3 implements INodeType {
 		description: 'Sends data to AWS S3',
 		defaults: {
 			name: 'AWS S3',
-			color: '#d05b4b',
 		},
 		inputs: ['main'],
 		outputs: ['main'],
@@ -73,6 +72,7 @@ export class AwsS3 implements INodeType {
 				displayName: 'Resource',
 				name: 'resource',
 				type: 'options',
+				noDataExpression: true,
 				options: [
 					{
 						name: 'Bucket',
@@ -88,7 +88,6 @@ export class AwsS3 implements INodeType {
 					},
 				],
 				default: 'file',
-				description: 'The operation to perform.',
 			},
 			// BUCKET
 			...bucketOperations,
@@ -115,7 +114,7 @@ export class AwsS3 implements INodeType {
 				if (resource === 'bucket') {
 					//https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateBucket.html
 					if (operation === 'create') {
-						const credentials = this.getCredentials('aws');
+						const credentials = await this.getCredentials('aws');
 						const name = this.getNodeParameter('name', i) as string;
 						const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
 						if (additionalFields.acl) {
@@ -139,7 +138,7 @@ export class AwsS3 implements INodeType {
 						if (additionalFields.grantWriteAcp) {
 							headers['x-amz-grant-write-acp'] = '';
 						}
-						let region = credentials!.region as string;
+						let region = credentials.region as string;
 
 						if (additionalFields.region) {
 							region = additionalFields.region as string;
@@ -607,8 +606,9 @@ export class AwsS3 implements INodeType {
 							}
 
 							const binaryData = (items[i].binary as IBinaryKeyData)[binaryPropertyName];
+							const binaryDataBuffer = await this.helpers.getBinaryDataBuffer(i, binaryPropertyName);
 
-							body = Buffer.from(binaryData.data, BINARY_ENCODING) as Buffer;
+							body = binaryDataBuffer;
 
 							headers['Content-Type'] = binaryData.mimeType;
 
@@ -633,7 +633,7 @@ export class AwsS3 implements INodeType {
 				}
 			} catch (error) {
 				if (this.continueOnFail()) {
-					returnData.push({ error: error.message });
+					returnData.push({ error: (error as JsonObject).message });
 					continue;
 				}
 				throw error;

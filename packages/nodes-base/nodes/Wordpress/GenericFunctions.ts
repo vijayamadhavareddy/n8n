@@ -13,15 +13,13 @@ import {
 } from 'n8n-workflow';
 
 export async function wordpressApiRequest(this: IExecuteFunctions | IExecuteSingleFunctions | ILoadOptionsFunctions, method: string, resource: string, body: any = {}, qs: IDataObject = {}, uri?: string, option: IDataObject = {}): Promise<any> { // tslint:disable-line:no-any
-	const credentials = this.getCredentials('wordpressApi');
-	if (credentials === undefined) {
-		throw new NodeOperationError(this.getNode(), 'No credentials got returned!');
-	}
+	const credentials = await this.getCredentials('wordpressApi');
 
 	let options: OptionsWithUri = {
 		headers: {
 			Accept: 'application/json',
 			'Content-Type': 'application/json',
+			'User-Agent': 'n8n',
 		},
 		auth: {
 			user: credentials!.username as string,
@@ -59,7 +57,8 @@ export async function wordpressApiRequestAllItems(this: IExecuteFunctions | ILoa
 		returnData.push.apply(returnData, responseData.body);
 	} while (
 		responseData.headers['x-wp-totalpages'] !== undefined &&
-		parseInt(responseData.headers['x-wp-totalpages'], 10) < query.page
+		responseData.headers['x-wp-totalpages'] !== '0' &&
+		parseInt(responseData.headers['x-wp-totalpages'], 10) !== query.page
 	);
 
 	return returnData;

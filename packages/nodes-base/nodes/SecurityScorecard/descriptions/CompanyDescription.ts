@@ -2,11 +2,12 @@ import {
 	INodeProperties,
 } from 'n8n-workflow';
 
-export const companyOperations = [
+export const companyOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		required: true,
 		displayOptions: {
 			show: {
@@ -44,13 +45,13 @@ export const companyOperations = [
 		],
 		default: 'getFactor',
 	},
-] as INodeProperties[];
+];
 
-export const companyFields = [
+export const companyFields: INodeProperties[] = [
 	{
 		displayName: 'Scorecard Identifier',
 		name: 'scorecardIdentifier',
-		description: 'Primary identifier of a company or scorecard, i.e. domain',
+		description: 'Primary identifier of a company or scorecard, i.e. domain.',
 		type: 'string',
 		default: '',
 		required: true,
@@ -105,7 +106,7 @@ export const companyFields = [
 			},
 		},
 		default: false,
-		description: 'If all results should be returned or only up to a given limit.',
+		description: 'Whether to return all results or only up to a given limit',
 	},
 	{
 		displayName: 'Limit',
@@ -132,10 +133,10 @@ export const companyFields = [
 			maxValue: 100,
 		},
 		default: 100,
-		description: 'Number of results to return.',
+		description: 'Max number of results to return',
 	},
 	{
-		displayName: 'Simplify Response',
+		displayName: 'Simplify',
 		name: 'simple',
 		type: 'boolean',
 		displayOptions: {
@@ -150,7 +151,7 @@ export const companyFields = [
 			},
 		},
 		default: true,
-		description: 'Return a simplified version of the response instead of the raw data.',
+		description: 'Whether to return a simplified version of the response instead of the raw data',
 	},
 
 	// company:getFactor
@@ -180,7 +181,7 @@ export const companyFields = [
 			},
 			{
 				displayName: 'Severity In',
-				description: 'Filter issues by comma separated severity list',
+				description: 'Filter issues by comma-separated severity list',
 				name: 'severity_in',
 				type: 'string',
 				default: '',
@@ -215,7 +216,6 @@ export const companyFields = [
 				name: 'date_from',
 				type: 'dateTime',
 				default: '',
-				required: false,
 
 			},
 			{
@@ -224,7 +224,6 @@ export const companyFields = [
 				name: 'date_to',
 				type: 'dateTime',
 				default: '',
-				required: false,
 			},
 			{
 				displayName: 'Timing',
@@ -246,8 +245,7 @@ export const companyFields = [
 					},
 				],
 				default: 'daily',
-				required: false,
 			},
 		],
 	},
-] as INodeProperties[];
+];

@@ -2,11 +2,12 @@ import {
 	INodeProperties,
 } from 'n8n-workflow';
 
-export const draftOperations = [
+export const draftOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		displayOptions: {
 			show: {
 				resource: [
@@ -42,15 +43,13 @@ export const draftOperations = [
 			},
 		],
 		default: 'create',
-		description: 'The operation to perform.',
 	},
-] as INodeProperties[];
+];
 
-export const draftFields = [
+export const draftFields: INodeProperties[] = [
 	{
 		displayName: 'Message ID',
 		name: 'messageId',
-		description: 'Message ID',
 		type: 'string',
 		required: true,
 		default: '',
@@ -73,7 +72,7 @@ export const draftFields = [
 	{
 		displayName: 'Subject',
 		name: 'subject',
-		description: 'The subject of the message.',
+		description: 'The subject of the message',
 		displayOptions: {
 			show: {
 				resource: [
@@ -90,7 +89,7 @@ export const draftFields = [
 	{
 		displayName: 'Body Content',
 		name: 'bodyContent',
-		description: 'Message body content.',
+		description: 'Message body content',
 		type: 'string',
 		displayOptions: {
 			show: {
@@ -150,14 +149,14 @@ export const draftFields = [
 			{
 				displayName: 'BCC Recipients',
 				name: 'bccRecipients',
-				description: 'Email addresses of BCC recipients.',
+				description: 'Email addresses of BCC recipients',
 				type: 'string',
 				default: '',
 			},
 			{
 				displayName: 'Body Content Type',
 				name: 'bodyContentType',
-				description: 'Message body content type.',
+				description: 'Message body content type',
 				type: 'options',
 				options: [
 					{
@@ -172,7 +171,7 @@ export const draftFields = [
 				default: 'html',
 			},
 			{
-				displayName: 'Categories',
+				displayName: 'Category Names or IDs',
 				name: 'categories',
 				type: 'multiOptions',
 				typeOptions: {
@@ -183,7 +182,7 @@ export const draftFields = [
 			{
 				displayName: 'CC Recipients',
 				name: 'ccRecipients',
-				description: 'Email addresses of CC recipients.',
+				description: 'Email addresses of CC recipients',
 				type: 'string',
 				default: '',
 			},
@@ -206,14 +205,14 @@ export const draftFields = [
 								name: 'name',
 								type: 'string',
 								default: '',
-								description: 'Name of the header.',
+								description: 'Name of the header',
 							},
 							{
 								displayName: 'Value',
 								name: 'value',
 								type: 'string',
 								default: '',
-								description: 'Value to set for the header.',
+								description: 'Value to set for the header',
 							},
 						],
 					},
@@ -222,14 +221,14 @@ export const draftFields = [
 			{
 				displayName: 'From',
 				name: 'from',
-				description: 'The owner of the mailbox which the message is sent.<br>Must correspond to the actual mailbox used.',
+				description: 'The owner of the mailbox which the message is sent. Must correspond to the actual mailbox used.',
 				type: 'string',
 				default: '',
 			},
 			{
 				displayName: 'Importance',
 				name: 'importance',
-				description: 'The importance of the message.',
+				description: 'The importance of the message',
 				type: 'options',
 				options: [
 					{
@@ -250,7 +249,7 @@ export const draftFields = [
 			{
 				displayName: 'Read Receipt Requested',
 				name: 'isReadReceiptRequested',
-				description: 'Indicates whether a read receipt is requested for the message.',
+				description: 'Whether a read receipt is requested for the message',
 				type: 'boolean',
 				default: false,
 			},
@@ -264,7 +263,7 @@ export const draftFields = [
 			{
 				displayName: 'Reply To',
 				name: 'replyTo',
-				description: 'Email addresses to use when replying.',
+				description: 'Email addresses to use when replying',
 				type: 'string',
 				default: '',
 			},
@@ -301,4 +300,4 @@ export const draftFields = [
 
 
 
-] as INodeProperties[];
+];

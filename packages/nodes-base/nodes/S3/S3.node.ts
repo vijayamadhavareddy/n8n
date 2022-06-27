@@ -1,21 +1,13 @@
-
 import {
 	paramCase,
 	snakeCase,
 } from 'change-case';
 
-import {
-	createHash,
-} from 'crypto';
+import { createHash } from 'crypto';
 
-import {
-	Builder,
-} from 'xml2js';
+import { Builder } from 'xml2js';
 
-import {
-	BINARY_ENCODING,
-	IExecuteFunctions,
-} from 'n8n-core';
+import { IExecuteFunctions } from 'n8n-core';
 
 import {
 	IBinaryKeyData,
@@ -52,6 +44,7 @@ export class S3 implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'S3',
 		name: 's3',
+		// eslint-disable-next-line n8n-nodes-base/node-class-description-icon-not-svg
 		icon: 'file:s3.png',
 		group: ['output'],
 		version: 1,
@@ -59,7 +52,6 @@ export class S3 implements INodeType {
 		description: 'Sends data to any S3-compatible service',
 		defaults: {
 			name: 'S3',
-			color: '#d05b4b',
 		},
 		inputs: ['main'],
 		outputs: ['main'],
@@ -74,6 +66,7 @@ export class S3 implements INodeType {
 				displayName: 'Resource',
 				name: 'resource',
 				type: 'options',
+				noDataExpression: true,
 				options: [
 					{
 						name: 'Bucket',
@@ -89,7 +82,6 @@ export class S3 implements INodeType {
 					},
 				],
 				default: 'file',
-				description: 'The operation to perform.',
 			},
 			// BUCKET
 			...bucketOperations,
@@ -120,7 +112,7 @@ export class S3 implements INodeType {
 						let credentials;
 
 						try {
-							credentials = this.getCredentials('s3');
+							credentials = await this.getCredentials('s3');
 						} catch (error) {
 							throw new NodeApiError(this.getNode(), error);
 						}
@@ -608,8 +600,7 @@ export class S3 implements INodeType {
 							}
 
 							const binaryData = (items[i].binary as IBinaryKeyData)[binaryPropertyName];
-
-							body = Buffer.from(binaryData.data, BINARY_ENCODING) as Buffer;
+							body = await this.helpers.getBinaryDataBuffer(i, binaryPropertyName);
 
 							headers['Content-Type'] = binaryData.mimeType;
 

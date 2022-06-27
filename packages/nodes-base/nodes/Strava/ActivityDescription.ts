@@ -3,11 +3,12 @@ import {
 	INodeProperties,
 } from 'n8n-workflow';
 
-export const activityOperations = [
+export const activityOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		displayOptions: {
 			show: {
 				resource: [
@@ -47,6 +48,11 @@ export const activityOperations = [
 				description: 'Get all activity laps',
 			},
 			{
+				name: 'Get Streams',
+				value: 'getStreams',
+				description: 'Get activity streams',
+			},
+			{
 				name: 'Get Zones',
 				value: 'getZones',
 				description: 'Get all activity zones',
@@ -58,11 +64,10 @@ export const activityOperations = [
 			},
 		],
 		default: 'create',
-		description: 'The operation to perform.',
 	},
-] as INodeProperties[];
+];
 
-export const activityFields = [
+export const activityFields: INodeProperties[] = [
 
 	/* -------------------------------------------------------------------------- */
 	/*                                activity:create                           */
@@ -107,6 +112,7 @@ export const activityFields = [
 		displayName: 'Start Date',
 		name: 'startDate',
 		type: 'dateTime',
+		default: '',
 		required: true,
 		displayOptions: {
 			show: {
@@ -118,7 +124,7 @@ export const activityFields = [
 				],
 			},
 		},
-		description: 'ISO 8601 formatted date time.',
+		description: 'ISO 8601 formatted date time',
 	},
 	{
 		displayName: 'Elapsed Time (Seconds)',
@@ -139,7 +145,7 @@ export const activityFields = [
 			minValue: 0,
 		},
 		default: 0,
-		description: 'In seconds.',
+		description: 'In seconds',
 	},
 	{
 		displayName: 'Additional Fields',
@@ -163,14 +169,14 @@ export const activityFields = [
 				name: 'commute',
 				type: 'boolean',
 				default: false,
-				description: 'Set to true to mark as commute.',
+				description: 'Whether to mark as commute',
 			},
 			{
 				displayName: 'Description',
 				name: 'description',
 				type: 'string',
 				default: '',
-				description: 'Description of the activity.',
+				description: 'Description of the activity',
 			},
 			{
 				displayName: 'Distance',
@@ -180,14 +186,14 @@ export const activityFields = [
 					minValue: 0,
 				},
 				default: 0,
-				description: 'In meters.',
+				description: 'In meters',
 			},
 			{
 				displayName: 'Trainer',
 				name: 'trainer',
 				type: 'boolean',
 				default: false,
-				description: 'Set to true to mark as a trainer activity.',
+				description: 'Whether to mark as a trainer activity',
 			},
 		],
 	},
@@ -235,21 +241,21 @@ export const activityFields = [
 				name: 'commute',
 				type: 'boolean',
 				default: false,
-				description: 'Set to true to mark as commute.',
+				description: 'Whether to mark as commute',
 			},
 			{
 				displayName: 'Description',
 				name: 'description',
 				type: 'string',
 				default: '',
-				description: 'Description of the activity.',
+				description: 'Description of the activity',
 			},
 			{
 				displayName: 'Gear ID',
 				name: 'gear_id',
 				type: 'string',
 				default: '',
-				description: 'Identifier for the gear associated with the activity. ‘none’ clears gear from activity',
+				description: 'Identifier for the gear associated with the activity. ‘none’ clears gear from activity.',
 			},
 			{
 				displayName: 'Name',
@@ -270,7 +276,7 @@ export const activityFields = [
 				name: 'trainer',
 				type: 'boolean',
 				default: false,
-				description: 'Set to true to mark as a trainer activity.',
+				description: 'Whether to mark as a trainer activity',
 			},
 		],
 	},
@@ -315,6 +321,7 @@ export const activityFields = [
 					'getLaps',
 					'getKudos',
 					'getZones',
+					'getStreams',
 				],
 			},
 		},
@@ -339,7 +346,7 @@ export const activityFields = [
 			},
 		},
 		default: false,
-		description: 'If all results should be returned or only up to a given limit.',
+		description: 'Whether to return all results or only up to a given limit',
 	},
 	{
 		displayName: 'Limit',
@@ -366,9 +373,72 @@ export const activityFields = [
 			maxValue: 100,
 		},
 		default: 50,
-		description: 'How many results to return.',
+		description: 'Max number of results to return',
 	},
-
+	{
+		displayName: 'Keys',
+		name: 'keys',
+		type: 'multiOptions',
+		options: [
+			{
+				name: 'Altitude',
+				value: 'altitude',
+			},
+			{
+				name: 'Cadence',
+				value: 'cadence',
+			},
+			{
+				name: 'Distance',
+				value: 'distance',
+			},
+			{
+				name: 'Gradient',
+				value: 'grade_smooth',
+			},
+			{
+				name: 'Heartrate',
+				value: 'heartrate',
+			},
+			{
+				name: 'Latitude / Longitude',
+				value: 'latlng',
+			},
+			{
+				name: 'Moving',
+				value: 'moving',
+			},
+			{
+				name: 'Temperature',
+				value: 'temp',
+			},
+			{
+				name: 'Time',
+				value: 'time',
+			},
+			{
+				name: 'Velocity',
+				value: 'velocity_smooth',
+			},
+			{
+				name: 'Watts',
+				value: 'watts',
+			},
+		],
+		displayOptions: {
+			show: {
+				resource: [
+					'activity',
+				],
+				operation: [
+					'getStreams',
+				],
+			},
+		},
+		required: true,
+		default: [],
+		description: 'Desired stream types to return',
+	},
 	/* -------------------------------------------------------------------------- */
 	/*                                  activity:getAll                           */
 	/* -------------------------------------------------------------------------- */
@@ -387,7 +457,7 @@ export const activityFields = [
 			},
 		},
 		default: false,
-		description: 'If all results should be returned or only up to a given limit.',
+		description: 'Whether to return all results or only up to a given limit',
 	},
 	{
 		displayName: 'Limit',
@@ -411,6 +481,6 @@ export const activityFields = [
 			maxValue: 100,
 		},
 		default: 50,
-		description: 'How many results to return.',
+		description: 'Max number of results to return',
 	},
-] as INodeProperties[];
+];

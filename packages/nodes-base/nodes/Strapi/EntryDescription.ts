@@ -2,10 +2,11 @@ import {
 	INodeProperties,
 } from 'n8n-workflow';
 
-export const entryOperations = [
+export const entryOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
+		noDataExpression: true,
 		type: 'options',
 		displayOptions: {
 			show: {
@@ -42,11 +43,10 @@ export const entryOperations = [
 			},
 		],
 		default: 'get',
-		description: 'The operation to perform.',
 	},
-] as INodeProperties[];
+];
 
-export const entryFields = [
+export const entryFields: INodeProperties[] = [
 	/* -------------------------------------------------------------------------- */
 	/*                                entry:create                                */
 	/* -------------------------------------------------------------------------- */
@@ -66,7 +66,7 @@ export const entryFields = [
 				],
 			},
 		},
-		description: 'Name of the content type.',
+		description: 'Name of the content type',
 	},
 	{
 		displayName: 'Columns',
@@ -84,7 +84,7 @@ export const entryFields = [
 		},
 		default: '',
 		placeholder: 'id,name,description',
-		description: 'Comma separated list of the properties which should used as columns for the new rows.',
+		description: 'Comma-separated list of the properties which should used as columns for the new rows',
 	},
 
 	/* -------------------------------------------------------------------------- */
@@ -106,7 +106,7 @@ export const entryFields = [
 				],
 			},
 		},
-		description: 'Name of the content type.',
+		description: 'Name of the content type',
 	},
 	{
 		displayName: 'Entry ID',
@@ -124,7 +124,7 @@ export const entryFields = [
 				],
 			},
 		},
-		description: 'The ID of the entry to delete.',
+		description: 'The ID of the entry to delete',
 	},
 
 	/* -------------------------------------------------------------------------- */
@@ -146,7 +146,7 @@ export const entryFields = [
 				],
 			},
 		},
-		description: 'Name of the content type.',
+		description: 'Name of the content type',
 	},
 	{
 		displayName: 'Entry ID',
@@ -164,7 +164,7 @@ export const entryFields = [
 				],
 			},
 		},
-		description: 'The ID of the entry to get.',
+		description: 'The ID of the entry to get',
 	},
 
 	/* -------------------------------------------------------------------------- */
@@ -203,7 +203,7 @@ export const entryFields = [
 			},
 		},
 		default: false,
-		description: 'Returns a list of your user contacts.',
+		description: 'Whether to return all results or only up to a given limit',
 	},
 	{
 		displayName: 'Limit',
@@ -227,7 +227,7 @@ export const entryFields = [
 			maxValue: 100,
 		},
 		default: 50,
-		description: 'How many results to return.',
+		description: 'Max number of results to return',
 	},
 	{
 		displayName: 'Options',
@@ -261,7 +261,7 @@ export const entryFields = [
 					},
 				],
 				default: '',
-				description: 'Only select entries matching the publication state provided.',
+				description: 'Only select entries matching the publication state provided',
 			},
 			{
 				displayName: 'Sort Fields',
@@ -273,9 +273,7 @@ export const entryFields = [
 				},
 				default: '',
 				placeholder: 'name:asc',
-				description: `Name of the fields to sort the data by. By default will be sorted ascendingly.<br>
-				To modify that behavior, you have to add the sort direction after the name of sort field preceded by a colon.
-				For example: name:asc`,
+				description: 'Name of the fields to sort the data by. By default will be sorted ascendingly. To modify that behavior, you have to add the sort direction after the name of sort field preceded by a colon. For example: <code>name:asc</code>.',
 			},
 			{
 				displayName: 'Where (JSON)',
@@ -285,7 +283,7 @@ export const entryFields = [
 					alwaysOpenEditWindow: true,
 				},
 				default: '',
-				description: 'JSON query to filter the data. <a href="https://strapi.io/documentation/developer-docs/latest/developer-resources/content-api/content-api.html#filters" target="_blank">More info</a>.',
+				description: 'JSON query to filter the data. <a href="https://strapi.io/documentation/developer-docs/latest/developer-resources/content-api/content-api.html#filters">More info</a>.',
 			},
 		],
 	},
@@ -309,7 +307,7 @@ export const entryFields = [
 				],
 			},
 		},
-		description: 'Name of the content type.',
+		description: 'Name of the content type',
 	},
 	{
 		displayName: 'Update Key',
@@ -327,6 +325,7 @@ export const entryFields = [
 		},
 		default: 'id',
 		required: true,
+		// eslint-disable-next-line n8n-nodes-base/node-param-description-miscased-id
 		description: 'Name of the property which decides which rows in the database should be updated. Normally that would be "id".',
 	},
 	{
@@ -345,6 +344,6 @@ export const entryFields = [
 		},
 		default: '',
 		placeholder: 'id,name,description',
-		description: 'Comma separated list of the properties which should used as columns for the new rows.',
+		description: 'Comma-separated list of the properties which should used as columns for the new rows',
 	},
-] as INodeProperties[];
+];

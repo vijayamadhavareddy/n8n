@@ -14,11 +14,7 @@ import {
 
 export async function contentfulApiRequest(this: IExecuteFunctions | IExecuteSingleFunctions | ILoadOptionsFunctions, method: string, resource: string, body: any = {}, qs: IDataObject = {}, uri?: string, option: IDataObject = {}): Promise<any> { // tslint:disable-line:no-any
 
-	const credentials = this.getCredentials('contentfulApi');
-	if (credentials === undefined) {
-		throw new NodeOperationError(this.getNode(), 'No credentials got returned!');
-	}
-
+	const credentials = await this.getCredentials('contentfulApi');
 	const source = this.getNodeParameter('source', 0) as string;
 	const isPreview = source === 'previewApi';
 

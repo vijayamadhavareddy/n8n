@@ -6,11 +6,12 @@ import {
 	makeSimpleField,
 } from './SharedFields';
 
-export const tagOperations = [
+export const tagOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		displayOptions: {
 			show: {
 				resource: [
@@ -33,18 +34,17 @@ export const tagOperations = [
 			},
 		],
 		default: 'create',
-		description: 'Operation to perform',
 	},
-] as INodeProperties[];
+];
 
-export const tagFields = [
+export const tagFields: INodeProperties[] = [
 	// ----------------------------------------
 	//               tag: create
 	// ----------------------------------------
 	{
 		displayName: 'Name',
 		name: 'name',
-		description: 'Name of the tag to create.',
+		description: 'Name of the tag to create',
 		type: 'string',
 		required: true,
 		default: '',
@@ -67,7 +67,7 @@ export const tagFields = [
 	{
 		displayName: 'Tag ID',
 		name: 'tagId',
-		description: 'ID of the tag to retrieve.',
+		description: 'ID of the tag to retrieve',
 		type: 'string',
 		default: '',
 		required: true,
@@ -92,7 +92,7 @@ export const tagFields = [
 		name: 'returnAll',
 		type: 'boolean',
 		default: false,
-		description: 'Return all results.',
+		description: 'Whether to return all results or only up to a given limit',
 		displayOptions: {
 			show: {
 				resource: [
@@ -109,7 +109,7 @@ export const tagFields = [
 		name: 'limit',
 		type: 'number',
 		default: 50,
-		description: 'The number of results to return.',
+		description: 'Max number of results to return',
 		typeOptions: {
 			minValue: 1,
 		},
@@ -128,4 +128,4 @@ export const tagFields = [
 		},
 	},
 	makeSimpleField('tag', 'getAll'),
-] as INodeProperties[];
+];

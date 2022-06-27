@@ -1,4 +1,4 @@
-import * as moment from 'moment-timezone';
+import moment from 'moment-timezone';
 
 import { IPollFunctions } from 'n8n-core';
 import {
@@ -24,15 +24,14 @@ export class ClockifyTrigger implements INodeType {
 		displayName: 'Clockify Trigger',
 		icon: 'file:clockify.svg',
 		name: 'clockifyTrigger',
-		group: [ 'trigger' ],
+		group: ['trigger'],
 		version: 1,
 		description: 'Listens to Clockify events',
 		defaults: {
 			name: 'Clockify Trigger',
-			color: '#000000',
 		},
 		inputs: [],
-		outputs: [ 'main' ],
+		outputs: ['main'],
 		credentials: [
 			{
 				name: 'clockifyApi',
@@ -42,15 +41,17 @@ export class ClockifyTrigger implements INodeType {
 		polling: true,
 		properties: [
 			{
-				displayName: 'Workspace',
+				displayName: 'Workspace Name or ID',
 				name: 'workspaceId',
 				type: 'options',
+				description: 'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>',
 				typeOptions: {
 					loadOptionsMethod: 'listWorkspaces',
 				},
 				required: true,
 				default: '',
 			},
+			// eslint-disable-next-line n8n-nodes-base/node-param-default-missing
 			{
 				displayName: 'Trigger',
 				name: 'watchField',
@@ -109,7 +110,7 @@ export class ClockifyTrigger implements INodeType {
 				qs.start = webhookData.lastTimeChecked;
 				qs.end = moment().tz(workflowTimezone).format('YYYY-MM-DDTHH:mm:ss') + 'Z';
 				qs.hydrated = true;
-				qs[ 'in-progress' ] = false;
+				qs['in-progress'] = false;
 				break;
 		}
 
@@ -117,7 +118,7 @@ export class ClockifyTrigger implements INodeType {
 		webhookData.lastTimeChecked = qs.end;
 
 		if (Array.isArray(result) && result.length !== 0) {
-			return [ this.helpers.returnJsonArray(result) ];
+			return [this.helpers.returnJsonArray(result)];
 		}
 		return null;
 	}

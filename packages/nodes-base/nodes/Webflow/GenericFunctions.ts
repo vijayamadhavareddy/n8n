@@ -47,10 +47,7 @@ export async function webflowApiRequest(
 	}
 	try {
 		if (authenticationMethod === 'accessToken') {
-			const credentials = this.getCredentials('webflowApi');
-			if (credentials === undefined) {
-				throw new NodeOperationError(this.getNode(), 'No credentials got returned!');
-			}
+			const credentials = await this.getCredentials('webflowApi');
 
 			options.headers!['authorization'] = `Bearer ${credentials.accessToken}`;
 

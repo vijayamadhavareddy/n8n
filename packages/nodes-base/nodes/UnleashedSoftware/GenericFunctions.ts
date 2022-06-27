@@ -18,7 +18,7 @@ import {
 	createHmac,
 } from 'crypto';
 
-import * as qs from 'qs';
+import qs from 'qs';
 
 export async function unleashedApiRequest(this: IHookFunctions | IExecuteFunctions | IExecuteSingleFunctions | ILoadOptionsFunctions, method: string, path: string, body: any = {}, query: IDataObject = {}, pageNumber?: number, headers?: object): Promise<any> { // tslint:disable-line:no-any
 
@@ -40,11 +40,7 @@ export async function unleashedApiRequest(this: IHookFunctions | IExecuteFunctio
 		delete options.body;
 	}
 
-	const credentials = this.getCredentials('unleashedSoftwareApi');
-
-	if (credentials === undefined) {
-		throw new NodeOperationError(this.getNode(), 'No credentials got returned!');
-	}
+	const credentials = await this.getCredentials('unleashedSoftwareApi');
 
 	const signature = createHmac('sha256', (credentials.apiKey as string))
 		.update(qs.stringify(query))

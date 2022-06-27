@@ -8,9 +8,16 @@ export class MicrosoftOAuth2Api implements ICredentialType {
 	extends = [
 		'oAuth2Api',
 	];
+	icon = 'file:Microsoft.svg';
 	displayName = 'Microsoft OAuth2 API';
 	documentationUrl = 'microsoft';
 	properties: INodeProperties[] = [
+		{
+			displayName: 'Grant Type',
+			name: 'grantType',
+			type: 'hidden',
+			default: 'authorizationCode',
+		},
 		//info about the tenantID
 		//https://docs.microsoft.com/en-us/azure/active-directory/develop/active-directory-v2-protocols#endpoints
 		{

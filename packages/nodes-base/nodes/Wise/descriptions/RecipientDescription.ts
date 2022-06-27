@@ -2,13 +2,13 @@ import {
 	INodeProperties,
 } from 'n8n-workflow';
 
-export const recipientOperations = [
+export const recipientOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		default: 'getAll',
-		description: 'Operation to perform',
 		options: [
 			{
 				name: 'Get All',
@@ -23,9 +23,9 @@ export const recipientOperations = [
 			},
 		},
 	},
-] as INodeProperties[];
+];
 
-export const recipientFields = [
+export const recipientFields: INodeProperties[] = [
 	// ----------------------------------
 	//        recipient: getAll
 	// ----------------------------------
@@ -34,7 +34,7 @@ export const recipientFields = [
 		name: 'returnAll',
 		type: 'boolean',
 		default: false,
-		description: 'Return all results.',
+		description: 'Whether to return all results or only up to a given limit',
 		displayOptions: {
 			show: {
 				resource: [
@@ -51,7 +51,7 @@ export const recipientFields = [
 		name: 'limit',
 		type: 'number',
 		default: 5,
-		description: 'The number of results to return.',
+		description: 'Max number of results to return',
 		typeOptions: {
 			minValue: 1,
 			maxValue: 1000,
@@ -70,4 +70,4 @@ export const recipientFields = [
 			},
 		},
 	},
-] as INodeProperties[];
+];

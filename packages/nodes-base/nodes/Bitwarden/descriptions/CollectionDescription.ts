@@ -2,13 +2,13 @@ import {
 	INodeProperties,
 } from 'n8n-workflow';
 
-export const collectionOperations = [
+export const collectionOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		default: 'get',
-		description: 'Operation to perform',
 		options: [
 			{
 				name: 'Delete',
@@ -35,9 +35,9 @@ export const collectionOperations = [
 			},
 		},
 	},
-] as INodeProperties[];
+];
 
-export const collectionFields = [
+export const collectionFields: INodeProperties[] = [
 	// ----------------------------------
 	//       collection: shared
 	// ----------------------------------
@@ -46,7 +46,7 @@ export const collectionFields = [
 		name: 'collectionId',
 		type: 'string',
 		required: true,
-		description: 'The identifier of the collection.',
+		description: 'The identifier of the collection',
 		default: '',
 		placeholder: '5e59c8c7-e05a-4d17-8e85-acc301343926',
 		displayOptions: {
@@ -71,7 +71,7 @@ export const collectionFields = [
 		name: 'returnAll',
 		type: 'boolean',
 		default: false,
-		description: 'Return all available results for the query.',
+		description: 'Whether to return all results or only up to a given limit',
 		displayOptions: {
 			show: {
 				resource: [
@@ -87,8 +87,11 @@ export const collectionFields = [
 		displayName: 'Limit',
 		name: 'limit',
 		type: 'number',
+		typeOptions: {
+			minValue: 1,
+		},
 		default: 10,
-		description: 'Number of results to return for the query.',
+		description: 'Max number of results to return',
 		displayOptions: {
 			show: {
 				resource: [
@@ -116,10 +119,10 @@ export const collectionFields = [
 		required: true,
 		options: [
 			{
-				displayName: 'Group',
+				displayName: 'Group Names or IDs',
 				name: 'groups',
 				type: 'multiOptions',
-				description: 'The group to assign this collection to.',
+				description: 'The group to assign this collection to. Choose from the list, or specify IDs using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 				default: [],
 				typeOptions: {
 					loadOptionsMethod: 'getGroups',
@@ -129,7 +132,7 @@ export const collectionFields = [
 				displayName: 'External ID',
 				name: 'externalId',
 				type: 'string',
-				description: 'The external identifier to set to this collection.',
+				description: 'The external identifier to set to this collection',
 				default: '',
 			},
 		],
@@ -144,7 +147,7 @@ export const collectionFields = [
 			},
 		},
 	},
-] as INodeProperties[];
+];
 
 export interface CollectionUpdateFields {
 	groups: string[];

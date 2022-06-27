@@ -2,13 +2,13 @@ import {
 	INodeProperties,
 } from 'n8n-workflow';
 
-export const tokenOperations = [
+export const tokenOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		default: 'create',
-		description: 'Operation to perform',
 		options: [
 			{
 				name: 'Create',
@@ -24,9 +24,9 @@ export const tokenOperations = [
 			},
 		},
 	},
-] as INodeProperties[];
+];
 
-export const tokenFields = [
+export const tokenFields: INodeProperties[] = [
 	// ----------------------------------
 	//          token: create
 	// ----------------------------------
@@ -43,6 +43,16 @@ export const tokenFields = [
 				value: 'cardToken',
 			},
 		],
+		displayOptions: {
+			show: {
+				resource: [
+					'token',
+				],
+				operation: [
+					'create',
+				],
+			},
+		},
 	},
 	{
 		displayName: 'Card Number',
@@ -127,4 +137,4 @@ export const tokenFields = [
 		default: '',
 		placeholder: '2022',
 	},
-] as INodeProperties[];
+];

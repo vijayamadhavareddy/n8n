@@ -1,4 +1,5 @@
 import {
+	Request,
 	sign,
 } from 'aws4';
 
@@ -31,11 +32,7 @@ export async function s3ApiRequest(this: IHookFunctions | IExecuteFunctions | IL
 
 	let credentials;
 
-	credentials = this.getCredentials('s3');
-
-	if (credentials === undefined) {
-		throw new NodeOperationError(this.getNode(), 'No credentials got returned!');
-	}
+	credentials = await this.getCredentials('s3');
 
 	if (!(credentials.endpoint as string).startsWith('http')) {
 		throw new NodeOperationError(this.getNode(), 'HTTP(S) Scheme is required in endpoint definition');
@@ -62,9 +59,15 @@ export async function s3ApiRequest(this: IHookFunctions | IExecuteFunctions | IL
 		path: `${path}?${queryToString(query).replace(/\+/g, '%2B')}`,
 		service: 's3',
 		body,
+	} as Request;
+
+	const securityHeaders = {
+		accessKeyId: `${credentials.accessKeyId}`.trim(),
+		secretAccessKey: `${credentials.secretAccessKey}`.trim(),
+		sessionToken: credentials.temporaryCredentials ? `${credentials.sessionToken}`.trim() : undefined,
 	};
 
-	sign(signOpts, { accessKeyId: `${credentials.accessKeyId}`.trim(), secretAccessKey: `${credentials.secretAccessKey}`.trim() });
+	sign(signOpts, securityHeaders);
 
 	const options: OptionsWithUri = {
 		headers: signOpts.headers,

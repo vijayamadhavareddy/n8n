@@ -2,11 +2,12 @@ import {
 	INodeProperties,
 } from 'n8n-workflow';
 
-export const listOperations = [
+export const listOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		displayOptions: {
 			show: {
 				resource: [
@@ -37,11 +38,10 @@ export const listOperations = [
 			},
 		],
 		default: 'get',
-		description: 'The operation to perform.',
 	},
-] as INodeProperties[];
+];
 
-export const listFields = [
+export const listFields: INodeProperties[] = [
 	/* -------------------------------------------------------------------------- */
 	/*                                 list:create                                */
 	/* -------------------------------------------------------------------------- */
@@ -61,7 +61,7 @@ export const listFields = [
 		},
 		required: true,
 		default: '',
-		description: 'List display name.',
+		description: 'List display name',
 	},
 
 	/* -------------------------------------------------------------------------- */
@@ -85,7 +85,7 @@ export const listFields = [
 		},
 		required: true,
 		default: '',
-		description: 'The identifier of the list, unique in the user\'s mailbox.',
+		description: 'The identifier of the list, unique in the user\'s mailbox',
 	},
 
 	/* -------------------------------------------------------------------------- */
@@ -106,7 +106,7 @@ export const listFields = [
 			},
 		},
 		default: false,
-		description: 'If all results should be returned or only up to a given limit.',
+		description: 'Whether to return all results or only up to a given limit',
 	},
 	{
 		displayName: 'Limit',
@@ -128,7 +128,7 @@ export const listFields = [
 			maxValue: 100,
 		},
 		default: 50,
-		description: 'How many results to return.',
+		description: 'Max number of results to return',
 	},
 
 	/* -------------------------------------------------------------------------- */
@@ -150,6 +150,6 @@ export const listFields = [
 		},
 		required: true,
 		default: '',
-		description: 'List display name.',
+		description: 'List display name',
 	},
-] as INodeProperties[];
+];

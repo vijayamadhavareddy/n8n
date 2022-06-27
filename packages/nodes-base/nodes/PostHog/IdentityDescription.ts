@@ -2,11 +2,12 @@ import {
 	INodeProperties,
 } from 'n8n-workflow';
 
-export const identityOperations = [
+export const identityOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		displayOptions: {
 			show: {
 				resource: [
@@ -21,11 +22,10 @@ export const identityOperations = [
 			},
 		],
 		default: 'create',
-		description: 'The operation to perform.',
 	},
-] as INodeProperties[];
+];
 
-export const identityFields = [
+export const identityFields: INodeProperties[] = [
 
 	/* -------------------------------------------------------------------------- */
 	/*                                 identity:create                            */
@@ -46,7 +46,7 @@ export const identityFields = [
 			},
 		},
 		default: '',
-		description: `The identity's distinct ID.`,
+		description: 'The identity\'s distinct ID',
 	},
 	{
 		displayName: 'Additional Fields',
@@ -106,8 +106,8 @@ export const identityFields = [
 				name: 'timestamp',
 				type: 'dateTime',
 				default: '',
-				description: `If not set, it'll automatically be set to the current time.`,
+				description: 'If not set, it\'ll automatically be set to the current time',
 			},
 		],
 	},
-] as INodeProperties[];
+];

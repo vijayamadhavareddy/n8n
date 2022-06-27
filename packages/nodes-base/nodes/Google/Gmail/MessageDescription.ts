@@ -2,11 +2,12 @@ import {
 	INodeProperties,
 } from 'n8n-workflow';
 
-export const messageOperations = [
+export const messageOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		displayOptions: {
 			show: {
 				resource: [
@@ -15,11 +16,6 @@ export const messageOperations = [
 			},
 		},
 		options: [
-			{
-				name: 'Send',
-				value: 'send',
-				description: 'Send an email',
-			},
 			{
 				name: 'Delete',
 				value: 'delete',
@@ -40,13 +36,17 @@ export const messageOperations = [
 				value: 'reply',
 				description: 'Reply to an email',
 			},
+			{
+				name: 'Send',
+				value: 'send',
+				description: 'Send an email',
+			},
 		],
 		default: 'send',
-		description: 'The operation to perform.',
 	},
-] as INodeProperties[];
+];
 
-export const messageFields = [
+export const messageFields: INodeProperties[] = [
 	{
 		displayName: 'Message ID',
 		name: 'messageId',
@@ -65,7 +65,7 @@ export const messageFields = [
 			},
 		},
 		placeholder: '172ce2c4a72cc243',
-		description: 'The ID of the message you are operating on.',
+		description: 'The ID of the message you are operating on',
 	},
 	{
 		displayName: 'Thread ID',
@@ -84,7 +84,7 @@ export const messageFields = [
 			},
 		},
 		placeholder: '172ce2c4a72cc243',
-		description: 'The ID of the thread you are replying to.',
+		description: 'The ID of the thread you are replying to',
 	},
 	{
 		displayName: 'Message ID',
@@ -103,7 +103,7 @@ export const messageFields = [
 			},
 		},
 		placeholder: 'CAHNQoFsC6JMMbOBJgtjsqN0eEc+gDg2a=SQj-tWUebQeHMDgqQ@mail.gmail.com',
-		description: 'The ID of the message you are replying to.',
+		description: 'The ID of the message you are replying to',
 	},
 	{
 		displayName: 'Subject',
@@ -123,7 +123,7 @@ export const messageFields = [
 			},
 		},
 		placeholder: 'Hello World!',
-		description: 'The message subject.',
+		description: 'The message subject',
 	},
 	{
 		displayName: 'HTML',
@@ -141,7 +141,7 @@ export const messageFields = [
 			},
 		},
 		default: false,
-		description: 'Switch ON if the message should also be included as HTML.',
+		description: 'Whether the message should also be included as HTML',
 	},
 	{
 		displayName: 'HTML Message',
@@ -163,7 +163,7 @@ export const messageFields = [
 				],
 			},
 		},
-		description: 'The HTML message body.',
+		description: 'The HTML message body',
 	},
 	{
 		displayName: 'Message',
@@ -182,7 +182,7 @@ export const messageFields = [
 				],
 			},
 		},
-		description: 'Plain text message body.',
+		description: 'Plain text message body',
 	},
 	{
 		displayName: 'To Email',
@@ -206,7 +206,7 @@ export const messageFields = [
 			},
 		},
 		placeholder: 'info@example.com',
-		description: 'The email addresses of the recipients.',
+		description: 'The email addresses of the recipients',
 	},
 	{
 		displayName: 'Additional Fields',
@@ -244,20 +244,19 @@ export const messageFields = [
 								name: 'property',
 								type: 'string',
 								default: '',
-								description: `Name of the binary property containing the data to be added to the email as an attachment.</br>
-								Multiples can be set separated by comma.`,
+								description: 'Name of the binary property containing the data to be added to the email as an attachment. Multiple properties can be set separated by comma.',
 							},
 						],
 					},
 				],
-				default: '',
-				description: 'Array of supported attachments to add to the message.',
+				default: {},
+				description: 'Array of supported attachments to add to the message',
 			},
 			{
 				displayName: 'BCC Email',
 				name: 'bccList',
 				type: 'string',
-				description: 'The email addresses of the blind copy recipients.',
+				description: 'The email addresses of the blind copy recipients',
 				typeOptions: {
 					multipleValues: true,
 					multipleValueButtonText: 'Add BCC Email',
@@ -269,7 +268,7 @@ export const messageFields = [
 				displayName: 'CC Email',
 				name: 'ccList',
 				type: 'string',
-				description: 'The email addresses of the copy recipients.',
+				description: 'The email addresses of the copy recipients',
 				typeOptions: {
 					multipleValues: true,
 					multipleValueButtonText: 'Add CC Email',
@@ -283,9 +282,7 @@ export const messageFields = [
 				type: 'string',
 				placeholder: 'Name <test@gmail.com>',
 				default: '',
-				description: `The name displayed in your contacts inboxes.</br>
-				It has to be in the format: "Display-Name &#60;name@gmail.com&#62;".</br>
-				The email address has to match the email address of the logged in user for the API`,
+				description: 'The name displayed in your contacts inboxes. It has to be in the format: "Display-Name &#60;name@gmail.com&#62;". The email address has to match the email address of the logged in user for the API',
 			},
 		],
 	},
@@ -319,7 +316,7 @@ export const messageFields = [
 					{
 						name: 'Metadata',
 						value: 'metadata',
-						description: 'Returns only email message ID, labels, and email headers.',
+						description: 'Returns only email message ID, labels, and email headers',
 					},
 					{
 						name: 'Minimal',
@@ -329,12 +326,12 @@ export const messageFields = [
 					{
 						name: 'RAW',
 						value: 'raw',
-						description: 'Returns the full email message data with body content in the raw field as a base64url encoded string; the payload field is not used.',
+						description: 'Returns the full email message data with body content in the raw field as a base64url encoded string; the payload field is not used',
 					},
 					{
 						name: 'Resolved',
 						value: 'resolved',
-						description: 'Returns the full email with all data resolved and attachments saved as binary data.',
+						description: 'Returns the full email with all data resolved and attachments saved as binary data',
 					},
 				],
 				default: 'resolved',
@@ -355,7 +352,7 @@ export const messageFields = [
 						],
 					},
 				},
-				description: 'Prefix for name of the binary property to which to<br />write the attachments. An index starting with 0 will be added.<br />So if name is "attachment_" the first attachment is saved to "attachment_0"',
+				description: 'Prefix for name of the binary property to which to write the attachments. An index starting with 0 will be added. So if name is "attachment_" the first attachment is saved to "attachment_0"',
 			},
 		],
 	},
@@ -378,7 +375,7 @@ export const messageFields = [
 			},
 		},
 		default: false,
-		description: 'If all results should be returned or only up to a given limit.',
+		description: 'Whether to return all results or only up to a given limit',
 	},
 	{
 		displayName: 'Limit',
@@ -402,7 +399,7 @@ export const messageFields = [
 			maxValue: 500,
 		},
 		default: 10,
-		description: 'How many results to return.',
+		description: 'Max number of results to return',
 	},
 	{
 		displayName: 'Additional Fields',
@@ -437,7 +434,7 @@ export const messageFields = [
 						],
 					},
 				},
-				description: 'Prefix for name of the binary property to which to<br />write the attachments. An index starting with 0 will be added.<br />So if name is "attachment_" the first attachment is saved to "attachment_0"',
+				description: 'Prefix for name of the binary property to which to write the attachments. An index starting with 0 will be added. So if name is "attachment_" the first attachment is saved to "attachment_0"',
 			},
 			{
 				displayName: 'Format',
@@ -457,7 +454,7 @@ export const messageFields = [
 					{
 						name: 'Metadata',
 						value: 'metadata',
-						description: 'Returns only email message ID, labels, and email headers.',
+						description: 'Returns only email message ID, labels, and email headers',
 					},
 					{
 						name: 'Minimal',
@@ -467,12 +464,12 @@ export const messageFields = [
 					{
 						name: 'RAW',
 						value: 'raw',
-						description: 'Returns the full email message data with body content in the raw field as a base64url encoded string; the payload field is not used.',
+						description: 'Returns the full email message data with body content in the raw field as a base64url encoded string; the payload field is not used',
 					},
 					{
 						name: 'Resolved',
 						value: 'resolved',
-						description: 'Returns the full email with all data resolved and attachments saved as binary data.',
+						description: 'Returns the full email with all data resolved and attachments saved as binary data',
 					},
 				],
 				default: 'resolved',
@@ -483,17 +480,17 @@ export const messageFields = [
 				name: 'includeSpamTrash',
 				type: 'boolean',
 				default: false,
-				description: 'Include messages from SPAM and TRASH in the results.',
+				description: 'Whether to include messages from SPAM and TRASH in the results',
 			},
 			{
-				displayName: 'Label IDs',
+				displayName: 'Label Names or IDs',
 				name: 'labelIds',
 				type: 'multiOptions',
 				typeOptions: {
 					loadOptionsMethod: 'getLabels',
 				},
 				default: [],
-				description: 'Only return messages with labels that match all of the specified label IDs.',
+				description: 'Only return messages with labels that match all of the specified label IDs. Choose from the list, or specify IDs using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 			},
 			{
 				displayName: 'Query',
@@ -503,12 +500,9 @@ export const messageFields = [
 					alwaysOpenEditWindow: true,
 				},
 				default: '',
-				description: `Only return messages matching the specified query.</br>
-				Supports the same query format as the Gmail search box.</br>
-				For example, "from:someuser@example.com rfc822msgid:<somemsgid@example.com> is:unread".</br>
-				Parameter cannot be used when accessing the api using the gmail.metadata scope.`,
+				description: 'Only return messages matching the specified query. Supports the same query format as the Gmail search box. For example, "from:someuser@example.com rfc822msgid:&lt;somemsgid@example.com&gt; is:unread". Parameter cannot be used when accessing the api using the gmail.metadata scope.',
 			},
 		],
 	},
 
-] as INodeProperties[];
+];

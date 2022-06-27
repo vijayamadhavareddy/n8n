@@ -2,11 +2,12 @@ import {
 	INodeProperties,
 } from 'n8n-workflow';
 
-export const folderOperations = [
+export const folderOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		displayOptions: {
 			show: {
 				resource: [
@@ -31,6 +32,11 @@ export const folderOperations = [
 				description: 'Get items inside a folder',
 			},
 			{
+				name: 'Rename',
+				value: 'rename',
+				description: 'Rename a folder',
+			},
+			{
 				name: 'Search',
 				value: 'search',
 				description: 'Search a folder',
@@ -42,11 +48,10 @@ export const folderOperations = [
 			},
 		],
 		default: 'getChildren',
-		description: 'The operation to perform.',
 	},
-] as INodeProperties[];
+];
 
-export const folderFields = [
+export const folderFields: INodeProperties[] = [
 
 /* -------------------------------------------------------------------------- */
 /*                                 folder:create                              */
@@ -56,6 +61,7 @@ export const folderFields = [
 		name: 'name',
 		required: true,
 		type: 'string',
+		placeholder: '/Pictures/2021',
 		displayOptions: {
 			show: {
 				operation: [
@@ -67,7 +73,7 @@ export const folderFields = [
 			},
 		},
 		default: '',
-		description: `Folder's name`,
+		description: 'The name or path of the folder',
 	},
 	{
 		displayName: 'Options',
@@ -114,8 +120,44 @@ export const folderFields = [
 			},
 		},
 		default: '',
-		description: 'Folder ID',
 	},
+/* -------------------------------------------------------------------------- */
+/*                               folder:rename                                */
+/* -------------------------------------------------------------------------- */
+{
+	displayName: 'Item ID',
+	name: 'itemId',
+	type: 'string',
+	displayOptions: {
+		show: {
+			operation: [
+				'rename',
+			],
+			resource: [
+				'folder',
+			],
+		},
+	},
+	default: '',
+	description: 'ID of the folder',
+},
+{
+	displayName: 'New Name',
+	name: 'newName',
+	type: 'string',
+	displayOptions: {
+		show: {
+			operation: [
+				'rename',
+			],
+			resource: [
+				'folder',
+			],
+		},
+	},
+	default: '',
+	description: 'New name for folder',
+},
 /* -------------------------------------------------------------------------- */
 /*                                 folder:search                              */
 /* -------------------------------------------------------------------------- */
@@ -134,8 +176,7 @@ export const folderFields = [
 			},
 		},
 		default: '',
-		description: `The query text used to search for items. Values may be matched
-		across several fields including filename, metadata, and file content.`,
+		description: 'The query text used to search for items. Values may be matched across several fields including filename, metadata, and file content.',
 	},
 /* -------------------------------------------------------------------------- */
 /*                                 folder:share                               */
@@ -215,4 +256,4 @@ export const folderFields = [
 		default: '',
 		description: 'The type of sharing link to create',
 	},
-] as INodeProperties[];
+];

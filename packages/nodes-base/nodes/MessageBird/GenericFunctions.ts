@@ -27,10 +27,7 @@ export async function messageBirdApiRequest(
 	body: IDataObject,
 	query: IDataObject = {},
 ): Promise<any> { // tslint:disable-line:no-any
-	const credentials = this.getCredentials('messageBirdApi');
-	if (credentials === undefined) {
-		throw new NodeOperationError(this.getNode(), 'No credentials returned!');
-	}
+	const credentials = await this.getCredentials('messageBirdApi');
 
 	const options: OptionsWithUri = {
 		headers: {

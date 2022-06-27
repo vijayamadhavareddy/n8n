@@ -25,11 +25,7 @@ export async function deepLApiRequest(
 	const proApiEndpoint = 'https://api.deepl.com/v2';
 	const freeApiEndpoint = 'https://api-free.deepl.com/v2';
 
-	const credentials = this.getCredentials('deepLApi');
-
-	if (credentials === undefined) {
-		throw new NodeOperationError(this.getNode(), 'No credentials got returned!');
-	}
+	const credentials = await this.getCredentials('deepLApi');
 
 	const options: OptionsWithUri = {
 		headers: {
@@ -50,6 +46,8 @@ export async function deepLApiRequest(
 		if (Object.keys(body).length === 0) {
 			delete options.body;
 		}
+
+		const credentials = await this.getCredentials('deepLApi');
 
 		options.qs.auth_key = credentials.apiKey;
 

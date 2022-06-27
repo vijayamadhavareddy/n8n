@@ -40,11 +40,16 @@ import {
 } from './TagDescription';
 
 import {
+	taskFields,
+	taskOperations,
+} from './TaskDescription';
+
+import {
 	timeEntryFields,
 	timeEntryOperations,
 } from './TimeEntryDescription';
 
-import * as moment from 'moment-timezone';
+import moment from 'moment-timezone';
 
 export class Clockify implements INodeType {
 	description: INodeTypeDescription = {
@@ -57,7 +62,6 @@ export class Clockify implements INodeType {
 		description: 'Consume Clockify REST API',
 		defaults: {
 			name: 'Clockify',
-			color: '#000000',
 		},
 		inputs: ['main'],
 		outputs: ['main'],
@@ -72,6 +76,7 @@ export class Clockify implements INodeType {
 				displayName: 'Resource',
 				name: 'resource',
 				type: 'options',
+				noDataExpression: true,
 				options: [
 					{
 						name: 'Project',
@@ -82,20 +87,25 @@ export class Clockify implements INodeType {
 						value: 'tag',
 					},
 					{
+						name: 'Task',
+						value: 'task',
+					},
+					{
 						name: 'Time Entry',
 						value: 'timeEntry',
 					},
 				],
 				default: 'project',
-				description: 'The resource to operate on.',
 			},
 			...projectOperations,
 			...tagOperations,
+			...taskOperations,
 			...timeEntryOperations,
 			{
-				displayName: 'Workspace ID',
+				displayName: 'Workspace Name or ID',
 				name: 'workspaceId',
 				type: 'options',
+				description: 'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>',
 				typeOptions: {
 					loadOptionsMethod: 'listWorkspaces',
 				},
@@ -104,6 +114,7 @@ export class Clockify implements INodeType {
 			},
 			...projectFields,
 			...tagFields,
+			...taskFields,
 			...timeEntryFields,
 		],
 	};
@@ -221,7 +232,7 @@ export class Clockify implements INodeType {
 
 		const returnData: IDataObject[] = [];
 
-		const length = (items.length as unknown) as number;
+		const length = items.length;
 
 		const qs: IDataObject = {};
 
@@ -451,6 +462,152 @@ export class Clockify implements INodeType {
 							this,
 							'PUT',
 							`/workspaces/${workspaceId}/tags/${tagId}`,
+							body,
+							qs,
+						);
+					}
+				}
+
+				if (resource === 'task') {
+					if (operation === 'create') {
+						const workspaceId = this.getNodeParameter(
+							'workspaceId',
+							i,
+						) as string;
+
+						const projectId = this.getNodeParameter('projectId', i) as string;
+
+						const name = this.getNodeParameter('name', i) as string;
+
+						const additionalFields = this.getNodeParameter(
+							'additionalFields',
+							i,
+						) as IDataObject;
+
+						const body: IDataObject = {
+							name,
+						};
+
+						Object.assign(body, additionalFields);
+
+						if (body.estimate) {
+							const [hour, minute] = (body.estimate as string).split(':');
+							body.estimate = `PT${hour}H${minute}M`;
+						}
+
+						responseData = await clockifyApiRequest.call(
+							this,
+							'POST',
+							`/workspaces/${workspaceId}/projects/${projectId}/tasks`,
+							body,
+							qs,
+						);
+					}
+
+					if (operation === 'delete') {
+						const workspaceId = this.getNodeParameter(
+							'workspaceId',
+							i,
+						) as string;
+
+						const projectId = this.getNodeParameter('projectId', i) as string;
+
+						const taskId = this.getNodeParameter('taskId', i) as string;
+
+						responseData = await clockifyApiRequest.call(
+							this,
+							'DELETE',
+							`/workspaces/${workspaceId}/projects/${projectId}/tasks/${taskId}`,
+							{},
+							qs,
+						);
+					}
+
+					if (operation === 'get') {
+						const workspaceId = this.getNodeParameter(
+							'workspaceId',
+							i,
+						) as string;
+
+						const projectId = this.getNodeParameter('projectId', i) as string;
+
+						const taskId = this.getNodeParameter('taskId', i) as string;
+
+						responseData = await clockifyApiRequest.call(
+							this,
+							'GET',
+							`/workspaces/${workspaceId}/projects/${projectId}/tasks/${taskId}`,
+							{},
+							qs,
+						);
+					}
+
+					if (operation === 'getAll') {
+						const returnAll = this.getNodeParameter('returnAll', i) as boolean;
+
+						const workspaceId = this.getNodeParameter(
+							'workspaceId',
+							i,
+						) as string;
+
+						const projectId = this.getNodeParameter('projectId', i) as string;
+
+						const filters = this.getNodeParameter(
+							'filters',
+							i,
+						) as IDataObject;
+
+						Object.assign(qs, filters);
+
+						if (returnAll) {
+							responseData = await clockifyApiRequestAllItems.call(
+								this,
+								'GET',
+								`/workspaces/${workspaceId}/projects/${projectId}/tasks`,
+								{},
+								qs,
+							);
+						} else {
+							qs['page-size'] = this.getNodeParameter('limit', i) as number;
+
+							responseData = await clockifyApiRequest.call(
+								this,
+								'GET',
+								`/workspaces/${workspaceId}/projects/${projectId}/tasks`,
+								{},
+								qs,
+							);
+						}
+					}
+
+					if (operation === 'update') {
+						const workspaceId = this.getNodeParameter(
+							'workspaceId',
+							i,
+						) as string;
+
+						const projectId = this.getNodeParameter('projectId', i) as string;
+
+						const taskId = this.getNodeParameter('taskId', i) as string;
+
+						const updateFields = this.getNodeParameter(
+							'updateFields',
+							i,
+						) as IDataObject;
+
+						const body: IDataObject = {};
+
+						Object.assign(body, updateFields);
+
+						if (body.estimate) {
+							const [hour, minute] = (body.estimate as string).split(':');
+							body.estimate = `PT${hour}H${minute}M`;
+						}
+
+						responseData = await clockifyApiRequest.call(
+							this,
+							'PUT',
+							`/workspaces/${workspaceId}/projects/${projectId}/tasks/${taskId}`,
 							body,
 							qs,
 						);

@@ -7,11 +7,12 @@ import {
 	makeSimpleField,
 } from './SharedFields';
 
-export const eventOperations = [
+export const eventOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		displayOptions: {
 			show: {
 				resource: [
@@ -34,18 +35,17 @@ export const eventOperations = [
 			},
 		],
 		default: 'create',
-		description: 'Operation to perform',
 	},
-] as INodeProperties[];
+];
 
-export const eventFields = [
+export const eventFields: INodeProperties[] = [
 	// ----------------------------------------
 	//              event: create
 	// ----------------------------------------
 	{
 		displayName: 'Origin System',
 		name: 'originSystem',
-		description: 'Source where the event originated.',
+		description: 'Source where the event originated',
 		type: 'string',
 		required: true,
 		default: '',
@@ -63,7 +63,7 @@ export const eventFields = [
 	{
 		displayName: 'Title',
 		name: 'title',
-		description: 'Title of the event to create.',
+		description: 'Title of the event to create',
 		type: 'string',
 		required: true,
 		default: '',
@@ -104,7 +104,7 @@ export const eventFields = [
 	{
 		displayName: 'Event ID',
 		name: 'eventId',
-		description: 'ID of the event to retrieve.',
+		description: 'ID of the event to retrieve',
 		type: 'string',
 		default: '',
 		required: true,
@@ -129,7 +129,7 @@ export const eventFields = [
 		name: 'returnAll',
 		type: 'boolean',
 		default: false,
-		description: 'Return all results.',
+		description: 'Whether to return all results or only up to a given limit',
 		displayOptions: {
 			show: {
 				resource: [
@@ -146,7 +146,7 @@ export const eventFields = [
 		name: 'limit',
 		type: 'number',
 		default: 50,
-		description: 'The number of results to return.',
+		description: 'Max number of results to return',
 		typeOptions: {
 			minValue: 1,
 		},
@@ -165,4 +165,4 @@ export const eventFields = [
 		},
 	},
 	makeSimpleField('event', 'getAll'),
-] as INodeProperties[];
+];

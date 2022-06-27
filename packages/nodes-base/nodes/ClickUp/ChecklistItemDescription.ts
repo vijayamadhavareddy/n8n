@@ -2,11 +2,12 @@ import {
 	INodeProperties,
 } from 'n8n-workflow';
 
-export const checklistItemOperations = [
+export const checklistItemOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		displayOptions: {
 			show: {
 				resource: [
@@ -32,11 +33,10 @@ export const checklistItemOperations = [
 			},
 		],
 		default: 'create',
-		description: 'The operation to perform.',
 	},
-] as INodeProperties[];
+];
 
-export const checklistItemFields = [
+export const checklistItemFields: INodeProperties[] = [
 
 	/* -------------------------------------------------------------------------- */
 	/*                                checklistItem:create                        */
@@ -210,7 +210,7 @@ export const checklistItemFields = [
 				name: 'parent',
 				type: 'string',
 				default: '',
-				description: 'Checklist item that you want to nest the target checklist item underneath.',
+				description: 'Checklist item that you want to nest the target checklist item underneath',
 			},
 			{
 				displayName: 'Resolved',
@@ -220,4 +220,4 @@ export const checklistItemFields = [
 			},
 		],
 	},
-] as INodeProperties[];
+];

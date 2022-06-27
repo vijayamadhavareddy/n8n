@@ -2,11 +2,12 @@ import {
 	INodeProperties,
 } from 'n8n-workflow';
 
-export const roomMemberOperations = [
+export const roomMemberOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		displayOptions: {
 			show: {
 				resource: [
@@ -22,19 +23,19 @@ export const roomMemberOperations = [
 			},
 		],
 		default: 'getAll',
-		description: 'The operation to perform.',
 	},
-] as INodeProperties[];
+];
 
 
-export const roomMemberFields = [
+export const roomMemberFields: INodeProperties[] = [
 	/* -------------------------------------------------------------------------- */
 	/*                             roomMember:getAll                             */
 	/* -------------------------------------------------------------------------- */
 	{
-		displayName: 'Room ID',
+		displayName: 'Room Name or ID',
 		name: 'roomId',
 		type: 'options',
+		description: 'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>',
 		typeOptions: {
 			loadOptionsMethod: 'getChannels',
 		},
@@ -49,7 +50,6 @@ export const roomMemberFields = [
 			},
 		},
 		default: '',
-		description: 'Room ID',
 		required: true,
 	},
 	{
@@ -71,7 +71,7 @@ export const roomMemberFields = [
 		placeholder: 'Add filter',
 		options: [
 			{
-				displayName: 'Exclude membership',
+				displayName: 'Exclude Membership',
 				name: 'notMembership',
 				type: 'options',
 				default: '',
@@ -142,4 +142,4 @@ export const roomMemberFields = [
 	},
 
 
-] as INodeProperties[];
+];

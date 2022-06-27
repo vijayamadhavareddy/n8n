@@ -8,6 +8,7 @@ import {
 	INodeType,
 	INodeTypeDescription,
 	IWebhookResponseData,
+	NodeOperationError,
 } from 'n8n-workflow';
 
 import {
@@ -24,16 +25,16 @@ import {
 
 export class CiscoWebexTrigger implements INodeType {
 	description: INodeTypeDescription = {
-		displayName: 'Cisco Webex Trigger',
+		displayName: 'Webex by Cisco Trigger',
 		name: 'ciscoWebexTrigger',
-		icon: 'file:ciscoWebex.svg',
+		// eslint-disable-next-line n8n-nodes-base/node-class-description-icon-not-svg
+		icon: 'file:ciscoWebex.png',
 		group: ['trigger'],
 		version: 1,
 		subtitle: '={{$parameter["resource"] + ":" + $parameter["event"]}}',
 		description: 'Starts the workflow when Cisco Webex events occur.',
 		defaults: {
-			name: 'Cisco Webex Trigger',
-			color: '#29b6f6',
+			name: 'Webex Trigger',
 		},
 		inputs: [],
 		outputs: ['main'],
@@ -56,7 +57,12 @@ export class CiscoWebexTrigger implements INodeType {
 				displayName: 'Resource',
 				name: 'resource',
 				type: 'options',
+				noDataExpression: true,
 				options: [
+					{
+						name: '[All]',
+						value: 'all',
+					},
 					{
 						name: 'Attachment Action',
 						value: 'attachmentAction',
@@ -85,10 +91,6 @@ export class CiscoWebexTrigger implements INodeType {
 						name: 'Room',
 						value: 'room',
 					},
-					{
-						name: '*',
-						value: 'all',
-					},
 				],
 				default: 'meeting',
 				required: true,
@@ -106,7 +108,8 @@ export class CiscoWebexTrigger implements INodeType {
 					},
 				},
 				default: true,
-				description: 'By default the response only contain a reference to the data the user inputed<br />If this option gets activated it will resolve the data automatically.',
+				// eslint-disable-next-line n8n-nodes-base/node-param-description-boolean-without-whether
+				description: 'By default the response only contain a reference to the data the user inputed. If this option gets activated, it will resolve the data automatically.',
 			},
 			{
 				displayName: 'Filters',
@@ -131,7 +134,7 @@ export class CiscoWebexTrigger implements INodeType {
 							},
 						},
 						default: false,
-						description: 'Limit to messages which contain file content attachments',
+						description: 'Whether to limit to messages which contain file content attachments',
 					},
 					{
 						displayName: 'Is Locked',
@@ -149,7 +152,7 @@ export class CiscoWebexTrigger implements INodeType {
 							},
 						},
 						default: false,
-						description: 'Limit to rooms that are locked',
+						description: 'Whether to limit to rooms that are locked',
 					},
 					{
 						displayName: 'Is Moderator',
@@ -168,7 +171,7 @@ export class CiscoWebexTrigger implements INodeType {
 							},
 						},
 						default: false,
-						description: 'Limit to moderators of a room',
+						description: 'Whether to limit to moderators of a room',
 					},
 					{
 						displayName: 'Mentioned People',
@@ -186,7 +189,7 @@ export class CiscoWebexTrigger implements INodeType {
 							},
 						},
 						default: '',
-						description: `Limit to messages which contain these mentioned people, by person ID; accepts me as a shorthand for your own person ID; separate multiple values with commas`,
+						description: 'Limit to messages which contain these mentioned people, by person ID; accepts me as a shorthand for your own person ID; separate multiple values with commas',
 					},
 					{
 						displayName: 'Message ID',
@@ -390,7 +393,7 @@ export class CiscoWebexTrigger implements INodeType {
 							},
 						},
 						default: '',
-						description: `Limit to a particular room type`,
+						description: 'Limit to a particular room type',
 					},
 					{
 						displayName: 'Type',
@@ -418,7 +421,7 @@ export class CiscoWebexTrigger implements INodeType {
 							},
 						},
 						default: '',
-						description: `Limit to a particular room type`,
+						description: 'Limit to a particular room type',
 					},
 					// {
 					// 	displayName: 'Call Type',
@@ -600,7 +603,8 @@ export class CiscoWebexTrigger implements INodeType {
 				const event = this.getNodeParameter('event') as string;
 				const resource = this.getNodeParameter('resource') as string;
 				const filters = this.getNodeParameter('filters', {}) as IDataObject;
-				const secret = getAutomaticSecret(this.getCredentials('ciscoWebexOAuth2Api')!);
+				const credentials = await this.getCredentials('ciscoWebexOAuth2Api');
+				const secret = getAutomaticSecret(credentials);
 				const filter = [];
 				for (const key of Object.keys(filters)) {
 					if (key !== 'ownedBy') {
@@ -662,7 +666,7 @@ export class CiscoWebexTrigger implements INodeType {
 		const headers = this.getHeaderData() as IDataObject;
 		const req = this.getRequestObject();
 		const resolveData = this.getNodeParameter('resolveData', false) as boolean;
-		
+
 		//@ts-ignore
 		const computedSignature = createHmac('sha1', webhookData.secret).update(req.rawBody).digest('hex');
 		if (headers['x-spark-signature'] !== computedSignature) {

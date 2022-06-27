@@ -15,10 +15,7 @@ import {
 
 export async function peekalinkApiRequest(this: IHookFunctions | IExecuteFunctions | IExecuteSingleFunctions | ILoadOptionsFunctions, method: string, resource: string, body: any = {}, qs: IDataObject = {}, uri?: string, option: IDataObject = {}): Promise<any> { // tslint:disable-line:no-any
 	try {
-		const credentials = this.getCredentials('peekalinkApi');
-		if (credentials === undefined) {
-			throw new NodeOperationError(this.getNode(), 'No credentials got returned!');
-		}
+		const credentials = await this.getCredentials('peekalinkApi');
 		let options: OptionsWithUri = {
 			headers: {
 				'X-API-Key': credentials.apiKey,

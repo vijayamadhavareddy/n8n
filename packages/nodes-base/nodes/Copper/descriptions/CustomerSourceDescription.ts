@@ -2,11 +2,12 @@ import {
 	INodeProperties,
 } from 'n8n-workflow';
 
-export const customerSourceOperations = [
+export const customerSourceOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		displayOptions: {
 			show: {
 				resource: [
@@ -21,11 +22,10 @@ export const customerSourceOperations = [
 			},
 		],
 		default: 'getAll',
-		description: 'Operation to perform',
 	},
-] as INodeProperties[];
+];
 
-export const customerSourceFields = [
+export const customerSourceFields: INodeProperties[] = [
 	// ----------------------------------------
 	//        customerSource: getAll
 	// ----------------------------------------
@@ -34,7 +34,7 @@ export const customerSourceFields = [
 		name: 'returnAll',
 		type: 'boolean',
 		default: false,
-		description: 'Return all results.',
+		description: 'Whether to return all results or only up to a given limit',
 		displayOptions: {
 			show: {
 				resource: [
@@ -51,7 +51,7 @@ export const customerSourceFields = [
 		name: 'limit',
 		type: 'number',
 		default: 5,
-		description: 'The number of results to return.',
+		description: 'Max number of results to return',
 		typeOptions: {
 			minValue: 1,
 			maxValue: 1000,
@@ -70,4 +70,4 @@ export const customerSourceFields = [
 			},
 		},
 	},
-] as INodeProperties[];
+];

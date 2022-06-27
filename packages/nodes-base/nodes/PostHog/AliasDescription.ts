@@ -2,11 +2,12 @@ import {
 	INodeProperties,
 } from 'n8n-workflow';
 
-export const aliasOperations = [
+export const aliasOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		displayOptions: {
 			show: {
 				resource: [
@@ -22,11 +23,10 @@ export const aliasOperations = [
 			},
 		],
 		default: 'create',
-		description: 'The operation to perform.',
 	},
-] as INodeProperties[];
+];
 
-export const aliasFields = [
+export const aliasFields: INodeProperties[] = [
 
 	/* -------------------------------------------------------------------------- */
 	/*                                 alias:create                               */
@@ -47,7 +47,7 @@ export const aliasFields = [
 			},
 		},
 		default: '',
-		description: 'The name of the alias.',
+		description: 'The name of the alias',
 	},
 	{
 		displayName: 'Distinct ID',
@@ -65,7 +65,7 @@ export const aliasFields = [
 			},
 		},
 		default: '',
-		description: `The user's distinct ID.`,
+		description: 'The user\'s distinct ID',
 	},
 	{
 		displayName: 'Additional Fields',
@@ -119,8 +119,8 @@ export const aliasFields = [
 				name: 'timestamp',
 				type: 'dateTime',
 				default: '',
-				description: `If not set, it'll automatically be set to the current time.`,
+				description: 'If not set, it\'ll automatically be set to the current time',
 			},
 		],
 	},
-] as INodeProperties[];
+];

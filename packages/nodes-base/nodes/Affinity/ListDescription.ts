@@ -2,11 +2,12 @@ import {
 	INodeProperties,
 } from 'n8n-workflow';
 
-export const listOperations = [
+export const listOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		displayOptions: {
 			show: {
 				resource: [
@@ -27,11 +28,10 @@ export const listOperations = [
 			},
 		],
 		default: 'get',
-		description: 'The operation to perform.',
 	},
-] as INodeProperties[];
+];
 
-export const listFields = [
+export const listFields: INodeProperties[] = [
 	/* -------------------------------------------------------------------------- */
 	/*                                 list:get                                   */
 	/* -------------------------------------------------------------------------- */
@@ -51,7 +51,7 @@ export const listFields = [
 				],
 			},
 		},
-		description: 'The unique id of the list object to be retrieved.',
+		description: 'The unique ID of the list object to be retrieved',
 	},
 	/* -------------------------------------------------------------------------- */
 	/*                                 list:getAll                                */
@@ -71,7 +71,7 @@ export const listFields = [
 			},
 		},
 		default: false,
-		description: 'If all results should be returned or only up to a given limit.',
+		description: 'Whether to return all results or only up to a given limit',
 	},
 	{
 		displayName: 'Limit',
@@ -95,6 +95,6 @@ export const listFields = [
 			maxValue: 10,
 		},
 		default: 5,
-		description: 'How many results to return.',
+		description: 'Max number of results to return',
 	},
-] as INodeProperties[];
+];

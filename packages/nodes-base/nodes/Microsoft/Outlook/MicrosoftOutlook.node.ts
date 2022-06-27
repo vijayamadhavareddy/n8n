@@ -62,7 +62,6 @@ export class MicrosoftOutlook implements INodeType {
 		description: 'Consume Microsoft Outlook API',
 		defaults: {
 			name: 'Microsoft Outlook',
-			color: '#3a71b5',
 		},
 		inputs: ['main'],
 		outputs: ['main'],
@@ -77,6 +76,7 @@ export class MicrosoftOutlook implements INodeType {
 				displayName: 'Resource',
 				name: 'resource',
 				type: 'options',
+				noDataExpression: true,
 				default: 'message',
 				options: [
 					{
@@ -143,7 +143,7 @@ export class MicrosoftOutlook implements INodeType {
 	async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
 		const items = this.getInputData();
 		const returnData: IDataObject[] = [];
-		const length = items.length as unknown as number;
+		const length = items.length;
 		const qs: IDataObject = {};
 		let responseData;
 
@@ -648,7 +648,7 @@ export class MicrosoftOutlook implements INodeType {
 						}
 
 						const binaryData = (items[i].binary as IBinaryKeyData)[binaryPropertyName];
-						const dataBuffer = Buffer.from(binaryData.data, 'base64');
+						const dataBuffer = await this.helpers.getBinaryDataBuffer(i, binaryPropertyName);
 
 						const fileName = additionalFields.fileName === undefined ? binaryData.fileName : additionalFields.fileName;
 
